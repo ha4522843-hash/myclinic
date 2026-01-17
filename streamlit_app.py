@@ -40,7 +40,7 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or (us
     sheet = connect_to_sheet()
     if sheet:
         all_data = sheet.get_all_values()
-        headers = ["تاريخ الكشف", "الاسم", "تاريخ الميلاد", "السن", "المهنة", "الحالة الاجتماعية", "المصدر", "النوع", "أمراض مزمنة", "عمليات سابقة", "ملاحظات"]
+        headers = ["تاريخ الكشف", "الاسم", "تاريخ الميلاد", "السن", "المهنة", "الحالة الاجتماعية", "المصدر", "النوع", "أمراض مزمنة", "عمليات سابقة", "ملاحظات","الضغط"]
 
         # 3. واجهة السكرتيرة
         if user_role == "السكرتيرة":
@@ -51,6 +51,7 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or (us
                     name = st.text_input("اسم المريض الثلاثي")
                     dob = st.date_input("تاريخ الميلاد", min_value=date(1930, 1, 1), max_value=date.today(), value=date(1990, 1, 1))
                     job = st.text_input("المهنة", value="لم تذكر")
+                    blood_pressure = st.text_input("قياس الضغط (مثلاً 120/80)")
                     phone = st.text_input("رقم الموبايل")
                     social = st.selectbox("الحالة الاجتماعية", ["اعزب/ة", "متزوج/ة", "مطلق/ة", "ارمل/ة", "لم تذكر"])
                     source_opt = st.selectbox("مصدر المعرفة", ["لم تذكر", "فيسبوك", "ترشيح من طبيب", "صديق/قريب", "أخرى"])
@@ -72,7 +73,7 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or (us
                     final_chronic = ", ".join(chronic_opt) + (" | " + chronic_manual if chronic_manual else "")
                     final_surgery = ", ".join(surgery_opt) + (" | " + surgery_manual if surgery_manual else "")
                     
-                    row = [datetime.now().strftime("%Y-%m-%d %H:%M"), name,phone, str(dob), str(final_age), job, social, final_source, check_type, final_chronic, final_surgery, notes]
+                   row = [datetime.now().strftime("%Y-%m-%d %H:%M"), name, str(dob), str(final_age), job, social, final_source, check_type, blood_pressure, final_chronic, final_surgery, notes]
                     sheet.append_row(row)
                     st.success(f"تم التسجيل! المريض: {name} | السن: {final_age} سنة.")
                     st.balloons()
@@ -100,4 +101,5 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or (us
 
 else:
     st.info("🔒 يرجى إدخال كلمة السر للدخول للنظام")
+
 
