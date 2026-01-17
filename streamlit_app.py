@@ -39,7 +39,6 @@ password = st.sidebar.text_input("🔑 كلمة السر:", type="password")
 if (user_role == "الجراح (الدكتورة)" and password == "111") or (user_role == "السكرتيرة" and password == "222"):
     sheet = connect_to_sheet()
     if sheet:
-        # الحصول على كل البيانات
         all_data = sheet.get_all_values()
         headers = ["تاريخ الكشف", "الاسم", "تاريخ الميلاد", "السن", "المهنة", "الحالة الاجتماعية", "المصدر", "النوع", "أمراض مزمنة", "عمليات سابقة", "ملاحظات"]
 
@@ -81,11 +80,22 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or (us
         elif user_role == "الجراح (الدكتورة)":
             st.header("🩺 السجل الطبي المباشر")
             if len(all_data) > 1:
-                # تحويل البيانات لجدول وترتيبها (الأحدث فوق)
                 df = pd.DataFrame(all_data[1:], columns=all_data[0] if len(all_data[0]) == len(headers) else headers)
                 df = df.iloc[::-1] # قلب الجدول ليظهر الأحدث أولاً
                 
                 c1, c2 = st.columns(2)
                 c1.metric("إجمالي الحالات بالسجل", len(df))
-                c2.metric("حالات اليوم", len(df
+                today_date = datetime.now().strftime("%Y-%m-%d")
+                today_count = len(df[df['تاريخ الكشف'].str.contains(today_date)])
+                c2.metric("حالات اليوم", today_count)
+
+                search = st.text_input("🔍 ابحثي عن مريض بالاسم:")
+                if search:
+                    df = df[df['الاسم'].str.contains(search, na=False)]
                 
+                st.dataframe(df, use_container_width=True, height=500)
+            else:
+                st.info("الجدول فارغ حالياً. بانتظار تسجيل أول حالة.")
+
+else:
+    st.info("🔒 يرجى إدخال كلمة السر للدخول للنظام")
