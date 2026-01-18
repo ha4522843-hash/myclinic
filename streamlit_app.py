@@ -88,8 +88,16 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
                     st.dataframe(res)
 
             st.divider()
+            # 1. نضع تاريخ الميلاد بره الـ Form عشان التفاعل يكون لحظي
+            col_dob, col_age = st.columns([2, 1])
+            with col_dob:
+                dob = st.date_input("📅 تاريخ الميلاد", value=date.today(), min_value=date(1930, 1, 1), max_value=date.today())
+            
+            age = calculate_age(dob)
+            with col_age:
+                st.metric("🔢 السن المحسوب", f"{age} سنة")
 
-            # 2. نموذج الإدخال
+           # 2. نموذج الإدخال
             with st.form("main_form", clear_on_submit=True):
                 new_id = len(all_data) + 1000
                 st.info(f"🆔 كود المريض: {new_id}")
@@ -101,10 +109,6 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
                     gender = st.selectbox("النوع", ["", "ذكر", "أنثى"])
                     phone = st.text_input("رقم الهاتف")
                     address = st.text_input("العنوان")
-                    # بدل السطر القديم، استخدمي ده لو عايزة يبدأ من النهاردة:
-                    dob = st.date_input("تاريخ الميلاد", value=date.today(), min_value=date(1930, 1, 1), max_value=date.today())
-                    age = calculate_age(dob)
-                    st.write(f"🔢 السن: {age} سنة")
                     job = st.text_input("المهنة")
                     social = st.selectbox("الحالة الاجتماعية", ["", "اعزب/ة", "متزوج/ة", "مطلق/ة", "ارمل/ة"])
                     # --- الأمراض المزمنة الذكية ---
@@ -262,6 +266,7 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
                         st.markdown(f'<a href="https://wa.me/{p["الهاتف"]}?text={urllib.parse.quote(msg)}" target="_blank" style="background-color: #25D366; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">إرسال</a>', unsafe_allow_html=True)
 else:
     st.info("🔒 يرجى تسجيل الدخول بكلمة السر الصحيحة")
+
 
 
 
