@@ -56,7 +56,15 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
     sheet = connect_to_sheet()
     if sheet:
         all_data = sheet.get_all_values()
-
+        # --- تجهيز القوائم الذكية (خارج الفورم عشان نمنع الـ NameError) ---
+        existing_sources = []
+        existing_types = []
+        if len(all_data) > 1:
+            df_temp = pd.DataFrame(all_data[1:], columns=all_data[0])
+            if 'المصدر' in df_temp.columns:
+                existing_sources = [s for s in df_temp['المصدر'].unique().tolist() if s]
+            if 'نوع الزيارة' in df_temp.columns:
+                existing_types = [t for t in df_temp['نوع الزيارة'].unique().tolist() if t]
         # --- واجهة السكرتيرة ---
         if user_role == "السكرتيرة":
             st.subheader("📝 تسجيل مريض جديد")
@@ -95,7 +103,9 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
                     source_options = list(set(["", "تليفون", "فيسبوك", "العيادة"] + existing_sources))
                     sel_source = st.selectbox("📍 مصدر الحجز", source_options + ["➕ إضافة مصدر جديد..."])
                     source = st.text_input("اكتب المصدر الجديد هنا:") if sel_source == "➕ إضافة مصدر جديد..." else sel_source
-                    v_type = st.selectbox("نوع الزيارة", ["كشف", "استشارة", "متابعة عملية"])
+                    type_list = list(set(["", "كشف", "استشارة", "متابعة"] + existing_types))
+                    sel_type = st.selectbox("📝 نوع الزيارة", type_list + ["➕ إضافة نوع جديد..."])
+                    type_input = st.text_input("اكتب النوع الجديد هنا:") if sel_type == "➕ إضافة نوع جديد..." else ""
                     prev_surgeries = st.selectbox("✂️ عمليات سابقة", ["", "لا يوجد", "تكميم معدة", "تحويل مسار", "مرارة", "فتق", "زائدة", "أخرى"])
                     weight = st.number_input("الوزن (كجم)", min_value=0.0, step=0.1)
                     height = st.number_input("الطول (سم)", min_value=0.0, step=1.0)
@@ -225,6 +235,7 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
                         st.markdown(f'<a href="https://wa.me/{p["الهاتف"]}?text={urllib.parse.quote(msg)}" target="_blank" style="background-color: #25D366; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">إرسال</a>', unsafe_allow_html=True)
 else:
     st.info("🔒 يرجى تسجيل الدخول بكلمة السر الصحيحة")
+
 
 
 
