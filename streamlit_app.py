@@ -118,10 +118,11 @@ if auth:
                 with st.form("reg_form", clear_on_submit=True):
                     col1, col2 = st.columns(2)
                     with col1:
-                        name = st.text_input("الاسم الثلاثي*", value=p_found['الاسم'] if p_found is not None else "")
-                        gender = st.selectbox("النوع", ["أنثى", "ذكر"], index=0 if p_found is None or p_found['النوع']=="أنثى" else 1)
-                        phone = st.text_input("رقم الهاتف", value=p_found['الهاتف'] if p_found is not None else "")
-                        address = st.text_input("العنوان", value=p_found['العنوان'] if p_found is not None else "")
+                       u_name = st.text_input("الاسم الثلاثي*", value=p_found['الاسم'] if p_found is not None else "")
+                       u_phone = st.text_input("رقم الهاتف", value=p_found['الهاتف'] if p_found is not None else "")
+                       u_address = st.text_input("العنوان", value=p_found['العنوان'] if p_found is not None else "")
+                       u_job = st.text_input("المهنة", value=p_found['المهنة'] if p_found is not None and 'المهنة' in p_found else "")
+                       u_chronic = st.text_input("الأمراض المزمنة", value=p_found['الأمراض المزمنة'] if p_found is not None else "")
                         
                         chronic_options = sorted(list(set(["سكر", "ضغط", "قلب"] + existing_chronic)))
                         sel_chronic = st.multiselect("🏥 الأمراض المزمنة", chronic_options, default=p_found['الأمراض المزمنة'].split(', ') if p_found is not None and p_found['الأمراض المزمنة']!="" else [])
@@ -164,12 +165,12 @@ if auth:
         # 2. واجهة الجراح (الدكتورة) - التايم لاين والألوان
         # -----------------------------------
         elif user_role == "الجراح (الدكتورة)":
-            waiting_list = df_main[(df_main['الحالة'] == "في الانتظار") & (df_main['تاريخ التسجيل'] == date.today().strftime("%Y-%m-%d"))]
-            selected_patient = st.selectbox("🔍 اختاري المريض الموجود بالخارج:", [""] + waiting_list['الاسم'].tolist())
+            waiting = df_main[df_main['الحالة'] == "في الانتظار"]
+            sel_p = st.selectbox("🎯 المريض القادم:", [""] + waiting['الاسم'].tolist())
             
-            if selected_patient:
-                p_history = df_main[df_main['الاسم'] == selected_patient].sort_values(by='تاريخ التسجيل')
-                p = p_history.iloc[-1]
+            if sel_p:
+                p_data = df_main[df_main['الاسم'] == sel_p].iloc[-1]
+                st.info(f"📋 المريض: {sel_p} | المهنة: {p_data.get('المهنة', 'غير مسجل')} | BMI: {p_data['BMI']}")
                 
                 # --- منطق الألوان للوزن ---
                 if len(p_history) > 1:
@@ -186,6 +187,7 @@ if auth:
                     st.dataframe(p_history[['تاريخ التسجيل', 'الوزن', 'ملاحظات']])
                     st.error(f"⚠️ الأمراض: {p.get('الأمراض المزمنة')}")
                     st.warning(f"✂️ العمليات السابقة: {p.get('عمليات سابقة')}")
+                    
 
                 with t2:
                     exam_report = st.text_area("🩺 تقرير الفحص الحالي:")
@@ -205,4 +207,5 @@ if auth:
 
 else:
     st.info("🔒 يرجى تسجيل الدخول")
+
 
