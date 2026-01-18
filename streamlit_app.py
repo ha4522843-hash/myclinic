@@ -91,30 +91,10 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
 
                 with col2:
                     app_date = st.date_input("📅 تاريخ الموعد", value=date.today())
-                   # --- داخل واجهة السكرتيرة (نظام مصدر الحجز الذكي) ---
-
-# 1. استخراج المصادر المسجلة مسبقاً من الشيت عشان تظهر في القائمة
-if len(all_data) > 1:
-    df_temp = pd.DataFrame(all_data[1:], columns=all_data[0])
-    # الحصول على القيم الفريدة من عمود "المصدر" وحذف الفراغات
-    existing_sources = df_temp['المصدر'].unique().tolist()
-    existing_sources = [src for src in existing_sources if src.strip() != ""]
-else:
-    existing_sources = []
-
-# 2. إضافة الخيارات الأساسية لو القائمة لسه فاضية
-base_options = ["تليفون", "فيسبوك", "العيادة", "مريض سابق"]
-final_options = list(set(base_options + existing_sources)) # دمج المكتوب سابقاً مع الأساسي
-final_options.sort() # ترتيب أبجدي
-
-# 3. عرض القائمة مع خيار "أخرى (كتابة مصدر جديد)"
-selected_source = st.selectbox("📍 مصدر الحجز الحالي:", [""] + final_options + ["➕ إضافة مصدر جديد..."])
-
-# 4. لو اختارت "إضافة مصدر جديد"، تظهر خانة للكتابة
-if selected_source == "➕ إضافة مصدر جديد...":
-    source = st.text_input("📝 اكتب المصدر الجديد هنا:")
-else:
-    source = selected_source
+                    # --- مصدر الحجز الذكي ---
+                    source_options = list(set(["", "تليفون", "فيسبوك", "العيادة"] + existing_sources))
+                    sel_source = st.selectbox("📍 مصدر الحجز", source_options + ["➕ إضافة مصدر جديد..."])
+                    source = st.text_input("اكتب المصدر الجديد هنا:") if sel_source == "➕ إضافة مصدر جديد..." else sel_source
                     v_type = st.selectbox("نوع الزيارة", ["كشف", "استشارة", "متابعة عملية"])
                     prev_surgeries = st.selectbox("✂️ عمليات سابقة", ["", "لا يوجد", "تكميم معدة", "تحويل مسار", "مرارة", "فتق", "زائدة", "أخرى"])
                     weight = st.number_input("الوزن (كجم)", min_value=0.0, step=0.1)
@@ -245,6 +225,7 @@ else:
                         st.markdown(f'<a href="https://wa.me/{p["الهاتف"]}?text={urllib.parse.quote(msg)}" target="_blank" style="background-color: #25D366; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">إرسال</a>', unsafe_allow_html=True)
 else:
     st.info("🔒 يرجى تسجيل الدخول بكلمة السر الصحيحة")
+
 
 
 
