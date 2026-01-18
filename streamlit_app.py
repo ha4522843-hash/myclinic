@@ -56,15 +56,25 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
     sheet = connect_to_sheet()
     if sheet:
         all_data = sheet.get_all_values()
-        # --- تجهيز القوائم الذكية (خارج الفورم عشان نمنع الـ NameError) ---
+        # --- تجهيز القوائم الذكية من الشيت ---
         existing_sources = []
         existing_types = []
+        existing_chronic = []
+        existing_surgeries = []
+        
         if len(all_data) > 1:
             df_temp = pd.DataFrame(all_data[1:], columns=all_data[0])
-            if 'المصدر' in df_temp.columns:
-                existing_sources = [s for s in df_temp['المصدر'].unique().tolist() if s]
-            if 'نوع الزيارة' in df_temp.columns:
-                existing_types = [t for t in df_temp['نوع الزيارة'].unique().tolist() if t]
+            # استخراج القيم الفريدة وتنظيفها
+            def get_unique(col_name):
+                if col_name in df_temp.columns:
+                    vals = df_temp[col_name].str.split(', ').explode().unique().tolist()
+                    return [v for v in vals if v and str(v).strip()]
+                return []
+
+            existing_sources = get_unique('مصدر الحجز')
+            existing_types = get_unique('نوع الزيارة')
+            existing_chronic = get_unique('الأمراض المزمنة')
+            existing_surgeries = get_unique('عمليات سابقة')
         # --- واجهة السكرتيرة ---
         if user_role == "السكرتيرة":
             st.subheader("📝 تسجيل مريض جديد")
@@ -87,6 +97,8 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
                 col1, col2 = st.columns(2)
                 with col1:
                     name = st.text_input("الاسم الثلاثي*")
+                    # --- خانة النوع الجديدة ---
+                    gender = st.selectbox("النوع", ["", "ذكر", "أنثى"])
                     phone = st.text_input("رقم الهاتف")
                     address = st.text_input("العنوان")
                     # بدل السطر القديم، استخدمي ده لو عايزة يبدأ من النهاردة:
@@ -95,7 +107,10 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
                     st.write(f"🔢 السن: {age} سنة")
                     job = st.text_input("المهنة")
                     social = st.selectbox("الحالة الاجتماعية", ["", "اعزب/ة", "متزوج/ة", "مطلق/ة", "ارمل/ة"])
-                    chronic = st.multiselect("🏥 الأمراض المزمنة", ["سكر", "ضغط", "قلب", "حساسية صدر", "غدة درقية"])
+                    # --- الأمراض المزمنة الذكية ---
+                    chronic_list = list(set(["سكر", "ضغط", "قلب", "حساسية صدر"] + existing_chronic))
+                    sel_chronic = st.multiselect("🏥 الأمراض المزمنة المسجلة", chronic_list)
+                    new_chronic = st.text_input("➕ إضافة مرض مزمن جديد (اختياري):")
 
                 with col2:
                     app_date = st.date_input("📅 تاريخ الموعد", value=date.today())
@@ -106,7 +121,10 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
                     type_list = list(set(["", "كشف", "استشارة", "متابعة"] + existing_types))
                     sel_type = st.selectbox("📝 نوع الزيارة", type_list + ["➕ إضافة نوع جديد..."])
                     type_input = st.text_input("اكتب النوع الجديد هنا:") if sel_type == "➕ إضافة نوع جديد..." else ""
-                    prev_surgeries = st.selectbox("✂️ عمليات سابقة", ["", "لا يوجد", "تكميم معدة", "تحويل مسار", "مرارة", "فتق", "زائدة", "أخرى"])
+                    - عمليات سابقة ذكية ---
+                    surg_list = list(set(["لا يوجد", "تكميم معدة", "تحويل مسار", "مرارة"] + existing_surgeries))
+                    sel_surgery = st.selectbox("✂️ عمليات سابقة", [""] + surg_list + ["➕ إضافة عملية جديدة..."])
+                    surgery_input = st.text_input("اكتب العملية الجديدة:") if sel_surgery == "➕ إضافة عملية جديدة..." else ""
                     weight = st.number_input("الوزن (كجم)", min_value=0.0, step=0.1)
                     height = st.number_input("الطول (سم)", min_value=0.0, step=1.0)
                     bmi = calculate_bmi(weight, height)
@@ -149,8 +167,10 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
                 selected_patient = st.selectbox("🔍 اختاري المريض الحالي (مرتبين حسب الحضور):", patient_list)
                 
                 if selected_patient:
-                    p_data = df[df['الاسم'] == selected_patient].iloc[0]
-                    p_idx = df[df['الاسم'] == selected_patient].index[0] + 2
+                    p = df[df['الاسم'] == selected_patient].iloc[0]
+                    # عرض النوع مع البيانات
+                    st.info(f"📋 الاسم: {selected_patient} | النوع: {p.get('النوع', 'N/A')} | السن: {p.get('السن')} سنة")
+                    st.warning(f"⚠️ الأمراض: {p.get('الأمراض المزمنة')} | العمليات: {p.get('عمليات سابقة')}")
                     
                     tab1, tab2, tab3 = st.tabs(["📋 الملف الطبي", "🎯 وحدة القرار", "📲 وحدة التواصل"])
                     
@@ -235,6 +255,7 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
                         st.markdown(f'<a href="https://wa.me/{p["الهاتف"]}?text={urllib.parse.quote(msg)}" target="_blank" style="background-color: #25D366; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">إرسال</a>', unsafe_allow_html=True)
 else:
     st.info("🔒 يرجى تسجيل الدخول بكلمة السر الصحيحة")
+
 
 
 
