@@ -76,26 +76,82 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
             existing_chronic = get_unique('الأمراض المزمنة')
             existing_surgeries = get_unique('عمليات سابقة')
         # --- واجهة السكرتيرة ---
+        # --- 1. واجهة السكرتيرة ---
         if user_role == "السكرتيرة":
-            st.subheader("📝 تسجيل مريض جديد")
-
-            # 1. نظام البحث
-            with st.expander("🔍 نظام البحث"):
-                search_term = st.text_input("ابحثي هنا (بالاسم أو الكود):")
-                if search_term and len(all_data) > 1:
-                    df_s = pd.DataFrame(all_data[1:], columns=all_data[0])
-                    res = df_s[df_s.astype(str).apply(lambda x: x.str.contains(search_term, na=False)).any(axis=1)]
-                    st.dataframe(res)
-
-            st.divider()
-            # 1. نضع تاريخ الميلاد بره الـ Form عشان التفاعل يكون لحظي
-            col_dob, col_age = st.columns([2, 1])
-            with col_dob:
-                dob = st.date_input("📅 تاريخ الميلاد", value=date.today(), min_value=date(1930, 1, 1), max_value=date.today())
+            st.subheader("📝 إدارة بيانات المرضى")
             
-            age = calculate_age(dob)
-            with col_age:
-                st.metric("🔢 السن المحسوب", f"{age} سنة")
+            # تقسيم الواجهة لتبويبين: تسجيل جديد وبحث/تعديل
+            tab_register, tab_edit = st.tabs(["🆕 تسجيل مريض جديد", "🔍 البحث والتعديل على مريض"])
+
+            with tab_register:
+                # (هنا يوضع كود التسجيل السابق كما هو: السن والـ BMI بره الفورم وباقي البيانات جوه)
+                st.info("استخدم هذا القسم لتسجيل مريض لأول مرة")
+                # ... [كود التسجيل الحالي] ...
+
+            with tab_edit:
+                if len(all_data) > 1:
+                    df_edit = pd.DataFrame(all_data[1:], columns=all_data[0])
+                    # البحث بالاسم أو بالكود
+                    search_query = st.text_input("🔍 ابحثي عن مريض (بالاسم أو الكود):")
+                    
+                    filtered_df = df_edit[df_edit['الاسم'].str.contains(search_query, na=False) | df_edit['ID'].str.contains(search_query, na=False)]
+                    
+                    if not filtered_df.empty and search_query != "":
+                        selected_patient_name = st.selectbox("اختاري المريض للتعديل:", filtered_df['الاسم'].tolist())
+                        patient_to_edit = df_edit[df_edit['الاسم'] == selected_patient_name].iloc[0]
+                        row_number = df_edit[df_edit['الاسم'] == selected_patient_name].index[0] + 2 # +2 عشان الهيدر وبداية الشيت
+                        
+                        st.divider()
+                        st.warning(f"⚠️ أنتِ الآن تعدلين بيانات: {selected_patient_name}")
+                        
+                        with st.form("edit_form"):
+                            col1, col2 = st.columns(2)
+                            with col1:
+                                edit_phone = st.text_input("رقم الهاتف", value=patient_to_edit.get('الهاتف', ''))
+                                edit_address = st.text_input("العنوان", value=patient_to_edit.get('العنوان', ''))
+                                edit_job = st.text_input("المهنة", value=patient_to_edit.get('المهنة', ''))
+                            
+                            with col2:
+                                edit_weight = st.number_input("الوزن الجديد", value=float(patient_to_edit.get('الوزن', 0)))
+                                edit_height = st.number_input("الطول الجديد", value=float(patient_to_edit.get('الطول', 0)))
+                                edit_bp = st.text_input("الضغط", value=patient_to_edit.get('الضغط', ''))
+                            
+                            edit_notes = st.text_area("تحديث الملاحظات", value=patient_to_edit.get('ملاحظات', ''))
+                            
+                            save_changes = st.form_submit_button("💾 حفظ التعديلات")
+                            
+                            if save_changes:
+                                # تحديث الخلايا في جوجل شيت بناءً على الأعمدة
+                                # ملاحظة: تأكدي من ترتيب الأرقام (Column Numbers) حسب شيتك
+                                sheet.update_cell(row_number, 8, edit_phone)    # عمود الهاتف H
+                                sheet.update_cell(row_number, 9, edit_address)  # عمود العنوان I
+                                sheet.update_cell(row_number, 13, str(edit_weight)) # عمود الوزن M
+                                sheet.update_cell(row_number, 14, str(edit_height)) # عمود الطول N
+                                # حساب الـ BMI الجديد وتحديثه
+                                new_bmi = calculate_bmi(edit_weight, edit_height)
+                                sheet.update_cell(row_number, 15, str(new_bmi)) # عمود الـ BMI
+                                sheet.update_cell(row_number, 16, edit_bp)      # عمود الضغط P
+                                sheet.update_cell(row_number, 19, edit_notes)   # عمود الملاحظات S
+                                
+                                st.success(f"✅ تم تحديث بيانات {selected_patient_name} بنجاح!")
+                                st.rerun()
+                    else:
+                        st.info("اكتبي اسم المريض في خانة البحث لتظهر لكِ خيارات التعديل.")
+                else:
+                    st.write("لا توجد بيانات مرضى مسجلة حالياً.")
+            # --- الجزء التفاعلي (خارج الفورم) لظهور السن والـ BMI فوراً ---
+            c1, c2, c3, c4 = st.columns(4)
+            with c1:
+                dob = st.date_input("📅 تاريخ الميلاد", value=date(1990, 1, 1))
+                age = calculate_age(dob)
+                st.metric("🔢 السن", f"{age} سنة")
+            with c2:
+                weight = st.number_input("الوزن (كجم)", min_value=0.0, step=0.1)
+            with c3:
+                height = st.number_input("الطول (سم)", min_value=0.0, step=1.0)
+            with c4:
+                bmi = calculate_bmi(weight, height)
+                st.metric("⚖️ BMI", bmi)
 
            # 2. نموذج الإدخال
             with st.form("main_form", clear_on_submit=True):
@@ -161,13 +217,30 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
                     st.success(f"✅ تم الحفظ بكود {new_id}")
                     st.rerun()
 
-            # عرض الجداول للسكرتيرة
-            if len(all_data) > 1:
-                st.subheader("📋 قائمة الحالات المسجلة (الأحدث أولاً)")
-                df_display = pd.DataFrame(all_data[1:], columns=all_data[0])
-                cols_to_show = ["ID", "الاسم", "تاريخ الموعد", "وقت التسجيل", "نوع الزيارة", "السن"]
-                st.dataframe(df_display[cols_to_show].iloc[::-1], use_container_width=True)
-
+        # عرض الجداول للسكرتيرة
+        # --- داخل واجهة السكرتيرة (بعد قسم التسجيل والتعديل) ---
+        if len(all_data) > 1:
+            st.divider() # خط فاصل للتنظيم
+            st.subheader("📋 قائمة الحالات المسجلة (الأحدث أولاً)")
+            
+            # تحويل البيانات لجدول (DataFrame)
+            df_display = pd.DataFrame(all_data[1:], columns=all_data[0])
+            
+            # قائمة الأعمدة المطلوبة بالظبط (تأكدي أن الأسماء في الشيت مطابقة لهذه الكلمات)
+            # ملحوظة: أضفت "النوع" للقائمة لو حبت السكرتيرة تراجعه
+            cols_to_show = ["ID", "الاسم", "النوع", "السن", "تاريخ الموعد", "وقت التسجيل", "نوع الزيارة"]
+            
+            # التأكد من وجود الأعمدة في الشيت لتجنب الأخطاء
+            existing_cols = [c for c in cols_to_show if c in df_display.columns]
+            
+            # عرض الجدول: iloc[::-1] لعكس الترتيب (الأحدث فوق)
+            st.dataframe(
+                df_display[existing_cols].iloc[::-1], 
+                use_container_width=True,
+                hide_index=True # إخفاء رقم السطر الجانبي لشكل أنظف
+            )
+        else:
+            st.info("لا توجد حالات مسجلة بعد.")
         # --- واجهة الجراح (الدكتورة هاجر) ---
         elif user_role == "الجراح (الدكتورة)":
             st.markdown(f"### 🩺 عيادة الدكتورة هاجر - لوحة التحكم الطبي")
@@ -266,6 +339,7 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
                         st.markdown(f'<a href="https://wa.me/{p["الهاتف"]}?text={urllib.parse.quote(msg)}" target="_blank" style="background-color: #25D366; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">إرسال</a>', unsafe_allow_html=True)
 else:
     st.info("🔒 يرجى تسجيل الدخول بكلمة السر الصحيحة")
+
 
 
 
