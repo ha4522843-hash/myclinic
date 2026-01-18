@@ -88,7 +88,7 @@ if auth:
                 # حسابات تفاعلية خارج الفورم
                 c1, c2, c3, c4 = st.columns(4)
                 with c1:
-                    dob = st.date_input("📅 تاريخ الميلاد", value=date(1990, 1, 1))
+                    dob = st.date_input("📅 تاريخ الميلاد", value=date.today)
                     age = calculate_age(dob)
                     st.metric("🔢 السن", f"{age} سنة")
                 with c2: weight = st.number_input("الوزن (كجم)", min_value=0.0, step=0.1)
@@ -208,3 +208,4 @@ if auth:
 
 else:
     st.info("🔒 يرجى تسجيل الدخول")
+
