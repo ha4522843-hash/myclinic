@@ -81,7 +81,8 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
                     name = st.text_input("الاسم الثلاثي*")
                     phone = st.text_input("رقم الهاتف")
                     address = st.text_input("العنوان")
-                    dob = st.date_input("تاريخ الميلاد", value=date(1990, 1, 1))
+                    # بدل السطر القديم، استخدمي ده لو عايزة يبدأ من النهاردة:
+                    dob = st.date_input("تاريخ الميلاد", value=date.today(), min_value=date(1930, 1, 1), max_value=date.today())
                     age = calculate_age(dob)
                     st.write(f"🔢 السن: {age} سنة")
                     job = st.text_input("المهنة")
@@ -221,6 +222,7 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
                         st.markdown(f'<a href="https://wa.me/{p["الهاتف"]}?text={urllib.parse.quote(msg)}" target="_blank" style="background-color: #25D366; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">إرسال</a>', unsafe_allow_html=True)
 else:
     st.info("🔒 يرجى تسجيل الدخول بكلمة السر الصحيحة")
+
 
 
 
