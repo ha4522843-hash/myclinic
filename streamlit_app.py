@@ -121,7 +121,7 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
                     type_list = list(set(["", "كشف", "استشارة", "متابعة"] + existing_types))
                     sel_type = st.selectbox("📝 نوع الزيارة", type_list + ["➕ إضافة نوع جديد..."])
                     type_input = st.text_input("اكتب النوع الجديد هنا:") if sel_type == "➕ إضافة نوع جديد..." else ""
-                    - عمليات سابقة ذكية ---
+                    #--- عمليات سابقة ذكية ---
                     surg_list = list(set(["لا يوجد", "تكميم معدة", "تحويل مسار", "مرارة"] + existing_surgeries))
                     sel_surgery = st.selectbox("✂️ عمليات سابقة", [""] + surg_list + ["➕ إضافة عملية جديدة..."])
                     surgery_input = st.text_input("اكتب العملية الجديدة:") if sel_surgery == "➕ إضافة عملية جديدة..." else ""
@@ -255,6 +255,7 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
                         st.markdown(f'<a href="https://wa.me/{p["الهاتف"]}?text={urllib.parse.quote(msg)}" target="_blank" style="background-color: #25D366; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">إرسال</a>', unsafe_allow_html=True)
 else:
     st.info("🔒 يرجى تسجيل الدخول بكلمة السر الصحيحة")
+
 
 
 
