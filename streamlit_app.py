@@ -55,11 +55,11 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
         # العناوين الموحدة للشيت
         headers = ["التاريخ", "الاسم", "السن", "الهاتف", "المصدر", "الضغط", "الوزن", "أمراض", "عمليات سابقة", "ملاحظات السكرتيرة", "التشخيص والعملية", "المتابعة"]
 
-        # --- واجهة السكرتيرة ---
+     # --- واجهة السكرتيرة (النسخة الكاملة مع السن والجدول) ---
         if user_role == "السكرتيرة":
             st.subheader("📝 تسجيل مريض جديد")
             
-            # البحث
+            # 1. قسم البحث (للبحث السريع)
             with st.expander("🔍 البحث عن مريض مسجل مسبقاً"):
                 search_term = st.text_input("ابحثي بالاسم:")
                 if search_term and len(all_data) > 1:
@@ -69,14 +69,21 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
 
             st.divider()
 
-            # نموذج التسجيل
+            # 2. نموذج التسجيل
             with st.form("medical_form", clear_on_submit=True):
                 col1, col2 = st.columns(2)
                 with col1:
                     name = st.text_input("اسم المريض الثلاثي")
                     phone = st.text_input("رقم الواتساب (201...)")
-                    dob = st.date_input("تاريخ الميلاد", value=date(1990, 1, 1))
+                    # تاريخ الميلاد
+                    dob = st.date_input("تاريخ الميلاد", value=date(1990, 1, 1), min_value=date(1930, 1, 1), max_value=date.today())
+                    
+                    # حساب السن فوراً وإظهاره بشكل واضح
+                    current_age = calculate_age(dob)
+                    st.info(f"🔢 السن تلقائياً: {current_age} سنة")
+                    
                     source = st.selectbox("المصدر", ["فيسبوك", "ترشيح طبيب", "مريض سابق", "أخرى"])
+                
                 with col2:
                     bp = st.text_input("الضغط")
                     weight = st.text_input("الوزن (كجم)")
@@ -84,13 +91,39 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
                     past_ops = st.multiselect("عمليات سابقة", ["مرارة", "زائدة", "قيصرية", "فتق"])
                 
                 sec_notes = st.text_area("ملاحظات السكرتيرة")
+                
+                # زر الحفظ (يجب أن يكون داخل الفورم)
                 submit = st.form_submit_button("🚀 حفظ البيانات")
 
                 if submit and name:
-                    age = calculate_age(dob)
-                    row = [datetime.now().strftime("%Y-%m-%d"), name, str(age), phone, source, bp, weight, ", ".join(chronic), ", ".join(past_ops), sec_notes, "", ""]
+                    final_age = calculate_age(dob)
+                    row = [
+                        datetime.now().strftime("%Y-%m-%d %H:%M"), 
+                        name, 
+                        str(final_age), 
+                        phone, 
+                        source, 
+                        bp, 
+                        weight, 
+                        ", ".join(chronic), 
+                        ", ".join(past_ops), 
+                        sec_notes, 
+                        "", ""
+                    ]
                     sheet.append_row(row)
-                    st.success(f"تم تسجيل {name} بنجاح")
+                    st.success(f"تم تسجيل {name} بنجاح!")
+                    st.rerun() # لإعادة تحديث الجدول فوراً بعد الحفظ
+
+            st.divider()
+            
+            # 3. الجدول السفلي (عرض البيانات المسجلة)
+            st.subheader("📋 قائمة الحالات المسجلة (من الأحدث)")
+            if len(all_data) > 1:
+                # تحويل البيانات لجدول وعرضها بشكل عكسي (الأحدث فوق)
+                df_view = pd.DataFrame(all_data[1:], columns=all_data[0])
+                st.dataframe(df_view.iloc[::-1], use_container_width=True)
+            else:
+                st.info("لا توجد بيانات مسجلة بعد.")
 
         # --- واجهة الجراح (الدكتورة) ---
         elif user_role == "الجراح (الدكتورة)":
@@ -130,3 +163,4 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
                         st.markdown(f'<a href="https://wa.me/{p["الهاتف"]}?text={urllib.parse.quote(msg)}" target="_blank">إرسال الآن</a>', unsafe_allow_html=True)
 else:
     st.info("🔒 يرجى تسجيل الدخول")
+
