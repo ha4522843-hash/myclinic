@@ -59,32 +59,83 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
             all_data = [headers]
         
         df = pd.DataFrame(all_data[1:], columns=all_data[0])
-
-        # --- واجهة السكرتيرة ---
+# --- واجهة السكرتيرة (نسخة كاملة مع البحث والقوائم) ---
         if user_role == "السكرتيرة":
             st.subheader("📝 تسجيل مريض جديد")
-            with st.form("sec_form", clear_on_submit=True):
-                c1, c2 = st.columns(2)
-                with c1:
-                    name = st.text_input("اسم المريض")
-                    phone = st.text_input("رقم الواتساب")
-                    dob = st.date_input("تاريخ الميلاد", value=date(1990, 1, 1))
-                    source = st.selectbox("المصدر (كيف عرف العيادة؟)", SOURCES)
-                with c2:
-                    bp = st.text_input("الضغط")
-                    weight = st.text_input("الوزن")
-                    chronic = st.multiselect("الأمراض المزمنة", CHRONIC_DISEASES)
-                    past_op = st.multiselect("عمليات سابقة", PAST_SURGERIES)
-                
-                notes = st.text_area("ملاحظات إضافية")
-                
-                if st.form_submit_button("حفظ وإرسال"):
-                    age = date.today().year - dob.year
-                    # حفظ البيانات بالترتيب المحدث
-                    row = [datetime.now().strftime("%Y-%m-%d"), name, str(age), phone, source, bp, weight, ", ".join(chronic), ", ".join(past_op), "", "", ""]
-                    sheet.append_row(row)
-                    st.success("تم الحفظ بنجاح")
+            
+            # قسم البحث للسكرتيرة
+            with st.expander("🔍 البحث عن مريض مسجل مسبقاً"):
+                search_term = st.text_input("ابحثي باسم المريض أو رقم الهاتف:")
+                if search_term and len(all_data) > 1:
+                    search_df = pd.DataFrame(all_data[1:], columns=all_data[0])
+                    results = search_df[search_df.apply(lambda row: search_term in row.values, axis=1)]
+                    if not results.empty:
+                        st.dataframe(results)
+                    else:
+                        st.warning("لا توجد نتائج مطابقة.")
 
+            st.divider()
+
+            # نموذج التسجيل
+            with st.form("medical_form", clear_on_submit=True):
+                col1, col2 = st.columns(2)
+                
+                with col1:
+                    name = st.text_input("اسم المريض الثلاثي")
+                    phone = st.text_input("رقم الواتساب (مثال: 010...)")
+                    dob = st.date_input("تاريخ الميلاد", min_value=date(1930, 1, 1), max_value=date.today(), value=date(1990, 1, 1))
+                    
+                    # حساب السن فوراً للسكرتيرة
+                    current_age = calculate_age(dob)
+                    st.info(f"🔢 السن تلقائياً: {current_age} سنة")
+                    
+                    job = st.text_input("المهنة", value="لم تذكر")
+                    social = st.selectbox("الحالة الاجتماعية", ["متزوج/ة", "اعزب/ة", "مطلق/ة", "ارمل/ة", "لم تذكر"])
+                    source_opt = st.selectbox("مصدر المعرفة", ["لم تذكر", "فيسبوك", "ترشيح من طبيب", "مريض سابق", "أخرى"])
+                    source_manual = st.text_input("إذا اخترت أخرى، اكتب هنا:")
+
+                with col2:
+                    check_type = st.selectbox("نوع الكشف", ["كشف جديد", "استشارة", "غيار", "عملية"])
+                    blood_pressure = st.text_input("قياس الضغط (مثلاً 120/80)")
+                    weight = st.text_input("الوزن (كجم)")
+                    
+                    # القوائم المنسدلة التي طلبتِها
+                    chronic_list = ["سكر", "ضغط", "قلب", "حساسية صدر", "فيروس كبدي", "أخرى"]
+                    chronic_opt = st.multiselect("الأمراض المزمنة والحساسية", chronic_list)
+                    chronic_manual = st.text_input("أمراض/حساسية أخرى (إن وجد):")
+                    
+                    surgery_list = ["مرارة", "زائدة", "قيصرية", "فتق", "أخرى"]
+                    surgery_opt = st.multiselect("عمليات سابقة", surgery_list)
+                    surgery_manual = st.text_input("عمليات أخرى (إن وجد):")
+                    
+                    notes = st.text_area("ملاحظات السكرتيرة")
+
+                submit = st.form_submit_button("🚀 حفظ البيانات وإرسالها للدكتورة")
+                
+                if submit and name:
+                    final_source = source_manual if source_opt == "أخرى" else source_opt
+                    final_chronic = ", ".join(chronic_opt) + (" | " + chronic_manual if chronic_manual else "")
+                    final_surgery = ", ".join(surgery_opt) + (" | " + surgery_manual if surgery_manual else "")
+                    
+                    # ترتيب الأعمدة ليناسب قاعدة بياناتك (تأكدي من مطابقة ترتيب الشيت)
+                    # التاريخ، الاسم، السن، الهاتف، الضغط، الوزن، المصدر، النوع، أمراض، عمليات، ملاحظات
+                    row = [
+                        datetime.now().strftime("%Y-%m-%d %H:%M"), 
+                        name, 
+                        str(current_age), 
+                        phone, 
+                        blood_pressure, 
+                        weight, 
+                        final_source, 
+                        check_type, 
+                        final_chronic, 
+                        final_surgery, 
+                        notes
+                    ]
+                    
+                    sheet.append_row(row)
+                    st.success(f"تم تسجيل {name} بنجاح!")
+                    st.balloons()
         # --- واجهة الجراح (الدكتورة) ---
         elif user_role == "الجراح (الدكتورة)":
             patient = st.selectbox("🔍 اختيار مريض:", [""] + df['الاسم'].tolist())
@@ -121,3 +172,4 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
                     st.markdown(f'<a href="https://wa.me/{p["الهاتف"]}?text={urllib.parse.quote(msg)}" target="_blank">فتح واتساب</a>', unsafe_allow_html=True)
                     if lab_link:
                         sheet.update_cell(df[df['الاسم'] == patient].index[0] + 2, 12, lab_link)
+
