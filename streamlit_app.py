@@ -124,9 +124,9 @@ if auth:
                        u_job = st.text_input("المهنة", value=p_found['المهنة'] if p_found is not None and 'المهنة' in p_found else "")
                        u_chronic = st.text_input("الأمراض المزمنة", value=p_found['الأمراض المزمنة'] if p_found is not None else "")
                         
-                        chronic_options = sorted(list(set(["سكر", "ضغط", "قلب"] + existing_chronic)))
-                        sel_chronic = st.multiselect("🏥 الأمراض المزمنة", chronic_options, default=p_found['الأمراض المزمنة'].split(', ') if p_found is not None and p_found['الأمراض المزمنة']!="" else [])
-                        new_chronic = st.text_input("➕ إضافة مرض جديد:")
+                       chronic_options = sorted(list(set(["سكر", "ضغط", "قلب"] + existing_chronic)))
+                       sel_chronic = st.multiselect("🏥 الأمراض المزمنة", chronic_options, default=p_found['الأمراض المزمنة'].split(', ') if p_found is not None and p_found['الأمراض المزمنة']!="" else [])
+                       new_chronic = st.text_input("➕ إضافة مرض جديد:")
 
                     with col2:
                         u_status = st.selectbox("📍 الحالة الآن", ["في الانتظار", "تم الفحص", "لم يحضر"])
@@ -207,5 +207,6 @@ if auth:
 
 else:
     st.info("🔒 يرجى تسجيل الدخول")
+
 
 
