@@ -162,7 +162,7 @@ if len(all_data) > 1:
     # عرض الجدول مرتب من الأحدث للأقدم
     st.dataframe(df_display[cols_to_show].iloc[::-1], use_container_width=True)
 # --- واجهة الجراح (الدكتورة هاجر) ---
- elif user_role == "الجراح (الدكتورة)":
+elif user_role == "الجراح (الدكتورة)":
             st.markdown(f"### 🩺 عيادة الدكتورة هاجر - لوحة التحكم الطبي")
             
             if len(all_data) > 1:
@@ -276,6 +276,7 @@ if len(all_data) > 1:
                         st.markdown(f'<a href="https://wa.me/{p["الهاتف"]}?text={urllib.parse.quote(msg)}" target="_blank">إرسال</a>', unsafe_allow_html=True)
 else:
     st.info("🔒 يرجى تسجيل الدخول")
+
 
 
 
