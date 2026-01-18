@@ -56,6 +56,7 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
     if sheet:
         all_data = sheet.get_all_values()
 
+   # --- واجهة السكرتيرة (النسخة النهائية المنظمة) ---
         if user_role == "السكرتيرة":
             st.subheader("📝 تسجيل مريض جديد")
             
@@ -66,23 +67,70 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
                     phone = st.text_input("رقم الواتساب")
                     address = st.text_input("العنوان")
                     dob = st.date_input("تاريخ الميلاد", value=date(1990, 1, 1))
+                    
+                    # السن التلقائي
                     age = calculate_age(dob)
                     st.info(f"🔢 السن تلقائياً: {age} سنة")
+                    
                     job = st.text_input("المهنة")
                     social = st.selectbox("الحالة الاجتماعية", ["", "اعزب/ة", "متزوج/ة", "مطلق/ة", "ارمل/ة"])
                 
                 with col2:
-                    booking = st.selectbox("نوع الحجز", ["", "تليفون", "حاضر بالعيادة", "التطبيق"])
+                    # الخانة الجديدة: تاريخ الموعد (Appointment Date)
+                    appointment_date = st.date_input("📅 تاريخ الكشف/الموعد المطلوب", value=date.today())
+                    
+                    booking = st.selectbox("نوع الحجز", ["", "تليفون", "حاضر بالعيادة", "من خلال التطبيق"])
                     visit = st.selectbox("نوع الزيارة", ["كشف جديد", "متابعة", "استشارة", "عملية"])
-                    weight = st.number_input("الوزن (كجم)", min_value=0.0)
-                    height = st.number_input("الطول (سم)", min_value=0.0)
-                    bmi = calculate_bmi(weight, height)
-                    if bmi > 0: st.code(f"BMI: {bmi}")
+                    
+                    weight = st.number_input("الوزن (كجم)", min_value=0.0, step=0.1)
+                    height = st.number_input("الطول (سم)", min_value=0.0, step=1.0)
+                    
+                    # حساب الـ BMI وإظهار حالته
+                    bmi_val = calculate_bmi(weight, height)
+                    if bmi_val > 0:
+                        if bmi_val < 25: st.success(f"⚖️ BMI: {bmi_val} (وزن مثالي)")
+                        elif bmi_val < 30: st.warning(f"⚖️ BMI: {bmi_val} (وزن زائد)")
+                        else: st.error(f"⚖️ BMI: {bmi_val} (سمنة مفرطة)")
+                    
                     bp = st.text_input("الضغط")
                     chronic = st.multiselect("الأمراض المزمنة", ["سكر", "ضغط", "قلب", "حساسية"])
                 
-                notes = st.text_area("ملاحظات")
+                notes = st.text_area("ملاحظات إضافية")
                 submit = st.form_submit_button("🚀 حفظ البيانات")
+
+                if submit and name:
+                    now = datetime.now()
+                    # ترتيب الحفظ في الشيت (تأكدي من توافق الأعمدة في جوجل شيت)
+                    row = [
+                        now.strftime("%Y-%m-%d"),          # 1. تاريخ التسجيل
+                        now.strftime("%H:%M"),             # 2. وقت التسجيل
+                        str(appointment_date),              # 3. تاريخ الموعد (المطلوب)
+                        name,                               # 4. الاسم
+                        str(age),                           # 5. السن
+                        phone,                              # 6. الهاتف
+                        address,                            # 7. العنوان
+                        job,                                # 8. المهنة
+                        social,                             # 9. الحالة الاجتماعية
+                        booking,                            # 10. نوع الحجز
+                        visit,                              # 11. نوع الزيارة
+                        str(weight),                        # 12. الوزن
+                        str(height),                        # 13. الطول
+                        str(bmi_val),                       # 14. BMI
+                        bp,                                 # 15. الضغط
+                        ", ".join(chronic),                 # 16. أمراض مزمنة
+                        notes,                              # 17. ملاحظات السكرتيرة
+                        "",                                 # 18. تعليمات الجراح (فارغ حالياً)
+                        ""                                  # 19. المتابعة (فارغ حالياً)
+                    ]
+                    sheet.append_row(row)
+                    st.success(f"تم تسجيل {name} لموعد يوم {appointment_date}")
+                    st.rerun()
+
+            st.divider()
+            st.subheader("📋 قائمة الحالات المسجلة")
+            if len(all_data) > 1:
+                df_view = pd.DataFrame(all_data[1:], columns=all_data[0])
+                st.dataframe(df_view.iloc[::-1], use_container_width=True)
 
                 if submit and name:
                     row = [datetime.now().strftime("%Y-%m-%d"), datetime.now().strftime("%H:%M"), name, str(age), phone, address, job, social, booking, visit, str(weight), str(height), str(bmi), bp, ", ".join(chronic), notes, "", ""]
@@ -119,6 +167,7 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
                         st.markdown(f'<a href="https://wa.me/{p["الهاتف"]}?text={urllib.parse.quote(msg)}" target="_blank">إرسال</a>', unsafe_allow_html=True)
 else:
     st.info("🔒 يرجى تسجيل الدخول")
+
 
 
 
