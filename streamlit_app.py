@@ -156,8 +156,22 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
                             st.info(f"📍 العمليات السابقة: {p_data.get('عمليات سابقة', 'لا يوجد')}")
                             st.warning(f"📝 ملاحظات السكرتيرة: {p_data.get('ملاحظات', 'لا يوجد')}")
 
+                    # --- داخل واجهة الجراح (تعديل الجزء الخاص بـ Tab 2 و Tab 3) ---
+
                     with tab2:
                         decision = st.radio("تحديد المسار:", ["متابعة فقط", "عملية جراحية", "علاج دوائي"])
+                        
+                        # تعريف متغيرات افتراضية لمنع الـ NameError
+                        selected_op = ""
+                        h_name = ""
+                        h_date = date.today()
+                        h_time = datetime.now().time()
+                        chosen_labs = []
+                        extra_lab = ""
+                        prep_notes = ""
+                        follow_up_date = date.today()
+                        follow_up_notes = ""
+
                         if decision == "عملية جراحية":
                             cat = st.selectbox("تصنيف العملية:", ["جراحة سمنة", "مناظير", "جراحة عامة"])
                             ops_map = {
@@ -173,24 +187,25 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
                             h_date = st.date_input("تاريخ العملية")
                             h_time = st.time_input("ساعة الدخول")
                             prep_notes = st.text_area("تعليمات التجهيز", "صيام 12 ساعة قبل الموعد")
+                        
                         elif decision == "متابعة فقط":
                             follow_up_date = st.date_input("موعد المتابعة القادم")
                             follow_up_notes = st.text_area("تعليمات المتابعة والعلاج")
+                        
+                        elif decision == "علاج دوائي":
+                            follow_up_notes = st.text_area("الروشتة أو تعليمات العلاج")
 
                     with tab3:
+                        # تجميع الرسالة بناءً على المسار المختار
                         if decision == "عملية جراحية":
                             all_labs = ", ".join(chosen_labs) + (f", {extra_lab}" if extra_lab else "")
                             msg = f"مرحباً أ/ {selected_patient}، معكِ عيادة د. هاجر. تم تحديد موعد لعملية ({selected_op}). \n🏥 المستشفى: {h_name} \n📅 التاريخ: {h_date} \n🕒 الساعة: {h_time} \n🔬 التحاليل: {all_labs} \n⚠️ التعليمات: {prep_notes}"
+                        elif decision == "متابعة فقط":
+                            msg = f"مرحباً أ/ {selected_patient}، معكِ عيادة د. هاجر. موعد المتابعة القادم هو {follow_up_date}. \n📝 التعليمات: {follow_up_notes}"
                         else:
-                            msg = f"مرحباً أ/ {selected_patient}، معكِ عيادة د. هاجر. موعد المتابعة القادم هو {follow_up_date}. التعليمات: {follow_up_notes}"
+                            msg = f"مرحباً أ/ {selected_patient}، معكِ عيادة د. هاجر. بخصوص كشف اليوم: \n💊 تعليمات العلاج: {follow_up_notes}"
                         
                         st.text_area("نص الرسالة:", msg, height=150)
-                        if st.button("💾 حفظ في السجل + تجهيز الإرسال"):
-                            sheet.update_cell(p_idx, 20, f"{decision}: {selected_op if decision=='عملية جراحية' else ''}")
-                            sheet.update_cell(p_idx, 21, str(h_date if decision=='عملية جراحية' else follow_up_date))
-                            encoded_msg = urllib.parse.quote(msg)
-                            st.markdown(f'<a href="https://wa.me/{p_data["الهاتف"]}?text={encoded_msg}" target="_blank" style="background-color: #25D366; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">📲 إرسال واتساب</a>', unsafe_allow_html=True)
-                            st.success("تم الحفظ!")
 
         # --- واجهة المساعد الطبي ---
         elif user_role == "المساعد الطبي":
@@ -206,6 +221,7 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
                         st.markdown(f'<a href="https://wa.me/{p["الهاتف"]}?text={urllib.parse.quote(msg)}" target="_blank" style="background-color: #25D366; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">إرسال</a>', unsafe_allow_html=True)
 else:
     st.info("🔒 يرجى تسجيل الدخول بكلمة السر الصحيحة")
+
 
 
 
