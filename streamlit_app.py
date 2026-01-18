@@ -141,7 +141,7 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
                     st.success(f"تم تسجيل {name} بنجاح")
                     st.rerun()
 
-            st.divider()
+                st.divider()
             
             # 3. الجدول السفلي
             st.subheader("📋 قائمة الحالات المسجلة")
@@ -187,6 +187,7 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
                         st.markdown(f'<a href="https://wa.me/{p["الهاتف"]}?text={urllib.parse.quote(msg)}" target="_blank">إرسال الآن</a>', unsafe_allow_html=True)
 else:
     st.info("🔒 يرجى تسجيل الدخول")
+
 
 
 
