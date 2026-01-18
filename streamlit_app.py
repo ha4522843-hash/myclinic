@@ -53,7 +53,12 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or (us
                 with col1:
                     u_name = st.text_input("الاسم الثلاثي*", value=p_found['الاسم'] if p_found is not None else "")
                     u_gender = st.selectbox("النوع", ["ذكر", "أنثى"], index=0 if p_found is None or p_found['النوع'] == "ذكر" else 1)
-                    u_dob = st.date_input("تاريخ الميلاد", value=date(1990, 1, 1))
+                    u_dob = st.date_input(
+                        "تاريخ الميلاد", 
+                        value=date(2010, 1, 1), # القيمة اللي تظهر أول ما يفتح الصفحة
+                        min_value=date(1900, 1, 1), # أقل تاريخ ممكن (لكبار السن)
+                        max_value=date.today() # أقصى تاريخ (للمواليد الجدد)
+                     )
                     u_phone = st.text_input("رقم الهاتف", value=p_found['الهاتف'] if p_found is not None else "")
                     u_job = st.text_input("المهنة", value=p_found['المهنة'] if p_found is not None else "")
 
@@ -111,3 +116,4 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or (us
                         sheet.update_cell(row_idx, 23, report)
                         st.success("تم الحفظ بنجاح")
                         st.rerun()
+
