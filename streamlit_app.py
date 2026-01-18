@@ -91,7 +91,7 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
 
                 with col2:
                     app_date = st.date_input("📅 تاريخ الموعد", value=date.today())
-                    source = st.selectbox("📍 مصدر الحجز", ["", "تليفون", "فيسبوك", "العيادة", "مريض سابق"])
+                    source = st.selectbox("📍 مصدر الحجز", ["", "تليفون", "فيسبوك", "العيادة", "مريض سابق","أخرى"])
                     v_type = st.selectbox("نوع الزيارة", ["كشف", "استشارة", "متابعة عملية"])
                     prev_surgeries = st.selectbox("✂️ عمليات سابقة", ["", "لا يوجد", "تكميم معدة", "تحويل مسار", "مرارة", "فتق", "زائدة", "أخرى"])
                     weight = st.number_input("الوزن (كجم)", min_value=0.0, step=0.1)
@@ -222,6 +222,7 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
                         st.markdown(f'<a href="https://wa.me/{p["الهاتف"]}?text={urllib.parse.quote(msg)}" target="_blank" style="background-color: #25D366; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">إرسال</a>', unsafe_allow_html=True)
 else:
     st.info("🔒 يرجى تسجيل الدخول بكلمة السر الصحيحة")
+
 
 
 
