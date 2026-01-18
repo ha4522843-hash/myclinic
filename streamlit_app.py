@@ -79,7 +79,7 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
             st.divider()
 
             # 2. نموذج التسجيل
-          with st.form("medical_form", clear_on_submit=True):
+        with st.form("medical_form", clear_on_submit=True):
                 col1, col2 = st.columns(2)
                 with col1:
                     name = st.text_input("اسم المريض الثلاثي")
@@ -187,6 +187,7 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
                         st.markdown(f'<a href="https://wa.me/{p["الهاتف"]}?text={urllib.parse.quote(msg)}" target="_blank">إرسال الآن</a>', unsafe_allow_html=True)
 else:
     st.info("🔒 يرجى تسجيل الدخول")
+
 
 
 
