@@ -30,6 +30,15 @@ def connect_to_sheet():
 def calculate_age(birth_date):
     today = date.today()
     return today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
+    def calculate_bmi(weight, height):
+    try:
+        if weight > 0 and height > 0:
+            height_m = height / 100  # تحويل السنتيمتر لمتر
+            bmi = weight / (height_m ** 2)
+            return round(bmi, 2)
+        return 0
+    except:
+        return 0
 
 # 3. القوائم المنسدلة للعمليات
 SURGERY_CAT = {
@@ -70,11 +79,12 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
             st.divider()
 
             # 2. نموذج التسجيل
-            with st.form("medical_form", clear_on_submit=True):
+          with st.form("medical_form", clear_on_submit=True):
                 col1, col2 = st.columns(2)
                 with col1:
                     name = st.text_input("اسم المريض الثلاثي")
-                    phone = st.text_input("رقم الواتساب (201...)")
+                    phone = st.text_input("رقم الواتساب")
+                    address = st.text_input("العنوان السكني") # <--- خانة العنوان
                     dob = st.date_input("تاريخ الميلاد", value=date(1990, 1, 1))
                     
                     # السن التلقائي
@@ -82,23 +92,30 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
                     st.info(f"🔢 السن تلقائياً: {current_age} سنة")
                     
                     job = st.text_input("المهنة")
-                    social_status = st.selectbox("الحالة الاجتماعية", ["", "اعزب/ة", "متزوج/ة", "مطلق/ة", "ارمل/ة"])
+                    social = st.selectbox("الحالة الاجتماعية", ["", "اعزب/ة", "متزوج/ة", "مطلق/ة", "ارمل/ة"])
                 
                 with col2:
-                    booking_type = st.selectbox("نوع الحجز", ["", "تليفون", "حاضر بالعيادة", "من خلال التطبيق"])
-                    check_type = st.selectbox("نوع الزيارة", ["كشف جديد", "متابعة", "استشارة", "عملية"])
+                    booking = st.selectbox("نوع الحجز", ["", "تليفون", "حاضر بالعيادة", "من خلال التطبيق"])
+                    visit = st.selectbox("نوع الزيارة", ["كشف جديد", "متابعة", "استشارة", "عملية"])
                     
-                    # إذا كانت متابعة، يظهر حقل اختيار التاريخ
-                    follow_up_date = ""
-                    if check_type == "متابعة":
-                        follow_up_date = st.date_input("تحديد موعد المتابعة")
+                    # خانات الوزن والطول والـ BMI
+                    weight = st.number_input("الوزن (كجم)", min_value=0.0, step=0.1)
+                    height = st.number_input("الطول (سم)", min_value=0.0, step=1.0)
+                    
+                    bmi_val = calculate_bmi(weight, height)
+                    if bmi_val > 0:
+                        # عرض الـ BMI بلون مميز
+                        if bmi_val < 25:
+                            st.success(f"⚖️ BMI: {bmi_val} (وزن مثالي)")
+                        elif bmi_val < 30:
+                            st.warning(f"⚖️ BMI: {bmi_val} (وزن زائد)")
+                        else:
+                            st.error(f"⚖️ BMI: {bmi_val} (سمنة مفرطة)")
                     
                     bp = st.text_input("الضغط")
-                    weight = st.text_input("الوزن (كجم)")
                     chronic = st.multiselect("الأمراض المزمنة", ["سكر", "ضغط", "قلب", "حساسية"])
                 
-                sec_notes = st.text_area("ملاحظات إضافية")
-                
+                notes = st.text_area("ملاحظات إضافية")
                 submit = st.form_submit_button("🚀 حفظ البيانات")
 
                 if submit and name:
@@ -170,5 +187,6 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
                         st.markdown(f'<a href="https://wa.me/{p["الهاتف"]}?text={urllib.parse.quote(msg)}" target="_blank">إرسال الآن</a>', unsafe_allow_html=True)
 else:
     st.info("🔒 يرجى تسجيل الدخول")
+
 
 
