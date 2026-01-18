@@ -173,3 +173,4 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
                     if lab_link:
                         sheet.update_cell(df[df['الاسم'] == patient].index[0] + 2, 12, lab_link)
 
+
