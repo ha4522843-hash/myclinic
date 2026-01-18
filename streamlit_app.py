@@ -144,7 +144,7 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
                     current_hour = datetime.now().hour
                     if current_hour >= 19:
                         st.warning("⚠️ تنبيه: الحجز بعد الساعة 7 مساءً")
-                 if submit and name:
+                if submit and name:
                     final_source = source_input if sel_source == "➕ إضافة مصدر جديد..." else sel_source
                     final_type = type_input if sel_type == "➕ إضافة نوع جديد..." else sel_type
                     final_surgery = surgery_input if sel_surgery == "➕ إضافة عملية جديدة..." else sel_surgery
@@ -262,6 +262,7 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
                         st.markdown(f'<a href="https://wa.me/{p["الهاتف"]}?text={urllib.parse.quote(msg)}" target="_blank" style="background-color: #25D366; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">إرسال</a>', unsafe_allow_html=True)
 else:
     st.info("🔒 يرجى تسجيل الدخول بكلمة السر الصحيحة")
+
 
 
 
