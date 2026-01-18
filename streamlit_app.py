@@ -144,7 +144,7 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
                 st.divider()
             
             # 3. الجدول السفلي
-            st.subheader("📋 قائمة الحالات المسجلة")
+               st.subheader("📋 قائمة الحالات المسجلة")
             if len(all_data) > 1:
                 df_view = pd.DataFrame(all_data[1:], columns=all_data[0])
                 st.dataframe(df_view.iloc[::-1], use_container_width=True)
@@ -187,6 +187,7 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
                         st.markdown(f'<a href="https://wa.me/{p["الهاتف"]}?text={urllib.parse.quote(msg)}" target="_blank">إرسال الآن</a>', unsafe_allow_html=True)
 else:
     st.info("🔒 يرجى تسجيل الدخول")
+
 
 
 
