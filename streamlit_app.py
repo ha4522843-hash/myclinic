@@ -30,7 +30,7 @@ def connect_to_sheet():
 def calculate_age(birth_date):
     today = date.today()
     return today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
- def calculate_bmi(weight, height):
+def calculate_bmi(weight, height):
     try:
         if weight > 0 and height > 0:
             height_m = height / 100  # تحويل السنتيمتر لمتر
@@ -187,6 +187,7 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
                         st.markdown(f'<a href="https://wa.me/{p["الهاتف"]}?text={urllib.parse.quote(msg)}" target="_blank">إرسال الآن</a>', unsafe_allow_html=True)
 else:
     st.info("🔒 يرجى تسجيل الدخول")
+
 
 
 
