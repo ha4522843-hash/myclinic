@@ -56,88 +56,111 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
     if sheet:
         all_data = sheet.get_all_values()
 
-# --- واجهة السكرتيرة (النسخة الكاملة مع الـ ID والبحث) ---
+# --- واجهة السكرتيرة (تحديث العمليات السابقة والأمراض) ---
         if user_role == "السكرتيرة":
-            st.subheader("📝 منظومة تسجيل المرضى")
+            st.subheader("📝 تسجيل مريض جديد")
 
             # 1. نظام البحث
-            with st.expander("🔍 البحث عن مريض مسجل مسبقاً"):
-                search_term = st.text_input("ابحثي بالكود (ID)، الاسم، أو الهاتف:")
+            with st.expander("🔍 نظام البحث"):
+                search_term = st.text_input("ابحثي هنا (بالاسم أو الكود):")
                 if search_term and len(all_data) > 1:
-                    df_search = pd.DataFrame(all_data[1:], columns=all_data[0])
-                    # البحث في الـ ID والاسم والهاتف
-                    search_result = df_search[
-                        df_search['ID'].astype(str).str.contains(search_term) |
-                        df_search['الاسم'].str.contains(search_term, na=False) | 
-                        df_search['الهاتف'].str.contains(search_term, na=False)
-                    ]
-                    if not search_result.empty:
-                        st.dataframe(search_result, use_container_width=True)
-                    else:
-                        st.warning("لا يوجد مريض بهذه البيانات.")
+                    df_s = pd.DataFrame(all_data[1:], columns=all_data[0])
+                    res = df_s[df_s.astype(str).apply(lambda x: x.str.contains(search_term, na=False)).any(axis=1)]
+                    st.dataframe(res)
 
             st.divider()
 
-            # 2. نموذج تسجيل مريض جديد
-            with st.form("medical_form", clear_on_submit=True):
-                # إنشاء ID تلقائي (رقم الصف الحالي + 1000)
-                new_id = len(all_data) + 1000 
-                st.markdown(f"### 🆔 كود المريض الجديد: `{new_id}`")
-                
+            # 2. نموذج الإدخال
+            with st.form("main_form", clear_on_submit=True):
+                new_id = len(all_data) + 1000
+                st.info(f"🆔 كود المريض: {new_id}")
+
                 col1, col2 = st.columns(2)
                 with col1:
-                    name = st.text_input("اسم المريض الثلاثي*")
-                    phone = st.text_input("رقم الواتساب")
+                    name = st.text_input("الاسم الثلاثي*")
+                    phone = st.text_input("رقم الهاتف")
                     address = st.text_input("العنوان")
                     dob = st.date_input("تاريخ الميلاد", value=date(1990, 1, 1))
                     age = calculate_age(dob)
-                    st.info(f"🔢 السن: {age} سنة")
+                    st.write(f"🔢 السن: {age} سنة")
                     job = st.text_input("المهنة")
                     social = st.selectbox("الحالة الاجتماعية", ["", "اعزب/ة", "متزوج/ة", "مطلق/ة", "ارمل/ة"])
+                    # خانة الأمراض المزمنة واضحة ومستقلة
+                    chronic = st.multiselect("🏥 الأمراض المزمنة", ["سكر", "ضغط", "قلب", "حساسية صدر", "غدة درقية"])
 
                 with col2:
-                    appointment_date = st.date_input("📅 تاريخ الموعد المطلوب", value=date.today())
-                    booking = st.selectbox("نوع الحجز", ["", "تليفون", "حاضر بالعيادة", "التطبيق"])
-                    visit = st.selectbox("نوع الزيارة", ["كشف جديد", "متابعة", "استشارة", "عملية"])
-                    weight = st.number_input("الوزن (كجم)", min_value=0.0)
-                    height = st.number_input("الطول (سم)", min_value=0.0)
+                    app_date = st.date_input("📅 تاريخ الموعد", value=date.today())
+                    source = st.selectbox("📍 مصدر الحجز", ["", "تليفون", "فيسبوك", "العيادة", "مريض سابق"])
+                    v_type = st.selectbox("نوع الزيارة", ["كشف", "استشارة", "متابعة عملية"])
+                    
+                    # خانة العمليات السابقة مع خيار فارغ (أخرى/لا يوجد)
+                    prev_surgeries = st.selectbox("✂️ عمليات سابقة", ["", "لا يوجد", "تكميم معدة", "تحويل مسار", "مرارة", "فتق", "زائدة", "أخرى"])
+                    
+                    weight = st.number_input("الوزن (كجم)", min_value=0.0, step=0.1)
+                    height = st.number_input("الطول (سم)", min_value=0.0, step=1.0)
                     bmi = calculate_bmi(weight, height)
-                    if bmi > 0: st.code(f"BMI: {bmi}")
+                    
+                    if bmi > 0:
+                        if bmi >= 30: st.error(f"⚠️ BMI: {bmi} (سمنة)")
+                        elif bmi >= 25: st.warning(f"⚖️ BMI: {bmi} (زيادة وزن)")
+                        else: st.success(f"✅ BMI: {bmi} (مثالي)")
+                    
                     bp = st.text_input("الضغط")
-                    chronic = st.multiselect("الأمراض المزمنة", ["سكر", "ضغط", "قلب", "حساسية"])
 
-                notes = st.text_area("ملاحظات")
+                notes = st.text_area("ملاحظات إضافية")
+                
                 submit = st.form_submit_button("🚀 حفظ البيانات")
 
                 if submit and name:
                     # تنبيه الساعة 7
-                    if datetime.now().hour >= 19:
+                    current_hour = datetime.now().hour
+                    if current_hour >= 19:
                         st.warning("⚠️ تنبيه: الحجز بعد الساعة 7 مساءً")
 
                     now = datetime.now()
-                    # السطر الجديد بالحفظ مع الـ ID في البداية
+                    # السطر اللي هينزل الشيت (21 خانة بالترتيب الجديد)
                     row = [
-                        str(new_id),                  # العمود A: ID
-                        now.strftime("%Y-%m-%d"),    # العمود B: تاريخ التسجيل
-                        now.strftime("%H:%M"),       # العمود C: وقت التسجيل
-                        str(appointment_date),        # العمود D: تاريخ الموعد
-                        name,                         # العمود E: الاسم
-                        str(age),                     # العمود F: السن
-                        phone,                        # العمود G: الهاتف
-                        address,                      # العمود H: العنوان
-                        job, social, booking, visit, 
-                        str(weight), str(height), str(bmi), bp, 
-                        ", ".join(chronic), notes, "", ""
+                        str(new_id),                  # 1: ID
+                        now.strftime("%Y-%m-%d"),    # 2: تاريخ التسجيل
+                        now.strftime("%H:%M"),       # 3: وقت التسجيل
+                        str(app_date),                # 4: تاريخ الموعد
+                        name,                         # 5: الاسم
+                        str(age),                     # 6: السن
+                        phone,                        # 7: الهاتف
+                        address,                      # 8: العنوان
+                        job,                          # 9: المهنة
+                        social,                       # 10: الحالة
+                        source,                       # 11: المصدر
+                        v_type,                       # 12: نوع الزيارة
+                        str(weight),                  # 13: الوزن
+                        str(height),                  # 14: الطول
+                        str(bmi),                     # 15: BMI
+                        bp,                           # 16: الضغط
+                        ", ".join(chronic),           # 17: الأمراض المزمنة
+                        prev_surgeries,               # 18: عمليات سابقة
+                        notes,                        # 19: ملاحظات
+                        "",                           # 20: التشخيص
+                        ""                            # 21: المتابعة
                     ]
                     sheet.append_row(row)
-                    st.success(f"✅ تم تسجيل المريض بكود: {new_id}")
+                    st.success(f"✅ تم الحفظ بكود {new_id}")
                     st.rerun()
-
             # 3. جدول العرض
             if len(all_data) > 1:
                 st.subheader("📋 قائمة المسجلين")
                 df_all = pd.DataFrame(all_data[1:], columns=all_data[0])
                 st.dataframe(df_all.iloc[::-1], use_container_width=True)
+                # --- جزء عرض الجدول في نهاية واجهة السكرتيرة ---
+st.subheader("📋 قائمة الحالات المسجلة (الأحدث أولاً)")
+if len(all_data) > 1:
+    # تحويل البيانات لجدول
+    df_display = pd.DataFrame(all_data[1:], columns=all_data[0])
+    
+    # اختيار أعمدة معينة عشان الزحمة (ممكن تغيريهم حسب رغبتك)
+    cols_to_show = ["ID", "الاسم", "تاريخ الموعد", "وقت التسجيل", "نوع الزيارة", "السن"]
+    
+    # عرض الجدول مرتب من الأحدث للأقدم
+    st.dataframe(df_display[cols_to_show].iloc[::-1], use_container_width=True)
         elif user_role == "الجراح (الدكتورة)":
             if len(all_data) > 1:
                 df = pd.DataFrame(all_data[1:], columns=all_data[0])
@@ -163,6 +186,7 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
                         st.markdown(f'<a href="https://wa.me/{p["الهاتف"]}?text={urllib.parse.quote(msg)}" target="_blank">إرسال</a>', unsafe_allow_html=True)
 else:
     st.info("🔒 يرجى تسجيل الدخول")
+
 
 
 
