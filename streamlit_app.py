@@ -138,15 +138,22 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
 
                 notes = st.text_area("ملاحظات إضافية")
                 submit = st.form_submit_button("🚀 حفظ البيانات")
+                
 
                 if submit and name:
                     current_hour = datetime.now().hour
                     if current_hour >= 19:
                         st.warning("⚠️ تنبيه: الحجز بعد الساعة 7 مساءً")
-
+                 if submit and name:
+                    final_source = source_input if sel_source == "➕ إضافة مصدر جديد..." else sel_source
+                    final_type = type_input if sel_type == "➕ إضافة نوع جديد..." else sel_type
+                    final_surgery = surgery_input if sel_surgery == "➕ إضافة عملية جديدة..." else sel_surgery
+                    final_chronic = ", ".join(sel_chronic + ([new_chronic] if new_chronic else []))
+                    
                     now = datetime.now()
-                    row = [str(new_id), now.strftime("%Y-%m-%d"), now.strftime("%H:%M"), str(app_date), name, str(age), phone, address, job, social, source, v_type, str(weight), str(height), str(bmi), bp, ", ".join(chronic), prev_surgeries, notes, "", ""]
-                    sheet.append_row(row)
+                    # إضافة النوع (Gender) للسطر
+                    row = [str(new_id), now.strftime("%Y-%m-%d"), now.strftime("%H:%M"), str(app_date), name, gender, str(calculate_age(dob)), phone, address, social, final_source, final_type, str(weight), str(height), str(bmi), bp, final_chronic, final_surgery, notes, "", ""]
+                    sheet.append_row(row)       
                     st.success(f"✅ تم الحفظ بكود {new_id}")
                     st.rerun()
 
@@ -255,6 +262,7 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
                         st.markdown(f'<a href="https://wa.me/{p["الهاتف"]}?text={urllib.parse.quote(msg)}" target="_blank" style="background-color: #25D366; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">إرسال</a>', unsafe_allow_html=True)
 else:
     st.info("🔒 يرجى تسجيل الدخول بكلمة السر الصحيحة")
+
 
 
 
