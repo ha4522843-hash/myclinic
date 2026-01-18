@@ -264,7 +264,7 @@ elif user_role == "الجراح (الدكتورة)":
                             st.markdown(f'<a href="{whatsapp_url}" target="_blank" style="background-color: #25D366; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">📲 إرسال واتساب للمريض الآن</a>', unsafe_allow_html=True)
                             st.success("تم حفظ القرار الطبي بنجاح!")
 
-        elif user_role == "المساعد الطبي":
+elif user_role == "المساعد الطبي":
             if len(all_data) > 1:
                 df = pd.DataFrame(all_data[1:], columns=all_data[0])
                 patient = st.selectbox("🔍 اختيار مريض:", [""] + df['الاسم'].tolist())
@@ -276,6 +276,7 @@ elif user_role == "الجراح (الدكتورة)":
                         st.markdown(f'<a href="https://wa.me/{p["الهاتف"]}?text={urllib.parse.quote(msg)}" target="_blank">إرسال</a>', unsafe_allow_html=True)
 else:
     st.info("🔒 يرجى تسجيل الدخول")
+
 
 
 
