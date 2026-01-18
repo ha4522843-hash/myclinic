@@ -56,92 +56,125 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
     if sheet:
         all_data = sheet.get_all_values()
 
-   # --- واجهة السكرتيرة (النسخة النهائية المنظمة) ---
+# --- واجهة السكرتيرة الكاملة ---
         if user_role == "السكرتيرة":
-            st.subheader("📝 تسجيل مريض جديد")
-            
+            st.subheader("📝 منظومة تسجيل المرضى")
+
+            # 1. نظام البحث المتطور
+            with st.expander("🔍 البحث عن مريض مسجل مسبقاً (بالاسم أو الهاتف)"):
+                search_term = st.text_input("ادخلي اسم المريض أو رقم الهاتف:")
+                if search_term and len(all_data) > 1:
+                    # تحويل البيانات لجدول للبحث فيها
+                    df_search = pd.DataFrame(all_data[1:], columns=all_data[0])
+                    # البحث في عمود الاسم وعمود الهاتف
+                    search_result = df_search[
+                        df_search['الاسم'].str.contains(search_term, na=False) | 
+                        df_search['الهاتف'].str.contains(search_term, na=False)
+                    ]
+                    if not search_result.empty:
+                        st.success(f"تم العثور على {len(search_result)} حالة:")
+                        st.dataframe(search_result, use_container_width=True)
+                    else:
+                        st.warning("لا يوجد مريض بهذا الاسم أو الرقم.")
+
+            st.divider()
+
+            # 2. نموذج تسجيل مريض جديد
+            st.markdown("### 📋 تسجيل بيانات مريض جديد")
             with st.form("medical_form", clear_on_submit=True):
                 col1, col2 = st.columns(2)
+                
                 with col1:
-                    name = st.text_input("اسم المريض الثلاثي")
-                    phone = st.text_input("رقم الواتساب")
-                    address = st.text_input("العنوان")
-                    dob = st.date_input("تاريخ الميلاد", value=date(1990, 1, 1))
+                    name = st.text_input("اسم المريض الثلاثي*")
+                    phone = st.text_input("رقم الواتساب (201...)")
+                    address = st.text_input("العنوان بالتفصيل")
+                    dob = st.date_input("تاريخ الميلاد", value=date(1990, 1, 1), min_value=date(1930, 1, 1), max_value=date.today())
                     
-                    # السن التلقائي
-                    age = calculate_age(dob)
-                    st.info(f"🔢 السن تلقائياً: {age} سنة")
+                    # حساب السن تلقائياً
+                    patient_age = calculate_age(dob)
+                    st.info(f"🔢 السن المحسوب: {patient_age} سنة")
                     
                     job = st.text_input("المهنة")
                     social = st.selectbox("الحالة الاجتماعية", ["", "اعزب/ة", "متزوج/ة", "مطلق/ة", "ارمل/ة"])
-                
+
                 with col2:
-                    # الخانة الجديدة: تاريخ الموعد (Appointment Date)
-                    appointment_date = st.date_input("📅 تاريخ الكشف/الموعد المطلوب", value=date.today())
+                    # تاريخ الموعد
+                    appointment_date = st.date_input("📅 تاريخ الموعد المطلوب", value=date.today())
                     
-                    booking = st.selectbox("نوع الحجز", ["", "تليفون", "حاضر بالعيادة", "من خلال التطبيق"])
-                    visit = st.selectbox("نوع الزيارة", ["كشف جديد", "متابعة", "استشارة", "عملية"])
+                    booking_type = st.selectbox("نوع الحجز", ["", "تليفون", "حاضر بالعيادة", "من خلال التطبيق"])
+                    visit_type = st.selectbox("نوع الزيارة", ["كشف جديد", "متابعة", "استشارة", "عملية"])
                     
-                    weight = st.number_input("الوزن (كجم)", min_value=0.0, step=0.1)
-                    height = st.number_input("الطول (سم)", min_value=0.0, step=1.0)
+                    # الوزن والطول وحساب BMI
+                    w = st.number_input("الوزن (كجم)", min_value=0.0, step=0.1)
+                    h = st.number_input("الطول (سم)", min_value=0.0, step=1.0)
+                    bmi_val = calculate_bmi(w, h)
                     
-                    # حساب الـ BMI وإظهار حالته
-                    bmi_val = calculate_bmi(weight, height)
                     if bmi_val > 0:
-                        if bmi_val < 25: st.success(f"⚖️ BMI: {bmi_val} (وزن مثالي)")
-                        elif bmi_val < 30: st.warning(f"⚖️ BMI: {bmi_val} (وزن زائد)")
-                        else: st.error(f"⚖️ BMI: {bmi_val} (سمنة مفرطة)")
+                        if bmi_val < 25:
+                            st.success(f"⚖️ BMI: {bmi_val} (وزن مثالي)")
+                        elif bmi_val < 30:
+                            st.warning(f"⚖️ BMI: {bmi_val} (وزن زائد)")
+                        else:
+                            st.error(f"⚖️ BMI: {bmi_val} (سمنة مفرطة)")
                     
                     bp = st.text_input("الضغط")
                     chronic = st.multiselect("الأمراض المزمنة", ["سكر", "ضغط", "قلب", "حساسية"])
-                
-                notes = st.text_area("ملاحظات إضافية")
-                submit = st.form_submit_button("🚀 حفظ البيانات")
 
-                if submit and name:
-                    now = datetime.now()
-                    # ترتيب الحفظ في الشيت (تأكدي من توافق الأعمدة في جوجل شيت)
-                    row = [
-                        now.strftime("%Y-%m-%d"),          # 1. تاريخ التسجيل
-                        now.strftime("%H:%M"),             # 2. وقت التسجيل
-                        str(appointment_date),              # 3. تاريخ الموعد (المطلوب)
-                        name,                               # 4. الاسم
-                        str(age),                           # 5. السن
-                        phone,                              # 6. الهاتف
-                        address,                            # 7. العنوان
-                        job,                                # 8. المهنة
-                        social,                             # 9. الحالة الاجتماعية
-                        booking,                            # 10. نوع الحجز
-                        visit,                              # 11. نوع الزيارة
-                        str(weight),                        # 12. الوزن
-                        str(height),                        # 13. الطول
-                        str(bmi_val),                       # 14. BMI
-                        bp,                                 # 15. الضغط
-                        ", ".join(chronic),                 # 16. أمراض مزمنة
-                        notes,                              # 17. ملاحظات السكرتيرة
-                        "",                                 # 18. تعليمات الجراح (فارغ حالياً)
-                        ""                                  # 19. المتابعة (فارغ حالياً)
-                    ]
-                    sheet.append_row(row)
-                    st.success(f"تم تسجيل {name} لموعد يوم {appointment_date}")
-                    st.rerun()
+                notes = st.text_area("ملاحظات السكرتيرة الإضافية")
+                
+                # زر الحفظ
+                submit = st.form_submit_button("🚀 حفظ البيانات والزيارة")
+
+                if submit:
+                    if not name:
+                        st.error("يرجى إدخال اسم المريض أولاً!")
+                    else:
+                        # أ. تنبيه الوقت (بعد الساعة 7 مساءً)
+                        if datetime.now().hour >= 19:
+                            st.warning("⚠️ تنبيه: يتم التسجيل الآن بعد الموعد المحدد (الساعة 7 مساءً).")
+
+                        # ب. فحص الزحمة (تضارب المواعيد)
+                        if len(all_data) > 1:
+                            df_check = pd.DataFrame(all_data[1:], columns=all_data[0])
+                            existing = df_check[df_check['تاريخ الموعد'] == str(appointment_date)]
+                            if len(existing) >= 1:
+                                st.info(f"💡 للعلم: يوجد {len(existing)} مرضى محجوزين في نفس هذا التاريخ.")
+
+                        # ج. عملية الحفظ الفعلية
+                        now = datetime.now()
+                        row = [
+                            now.strftime("%Y-%m-%d"),    # 1. تاريخ التسجيل
+                            now.strftime("%H:%M"),       # 2. وقت التسجيل
+                            str(appointment_date),        # 3. تاريخ الموعد
+                            name,                         # 4. الاسم
+                            str(patient_age),             # 5. السن
+                            phone,                        # 6. الهاتف
+                            address,                      # 7. العنوان
+                            job,                          # 8. المهنة
+                            social,                       # 9. الحالة الاجتماعية
+                            booking_type,                 # 10. نوع الحجز
+                            visit_type,                   # 11. نوع الزيارة
+                            str(w),                       # 12. الوزن
+                            str(h),                       # 13. الطول
+                            str(bmi_val),                 # 14. BMI
+                            bp,                           # 15. الضغط
+                            ", ".join(chronic),           # 16. أمراض مزمنة
+                            notes,                        # 17. ملاحظات السكرتيرة
+                            "",                           # 18. تعليمات الجراح (فارغ)
+                            ""                            # 19. المتابعة (فارغ)
+                        ]
+                        
+                        sheet.append_row(row)
+                        st.success(f"✅ تم تسجيل المريض {name} بنجاح.")
+                        st.rerun()
 
             st.divider()
-            st.subheader("📋 قائمة الحالات المسجلة")
+
+            # 3. عرض قائمة المسجلين اليوم
+            st.subheader("📋 قائمة المسجلين (من الأحدث للأقدم)")
             if len(all_data) > 1:
-                df_view = pd.DataFrame(all_data[1:], columns=all_data[0])
-                st.dataframe(df_view.iloc[::-1], use_container_width=True)
-
-                if submit and name:
-                    row = [datetime.now().strftime("%Y-%m-%d"), datetime.now().strftime("%H:%M"), name, str(age), phone, address, job, social, booking, visit, str(weight), str(height), str(bmi), bp, ", ".join(chronic), notes, "", ""]
-                    sheet.append_row(row)
-                    st.success("تم الحفظ")
-                    st.rerun()
-
-            st.subheader("📋 الحالات المسجلة")
-            if len(all_data) > 1:
-                st.dataframe(pd.DataFrame(all_data[1:], columns=all_data[0]).iloc[::-1])
-
+                df_display = pd.DataFrame(all_data[1:], columns=all_data[0])
+                st.dataframe(df_display.iloc[::-1], use_container_width=True)
         elif user_role == "الجراح (الدكتورة)":
             if len(all_data) > 1:
                 df = pd.DataFrame(all_data[1:], columns=all_data[0])
@@ -167,6 +200,7 @@ if (user_role == "الجراح (الدكتورة)" and password == "111") or \
                         st.markdown(f'<a href="https://wa.me/{p["الهاتف"]}?text={urllib.parse.quote(msg)}" target="_blank">إرسال</a>', unsafe_allow_html=True)
 else:
     st.info("🔒 يرجى تسجيل الدخول")
+
 
 
 
