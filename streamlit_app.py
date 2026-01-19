@@ -3,89 +3,107 @@ import streamlit as st
 # --- 1. إعدادات الصفحة ---
 st.set_page_config(page_title="DR. BAHAA SYSTEM", layout="wide")
 
-# --- 2. إدارة الجلسة (عشان السيستم يفتكر إنك سجلت دخول) ---
+# --- 2. إدارة الجلسة ---
 if 'logged_in' not in st.session_state:
     st.session_state['logged_in'] = False
 
-# --- 3. محرك الجرافيك (الـ CSS الخاص باللوجو ولوحة التحكم) ---
+# --- 3. محرك الجرافيك والألوان (The Mint Design) ---
 st.markdown("""
     <style>
-    .stApp { background: radial-gradient(circle at center, #ffffff 0%, #f4f9f7 100%); }
+    /* توحيد الخلفية */
+    .stApp { background-color: #f4f9f7; }
     
-    /* تنسيق اللوجو 3D في شاشة الدخول */
-    .main-viewport {
-        display: flex; flex-direction: column; align-items: center;
-        justify-content: center; padding-top: 3vh; perspective: 1500px;
+    /* تنسيق القائمة الجانبية باللون المِنت جرين */
+    [data-testid="stSidebar"] {
+        background-color: #3e7d6a; /* لون المِنت جرين الغامق */
+        color: white;
     }
-    .logo-3d {
-        width: 600px; height: auto;
-        filter: drop-shadow(0px 20px 40px rgba(62, 125, 106, 0.2));
-        transition: transform 0.3s ease-out; transform-style: preserve-3d;
-    }
-    .logo-3d:hover { transform: rotateX(10deg) rotateY(10deg) scale(1.02); }
     
-    .accent-line {
-        height: 3px; width: 400px;
-        background: linear-gradient(90deg, transparent, #a3d9c9, transparent);
-        margin: 5px 0;
+    /* تغيير لون الخطوط في السايد بار للأبيض عشان تبان */
+    [data-testid="stSidebar"] * { color: white !important; }
+
+    /* الصور في السايد بار */
+    .sidebar-img-top {
+        width: 100%;
+        margin-bottom: 0px;
+        filter: drop-shadow(0px 5px 10px rgba(0,0,0,0.2));
     }
-    .system-text {
-        color: #3e7d6a; font-weight: 900; margin-bottom: 2px;
-        letter-spacing: 4px; font-size: 18px; text-align: center;
+    .sidebar-img-bottom {
+        width: 100%;
+        margin-top: -10px; /* لتقريبها من الصورة اللي فوقها */
     }
 
-    /* تنسيق كروت الإحصائيات في الداخل */
+    /* كروت الإحصائيات بلون مِنت متناسق */
     .metric-box {
-        background: white; padding: 20px; border-radius: 15px;
-        border-bottom: 4px solid #3e7d6a; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        text-align: center; color: #3e7d6a;
+        background: white;
+        padding: 20px;
+        border-radius: 20px;
+        border-right: 8px solid #a3d9c9;
+        box-shadow: 0 10px 20px rgba(62, 125, 106, 0.1);
+        text-align: center;
+        transition: 0.3s;
     }
+    .metric-box:hover { transform: translateY(-5px); }
+    .metric-box h2 { color: #3e7d6a; margin: 0; }
+    .metric-box p { color: #666; font-weight: bold; }
     </style>
 """, unsafe_allow_html=True)
 
-# --- 4. منطق العرض (شاشة دخول أم لوحة تحكم؟) ---
+# --- 4. منطق العرض ---
 
 if not st.session_state['logged_in']:
-    # ---- [ شاشة الدخول باللوجو الـ 3D ] ----
+    # شاشة الدخول (نفس اللوجو الـ 3D التفاعلي اللي ظبطناه)
     st.markdown(f"""
-        <div class="main-viewport">
-            <img src="https://i.ibb.co/YFVscsYM/Adobe-Express-file.png" class="logo-3d">
-            <div class="accent-line"></div>
-            <p class="system-text">SYSTEM ACCESS</p>
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding-top: 5vh; perspective: 1500px;">
+            <img src="https://i.ibb.co/YFVscsYM/Adobe-Express-file.png" style="width: 550px; filter: drop-shadow(0px 20px 40px rgba(62, 125, 106, 0.2)); transition: 0.3s;" onmouseover="this.style.transform='rotateX(10deg) rotateY(10deg)'" onmouseout="this.style.transform='rotateX(0) rotateY(0)'">
+            <div style="height: 3px; width: 350px; background: linear-gradient(90deg, transparent, #a3d9c9, transparent); margin: 10px 0;"></div>
+            <p style="color: #3e7d6a; font-weight: 900; letter-spacing: 3px; font-size: 18px;">SYSTEM ACCESS</p>
         </div>
     """, unsafe_allow_html=True)
 
     col1, col2, col3 = st.columns([1, 0.6, 1])
     with col2:
         st.markdown('<style>div.block-container{padding-top:0rem; margin-top:-20px;}</style>', unsafe_allow_html=True)
-        code = st.text_input("", placeholder="Access Code", type="password", label_visibility="collapsed")
+        code = st.text_input("", placeholder="Enter Access Code", type="password", label_visibility="collapsed")
         if st.button("LOGIN", use_container_width=True):
             if code == "0000":
                 st.session_state['logged_in'] = True
                 st.rerun()
             else:
-                st.error("كود غير صحيح")
+                st.error("Invalid Code")
 
 else:
-    # ---- [ لوحة التحكم بعد الدخول ] ----
+    # ---- [ لوحة التحكم المِنت الجديدة ] ----
     with st.sidebar:
-        st.image("https://i.ibb.co/YFVscsYM/Adobe-Express-file.png", width=150)
-        st.markdown("### إدارة العيادة")
-        menu = st.sidebar.selectbox("القائمة", ["الرئيسية", "المرضى", "المواعيد"])
-        if st.button("تسجيل الخروج"):
+        # وضع الصور الجديدة فوق بعضها في السايد بار
+        st.markdown(f"""
+            <img src="https://i.ibb.co/WWq0wnpg/Layer-8.png" class="sidebar-img-top">
+            <img src="https://i.ibb.co/xtmjKkMm/Layer-1-copy.png" class="sidebar-img-bottom">
+        """, unsafe_allow_html=True)
+        
+        st.markdown("<br><h4 style='text-align:center;'>DR. BAHA MANAGEMENT</h4>", unsafe_allow_html=True)
+        st.divider()
+        menu = st.radio("القائمة الرئيسية", ["الرئيسية", "سجل المرضى", "جدول العمليات", "التقارير"])
+        
+        st.markdown("<br><br>", unsafe_allow_html=True)
+        if st.button("Logout"):
             st.session_state['logged_in'] = False
             st.rerun()
 
-    st.markdown(f"<h1 style='color:#3e7d6a;'>مرحباً دكتور بهاء</h1>", unsafe_allow_html=True)
+    # محتوى لوحة التحكم
+    st.markdown("<h2 style='color:#3e7d6a; text-align:right;'>لوحة التحكم الرئيسية</h2>", unsafe_allow_html=True)
     
-    # توزيع كروت الإحصائيات
-    c1, c2, c3 = st.columns(3)
+    # صف الإحصائيات
+    c1, c2, c3, c4 = st.columns(4)
     with c1:
-        st.markdown('<div class="metric-box"><h2>15</h2><p>كشوفات اليوم</p></div>', unsafe_allow_html=True)
+        st.markdown('<div class="metric-box"><h2>24</h2><p>حالات اليوم</p></div>', unsafe_allow_html=True)
     with c2:
-        st.markdown('<div class="metric-box"><h2>4</h2><p>عمليات جراحية</p></div>', unsafe_allow_html=True)
+        st.markdown('<div class="metric-box"><h2>8</h2><p>عمليات</p></div>', unsafe_allow_html=True)
     with c3:
-        st.markdown('<div class="metric-box"><h2>120</h2><p>إجمالي المرضى</p></div>', unsafe_allow_html=True)
+        st.markdown('<div class="metric-box"><h2>150</h2><p>إجمالي المرضى</p></div>', unsafe_allow_html=True)
+    with c4:
+        st.markdown('<div class="metric-box"><h2>95%</h2><p>رضا المرضى</p></div>', unsafe_allow_html=True)
 
-    st.write("### جدول المواعيد")
-    st.dataframe({"المريض": ["أحمد", "منى"], "الساعة": ["10:00", "11:00"], "الحالة": ["انتظار", "تم"]})
+    st.write("<br>", unsafe_allow_html=True)
+    st.subheader("آخر العمليات المسجلة")
+    st.info("مرحباً دكتور بهاء، السيستم جاهز لاستقبال بيانات المرضى.")
