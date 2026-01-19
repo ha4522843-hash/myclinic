@@ -80,7 +80,7 @@ if not st.session_state['logged_in']:
 
 else:
     # ---- [ لوحة التحكم المريحة ] ----
-    with st.sidebar:
+with st.sidebar:
     # التحكم في نزول الصور: غيري رقم 50px ده لو عاوزة تنزليهم أكتر
     st.markdown(f"""
         <div style="display: flex; flex-direction: column; align-items: center; padding-top: 50px;">
@@ -110,5 +110,6 @@ else:
 
     st.write("<br>", unsafe_allow_html=True)
     st.info("السيستم الآن يعمل بأفضل أداء بصري.")
+
 
 
