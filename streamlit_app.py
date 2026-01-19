@@ -44,7 +44,7 @@ if city_choice == "+ إضافة منطقة جديدة":
     if st.button("حفظ المنطقة"):
         st.session_state['cities_list'].append(new_city)
         st.rerun()
- if 'surgeries_list' not in st.session_state:
+if 'surgeries_list' not in st.session_state:
     st.session_state['surgeries_list'] = ["تكميم معدة", "تحويل مسار", "مرارة", "فتق إربي", "تجميل أنف"]       
 # --- 3. محرك الجرافيك (التنسيق الكامل) ---
 st.markdown("""
@@ -297,6 +297,7 @@ elif patient_type == "🔍 مريض سابق (بحث وتعديل)":
                 st.markdown(f'<a href="{wa_url}" target="_blank"><button style="background:#25D366; color:white; border:none; padding:10px; border-radius:10px; width:100%;">إرسال رسالة واتساب للمريض</button></a>', unsafe_allow_html=True)
             else:
                 st.error("لم يتم العثور على مريض بهذا الاسم أو الرقم.")
+
 
 
 
