@@ -106,7 +106,7 @@ if menu == "📋 سجل المواعيد":
       st.markdown("<h2 class='main-title'>Clinical Schedule</h2>", unsafe_allow_html=True)
     
     # جدول عرض الحالات فقط (بدون زحمة واتساب)
-    for id, p in st.session_state['db'].items():
+for id, p in st.session_state['db'].items():
         row_class = "patient-row delay-alert" if p['delay'] else "patient-row"
         st.markdown(f"<div class='{row_class}'>", unsafe_allow_html=True)
         col_name, col_status = st.columns([3, 1])
@@ -249,5 +249,6 @@ elif menu == "Patients (ملف مريض)":
 
                     wa_url = f"https://wa.me/{p.get('phone', '')}"
                     st.markdown(f'<a href="{wa_url}" target="_blank"><button style="background:#25D366; color:white; border:none; padding:10px; border-radius:10px; width:100%;">إرسال واتساب</button></a>', unsafe_allow_html=True)
+
 
 
