@@ -16,7 +16,7 @@ st.markdown("""
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding-top: 400px; /* هنا التحكم في نزول اللوجو */
+        padding-top: 600px; /* هنا التحكم في نزول اللوجو */
         padding-bottom: 20px;
     }
 
@@ -73,6 +73,7 @@ with col2:
         else:
             st.error("Invalid Code")
             
+
 
 
 
