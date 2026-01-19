@@ -3,93 +3,89 @@ import streamlit as st
 # --- 1. إعدادات الصفحة ---
 st.set_page_config(page_title="DR. BAHAA SYSTEM", layout="wide")
 
-# --- 2. محرك الجرافيك (ضبط المسافات بدقة) ---
+# --- 2. إدارة الجلسة (عشان السيستم يفتكر إنك سجلت دخول) ---
+if 'logged_in' not in st.session_state:
+    st.session_state['logged_in'] = False
+
+# --- 3. محرك الجرافيك (الـ CSS الخاص باللوجو ولوحة التحكم) ---
 st.markdown("""
     <style>
-    .stApp {
-        background: radial-gradient(circle at center, #ffffff 0%, #f0f7f4 100%);
-        overflow: hidden;
-    }
-
-    /* الحاوية الرئيسية */
+    .stApp { background: radial-gradient(circle at center, #ffffff 0%, #f4f9f7 100%); }
+    
+    /* تنسيق اللوجو 3D في شاشة الدخول */
     .main-viewport {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding-top: 3vh; /* تقليل الفراغ العلوي جداً */
-        perspective: 1500px;
+        display: flex; flex-direction: column; align-items: center;
+        justify-content: center; padding-top: 3vh; perspective: 1500px;
     }
-
-    /* اللوجو 3D */
     .logo-3d {
-        width: 600px; 
-        height: auto;
+        width: 600px; height: auto;
         filter: drop-shadow(0px 20px 40px rgba(62, 125, 106, 0.2));
-        transition: transform 0.3s ease-out; 
-        transform-style: preserve-3d;
+        transition: transform 0.3s ease-out; transform-style: preserve-3d;
     }
-
-    .logo-3d:hover {
-        transform: rotateX(10deg) rotateY(10deg) scale(1.02);
-    }
-
-    /* الخط الفاصل - تم تقليل الـ margin جداً */
+    .logo-3d:hover { transform: rotateX(10deg) rotateY(10deg) scale(1.02); }
+    
     .accent-line {
-        height: 3px;
-        width: 400px;
+        height: 3px; width: 400px;
         background: linear-gradient(90deg, transparent, #a3d9c9, transparent);
-        margin: 5px 0; /* مسافة 5 بكسل فقط ليكون قريب جداً من اللوجو */
+        margin: 5px 0;
     }
-
-    /* نص SYSTEM ACCESS - تم تقليل المسافة السفلية */
     .system-text {
-        color: #3e7d6a;
-        font-weight: 900;
-        font-family: 'Segoe UI', sans-serif;
-        margin-bottom: 2px; /* تقليل المسافة جداً للالتصاق بصندوق الدخول */
-        letter-spacing: 4px;
-        font-size: 18px;
+        color: #3e7d6a; font-weight: 900; margin-bottom: 2px;
+        letter-spacing: 4px; font-size: 18px; text-align: center;
     }
 
-    /* تنسيق صندوق الدخول ليكون ملتصقاً */
-    div.stTextInput > div > div > input {
-        text-align: center;
-        border-radius: 12px;
-        border: 2px solid #a3d9c9;
-        height: 45px;
-    }
-
-    div.stButton > button {
-        border-radius: 12px;
-        background-color: #3e7d6a;
-        color: white;
-        font-weight: bold;
-        height: 45px;
-        margin-top: -10px; /* سحب الزرار لفوق ليقترب من الخانة */
+    /* تنسيق كروت الإحصائيات في الداخل */
+    .metric-box {
+        background: white; padding: 20px; border-radius: 15px;
+        border-bottom: 4px solid #3e7d6a; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        text-align: center; color: #3e7d6a;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# --- 3. التنفيذ البصري (العناصر ملتصقة ومنظمة) ---
-st.markdown(f"""
-    <div class="main-viewport">
-        <img src="https://i.ibb.co/YFVscsYM/Adobe-Express-file.png" class="logo-3d">
-        <div class="accent-line"></div>
-        <p class="system-text">SYSTEM ACCESS</p>
-    </div>
-""", unsafe_allow_html=True)
+# --- 4. منطق العرض (شاشة دخول أم لوحة تحكم؟) ---
 
-# صندوق تسجيل الدخول
-col1, col2, col3 = st.columns([1, 0.6, 1])
-with col2:
-    # إزالة فراغات ستريمليت الإجبارية
-    st.markdown('<style>div.block-container{padding-top:0rem; margin-top:-20px;}</style>', unsafe_allow_html=True)
+if not st.session_state['logged_in']:
+    # ---- [ شاشة الدخول باللوجو الـ 3D ] ----
+    st.markdown(f"""
+        <div class="main-viewport">
+            <img src="https://i.ibb.co/YFVscsYM/Adobe-Express-file.png" class="logo-3d">
+            <div class="accent-line"></div>
+            <p class="system-text">SYSTEM ACCESS</p>
+        </div>
+    """, unsafe_allow_html=True)
+
+    col1, col2, col3 = st.columns([1, 0.6, 1])
+    with col2:
+        st.markdown('<style>div.block-container{padding-top:0rem; margin-top:-20px;}</style>', unsafe_allow_html=True)
+        code = st.text_input("", placeholder="Access Code", type="password", label_visibility="collapsed")
+        if st.button("LOGIN", use_container_width=True):
+            if code == "0000":
+                st.session_state['logged_in'] = True
+                st.rerun()
+            else:
+                st.error("كود غير صحيح")
+
+else:
+    # ---- [ لوحة التحكم بعد الدخول ] ----
+    with st.sidebar:
+        st.image("https://i.ibb.co/YFVscsYM/Adobe-Express-file.png", width=150)
+        st.markdown("### إدارة العيادة")
+        menu = st.sidebar.selectbox("القائمة", ["الرئيسية", "المرضى", "المواعيد"])
+        if st.button("تسجيل الخروج"):
+            st.session_state['logged_in'] = False
+            st.rerun()
+
+    st.markdown(f"<h1 style='color:#3e7d6a;'>مرحباً دكتور بهاء</h1>", unsafe_allow_html=True)
     
-    code = st.text_input("", placeholder="Access Code", type="password", label_visibility="collapsed")
-    st.write("") # فاصل صغير جداً
-    if st.button("LOGIN", use_container_width=True):
-        if code == "123":
-            st.success("Welcome Dr. Bahaa")
-        else:
-            st.error("Invalid Code")
+    # توزيع كروت الإحصائيات
+    c1, c2, c3 = st.columns(3)
+    with c1:
+        st.markdown('<div class="metric-box"><h2>15</h2><p>كشوفات اليوم</p></div>', unsafe_allow_html=True)
+    with c2:
+        st.markdown('<div class="metric-box"><h2>4</h2><p>عمليات جراحية</p></div>', unsafe_allow_html=True)
+    with c3:
+        st.markdown('<div class="metric-box"><h2>120</h2><p>إجمالي المرضى</p></div>', unsafe_allow_html=True)
+
+    st.write("### جدول المواعيد")
+    st.dataframe({"المريض": ["أحمد", "منى"], "الساعة": ["10:00", "11:00"], "الحالة": ["انتظار", "تم"]})
