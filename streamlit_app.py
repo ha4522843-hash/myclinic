@@ -102,7 +102,7 @@ else:
             st.rerun()
 
     # ---- [ محتوى Dashboard ] ----
-  if menu == "📋 سجل المواعيد":
+if menu == "📋 سجل المواعيد":
       st.markdown("<h2 class='main-title'>Clinical Schedule</h2>", unsafe_allow_html=True)
     
     # جدول عرض الحالات فقط (بدون زحمة واتساب)
@@ -124,7 +124,7 @@ else:
 
      # ---- [ واجهة ملف المريض - هي اللي فيها الواتساب ] ----
      # ---- [ محتوى Patients ] ----
-  elif menu == "Patients (ملف مريض)":
+elif menu == "Patients (ملف مريض)":
         st.markdown("<h2 class='main-title'>مدير ملفات المرضى</h2>", unsafe_allow_html=True)
         # اختيار نوع الإجراء (مريض جديد أم سابق)
         patient_type = st.radio("اختر الإجراء المطلوب:", 
@@ -249,4 +249,5 @@ else:
 
                     wa_url = f"https://wa.me/{p.get('phone', '')}"
                     st.markdown(f'<a href="{wa_url}" target="_blank"><button style="background:#25D366; color:white; border:none; padding:10px; border-radius:10px; width:100%;">إرسال واتساب</button></a>', unsafe_allow_html=True)
+
 
