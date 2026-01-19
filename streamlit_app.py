@@ -62,7 +62,7 @@ st.markdown("""
 # --- 3. تنفيذ الواجهة (اللوجو الـ 3D العائم) ---
 st.markdown("""
     <div class="scene">
-        <img src="https://i.ibb.co/Qvm9q6bX/logo.jpg" class="logo-3d">
+        <img src="https://i.ibb.co/YFVscsYM/Adobe-Express-file.png" class="logo-3d">
     </div>
     <div class="glass-divider"></div>
 """, unsafe_allow_html=True)
@@ -70,5 +70,6 @@ st.markdown("""
 # مساحة عمل تحت الهيدر
 st.write("<br><br>", unsafe_allow_html=True)
 st.markdown("<h2 style='text-align:center; color:#3e7d6a; font-family:sans-serif;'>READY TO START THE MISSION</h2>", unsafe_allow_html=True)
+
 
 
