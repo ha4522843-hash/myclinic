@@ -32,7 +32,7 @@ st.markdown("""
     }
     
     /* تقليل المسافات بين الصور */
-    .img-box { padding: 10px; text-align: center; }
+    .img-box { padding: 50px; text-align: center; }
 
     /* كروت الإحصائيات (تصميم Glassmorphism خفيف) */
     .metric-box {
@@ -106,3 +106,4 @@ else:
 
     st.write("<br>", unsafe_allow_html=True)
     st.info("السيستم الآن يعمل بأفضل أداء بصري.")
+
