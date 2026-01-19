@@ -113,7 +113,7 @@ else:
         return years, icon
 
     # ---- [ محتوى Patients ] ----
-    elif menu == "Patients (ملف مريض)":
+      elif menu == "Patients (ملف مريض)":
         st.markdown("<h1 class='main-title'>📂 فتح ملف طبي جديد</h1>", unsafe_allow_html=True)
     
     # محرك البحث الذكي (ID أو الاسم)
@@ -186,6 +186,7 @@ else:
         if submit_btn:
             st.success(f"تم تسجيل {name} بنجاح!")
             st.balloons()
+
 
 
 
