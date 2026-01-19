@@ -32,7 +32,7 @@ st.markdown("""
     }
     
     /* تقليل المسافات بين الصور */
-    .img-box { padding: 50px; text-align: center; }
+    .img-box { padding: 10px; text-align: center; }
 
     /* كروت الإحصائيات (تصميم Glassmorphism خفيف) */
     .metric-box {
@@ -81,15 +81,19 @@ if not st.session_state['logged_in']:
 else:
     # ---- [ لوحة التحكم المريحة ] ----
     with st.sidebar:
-        # عرض الصور فوق بعض بدقة عالية
-        st.markdown(f"""
-            <div class="img-box">
-                <img src="https://i.ibb.co/WWq0wnpg/Layer-8.png" class="sidebar-img">
-                <img src="https://i.ibb.co/xtmjKkMm/Layer-1-copy.png" class="sidebar-img" style="margin-top:-10px; width:80%;">
-            </div>
-            <hr style="border-color: #a3d9c9;">
-        """, unsafe_allow_html=True)
-        
+    # التحكم في نزول الصور: غيري رقم 50px ده لو عاوزة تنزليهم أكتر
+    st.markdown(f"""
+        <div style="display: flex; flex-direction: column; align-items: center; padding-top: 50px;">
+            
+            <img src="https://i.ibb.co/WWq0wnpg/Layer-8.png" 
+                 style="width: 100%; image-rendering: -webkit-optimize-contrast;">
+            
+            <img src="https://i.ibb.co/xtmjKkMm/Layer-1-copy.png" 
+                 style="width: 80%; margin-top: 10px; image-rendering: -webkit-optimize-contrast;">
+                 
+            <div style="height: 2px; width: 80%; background: #a3d9c9; margin: 20px 0;"></div>
+        </div>
+    """, unsafe_allow_html=True)
         menu = st.radio("القائمة الرئيسية", ["Dashboard", "Patients", "Calendar"])
         
         if st.button("Logout", use_container_width=True):
@@ -106,4 +110,5 @@ else:
 
     st.write("<br>", unsafe_allow_html=True)
     st.info("السيستم الآن يعمل بأفضل أداء بصري.")
+
 
