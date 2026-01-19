@@ -103,7 +103,7 @@ if menu == "Dashboard (السجل اليومي)":
                 c_call.markdown(f'<a href="tel:{p["phone"]}"><button style="background:#3e7d6a; color:white; border:none; border-radius:8px; width:100%; padding:8px; cursor:pointer;">Call</button></a>', unsafe_allow_html=True)
             st.markdown("</div>", unsafe_allow_html=True)
             # --- 1. تعريف الدالة (يجب أن تكون في بداية الملف أو قبل استخدامها) ---
-    def calculate_age(birth_date):
+def calculate_age(birth_date):
         from datetime import date
         today = date.today()
         years = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
@@ -186,6 +186,7 @@ elif menu == "Patients (ملف مريض)":
         if submit_btn:
             st.success(f"تم تسجيل {name} بنجاح!")
             st.balloons()
+
 
 
 
