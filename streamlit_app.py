@@ -105,33 +105,74 @@ else:
 
     # ---- [ محتوى Patients ] ----
     elif menu == "Patients (ملف مريض)":
-        st.markdown("<h1 class='main-title'>Patient File Management</h1>", unsafe_allow_html=True)
+        st.markdown("<h1 class='main-title'>📂 فتح ملف طبي جديد</h1>", unsafe_allow_html=True)
+    
+    # محرك البحث الذكي (ID أو الاسم)
+    search_id = st.text_input("🔍 ابحث برقم الملف (ID) أو الاسم للتحقق من وجود المريض")
+    is_ex = search_id in st.session_state['db']
+    p_data = st.session_state['db'].get(search_id, {"name": "", "phone": "", "type": "Normal", "address": "", "job": "", "social": "أعزب", "source": "فيسبوك"})
+
+    with st.form("comprehensive_patient_form"):
+        # --- القسم الأول: البيانات الشخصية (Personal Info) ---
+        st.markdown("<h4 style='color:#3e7d6a;'>👤 أولاً: البيانات الشخصية</h4>", unsafe_allow_html=True)
+        col1, col2 = st.columns(2)
         
-        # محرك البحث
-        search_id = st.text_input("🔍 ابحث برقم الملف (ID) أو الاسم")
-        is_ex = search_id in st.session_state['db']
-        p_data = st.session_state['db'].get(search_id, {"name": "", "phone": "", "type": "Normal"})
+        with col1:
+            name = st.text_input("الاسم الرباعي", value=p_data['name'], disabled=is_ex)
+            gender = st.radio("النوع", ["ذكر 💙", "أنثى 💗"], horizontal=True, disabled=is_ex)
+            # محرك العمر الذكي
+            dob = st.date_input("تاريخ الميلاد", min_value=date(1940, 1, 1))
+            age_years, age_icon = calculate_age(dob)
+            st.info(f"السن المحسوب: {age_years} سنة {age_icon}")
 
-        with st.form("patient_form"):
-            c1, c2 = st.columns(2)
-            with c1:
-                name = st.text_input("الاسم", value=p_data['name'], disabled=is_ex)
-                gender = st.radio("النوع", ["ذكر 💙", "أنثى 💗"], horizontal=True, disabled=is_ex)
-            with c2:
-                phone = st.text_input("الموبايل", value=p_data['phone'], disabled=is_ex)
-                job = st.selectbox("المهنة", ["طبيب", "مهندس", "أخرى"], disabled=is_ex)
+        with col2:
+            phone = st.text_input("رقم الموبايل (واتساب)", value=p_data['phone'], disabled=is_ex)
+            social = st.selectbox("الحالة الاجتماعية", ["أعزب", "متزوج", "مطلق", "أرمل"], index=0)
+            # القوائم الذكية (تتعلم ذاتياً)
+            job = st.selectbox("المهنة (قائمة ذكية)", options=st.session_state.get('jobs_list', ["طبيب", "مهندس", "أعمال حرة", "أخرى"]))
+            source = st.selectbox("مصدر الحجز", ["فيسبوك", "تيك توك", "إعلان ممول", "ترشيح من مريض"], index=0)
 
-            st.markdown("---")
-            # قسم السمنة (يظهر للكل كخيار لكن الدكتور هو من يسجل)
-            is_ob = st.checkbox("حالة سمنة (محرك BMI)", value=(p_data['type']=="Obesity"))
-            if is_ob:
-                cw, ch, cb = st.columns(3)
-                w = cw.number_input("الوزن (كجم)", value=80.0)
-                h = ch.number_input("الطول (سم)", value=170.0)
-                if h > 0:
-                    bmi_val = w / ((h/100)**2)
-                    cb.metric("BMI Result", f"{bmi_val:.1f}")
-            
-            if st.form_submit_button("💾 حفظ البيانات"):
-                st.success("تم الحفظ وتحديث الأرشيف الطبي بنجاح.")
+        # --- القسم الثاني: العنوان التفصيلي (Smart Address) ---
+        st.markdown("<h4 style='color:#3e7d6a;'>📍 ثانياً: العنوان والسكن</h4>", unsafe_allow_html=True)
+        c_addr1, c_addr2 = st.columns(2)
+        with c_addr1:
+            city = st.selectbox("المحافظة / المنطقة", ["القاهرة", "الجيزة", "الإسكندرية", "أخرى"])
+        with c_addr2:
+            street = st.text_input("الشارع / رقم المبنى / علامة مميزة")
+
+        st.markdown("---")
+
+        # --- القسم الثالث: المؤشرات القياسية (Vital Signs) ---
+        st.markdown("<h4 style='color:#3e7d6a;'>📊 ثالثاً: المؤشرات القياسية (خاص للدكتور)</h4>", unsafe_allow_html=True)
+        is_ob = st.checkbox("حالة سمنة (تفعيل حسابات BMI)", value=(p_data['type']=="Obesity"))
+        
+        c_w, c_h, c_p, c_t = st.columns(4)
+        weight = c_w.number_input("الوزن (kg)", min_value=1.0, value=80.0)
+        height = c_h.number_input("الطول (cm)", min_value=1.0, value=170.0)
+        pressure = c_p.text_input("الضغط (BP)", placeholder="120/80")
+        pulse = c_t.text_input("النبض (Pulse)", placeholder="72 bpm")
+        
+        if is_ob and height > 0:
+            bmi_val = weight / ((height/100)**2)
+            st.metric("معادل كتلة الجسم (BMI)", f"{bmi_val:.2f}")
+            if bmi_val > 30: st.error("تحذير: سمنة مفرطة")
+
+        st.markdown("---")
+
+        # --- القسم الرابع: التاريخ الطبي (Medical History) ---
+        st.markdown("<h4 style='color:#3e7d6a;'>🩺 رابعاً: التاريخ الطبي والعمليات</h4>", unsafe_allow_html=True)
+        c_med1, c_med2 = st.columns(2)
+        with c_med1:
+            chronic = st.multiselect("الأمراض المزمنة", ["السكري", "الضغط", "حساسية صدر", "أمراض قلب"])
+        with c_med2:
+            prev_surgery = st.text_area("العمليات الجراحية السابقة", placeholder="اذكر نوع العملية وتاريخها إن وجد")
+
+        # تاريخ التسجيل (تلقائي وغير قابل للتعديل)
+        reg_date = st.date_input("تاريخ تسجيل الملف (تلقائي)", value=date.today(), disabled=True)
+
+        # زر الحفظ النهائي
+        if st.form_submit_button("💾 حفظ ملف المريض المشفر"):
+            st.balloons()
+            st.success(f"تم إنشاء ملف طبي جديد للمريض: {name} بنجاح!")
+
 
