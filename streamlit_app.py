@@ -1,80 +1,60 @@
 import streamlit as st
 
-# --- 1. إعدادات الهوية البصرية المتكررة (Global Theme) ---
-st.set_page_config(page_title="Dr. Bahaa Bariatric System", layout="wide")
+# --- إعدادات الصفحة ---
+st.set_page_config(page_title="DR. BAHAA SYSTEM", layout="wide")
 
-# تثبيت الألوان (Mint Green) والخطوط
+# --- محرك التنسيق (CSS) لبروز الاسم الإنجليزي فقط ---
 st.markdown("""
     <style>
-    /* الخطوط والألوان العامة */
-    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
-    
-    html, body, [class*="css"] {
-        font-family: 'Cairo', sans-serif;
-        text-align: right;
-    }
+    /* استيراد خط Poppins العالمي */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@900&display=swap');
     
     :root {
         --mint: #a3d9c9;
         --deep-mint: #3e7d6a;
     }
 
-    /* الهيدر الثابت في كل الصفحات */
+    /* الهيدر الاحترافي */
     .main-header {
         background: white;
-        padding: 15px 30px;
-        border-bottom: 4px solid var(--mint);
-        border-radius: 0 0 20px 20px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        padding: 25px 50px;
+        border-bottom: 8px solid var(--mint);
+        border-radius: 0 0 40px 40px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1);
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 25px;
     }
 
-    .title-text {
-        text-align: center;
-        flex-grow: 1;
-    }
-
-    .title-text h2 {
+    /* الاسم الإنجليزي (كبير جداً وفخم) */
+    .title-text h1 {
         color: var(--deep-mint);
+        font-family: 'Poppins', sans-serif;
+        font-size: 55px; /* حجم عملاق */
+        font-weight: 900;
         margin: 0;
-        font-size: 24px;
-        font-weight: 700;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.05);
     }
 
-    .title-text h4 {
-        color: #666;
-        margin: 0;
-        font-size: 16px;
-        font-weight: 400;
-        letter-spacing: 1px;
-    }
-
-    /* تنسيق اللوجوهات */
     .logo-img {
-        width: 80px;
+        width: 120px; /* تكبير اللوجو ليتناسب مع فخامة العنوان */
         height: auto;
-        object-fit: contain;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# --- 2. تنفيذ الهيدر (العربي والإنجليزي واللوجو) ---
-# ده الجزء اللي هيتكرر معانا في كل صفحة
+# --- تنفيذ الهيدر الثابت بدون عربي ---
 st.markdown(f"""
     <div class="main-header">
         <img src="https://i.ibb.co/7JS5M1yR/Background.jpg" class="logo-img">
         <div class="title-text">
-            <h2>منظومة د. بهاء لجراحات السمنة والمناظير</h2>
-            <h4>Dr. Bahaa's Bariatric & Laparoscopic Surgery System</h4>
+            <h1>DR. BAHAA BARIATRIC SYSTEM</h1>
         </div>
         <img src="https://i.ibb.co/Qvm9q6bX/logo.jpg" class="logo-img">
     </div>
 """, unsafe_allow_html=True)
 
-# --- 3. محتوى الصفحة التجريبي (لبناء الأجزاء التالية) ---
-st.write("### تم تثبيت الهوية البصرية بنجاح ✅")
-st.info("الاسم بالعربي والإنجليزي مع اللوجو المفرود سيظهرون دائماً في أعلى التطبيق.")
-
+st.write("<br><br>", unsafe_allow_html=True)
+st.success("✅ الهوية الإنجليزية الكاملة اعتُمدت. الاسم في المنتصف بحجم كبير جداً وبنفس ألوان اللوجو.")
