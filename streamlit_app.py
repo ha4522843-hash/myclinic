@@ -7,7 +7,15 @@ st.set_page_config(page_title="DR. BAHAA SYSTEM", layout="wide")
 # --- 2. إدارة الجلسة والبيانات ---
 if 'logged_in' not in st.session_state:
     st.session_state['logged_in'] = False
-
+   # --- 1. تعريف الدالة (يجب أن تكون في بداية الملف أو قبل استخدامها) ---
+def calculate_age(birth_date):
+    from datetime import date
+    today = date.today()
+    years = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
+    if years < 12: icon = "👶 (طفل)"
+    elif years < 60: icon = "👱 (بالغ)"
+    else: icon = "👴 (كبير سن)"
+    return years, icon
 # قاعدة بيانات وهمية للتجربة (يمكن استبدالها لاحقاً بقاعدة بيانات حقيقية)
 if 'db' not in st.session_state:
     st.session_state['db'] = {
@@ -102,15 +110,6 @@ if menu == "Dashboard (السجل اليومي)":
                 c_wa.markdown(f'<a href="{wa_link}" target="_blank"><button style="background:#25D366; color:white; border:none; border-radius:8px; width:100%; padding:8px; cursor:pointer;">WhatsApp</button></a>', unsafe_allow_html=True)
                 c_call.markdown(f'<a href="tel:{p["phone"]}"><button style="background:#3e7d6a; color:white; border:none; border-radius:8px; width:100%; padding:8px; cursor:pointer;">Call</button></a>', unsafe_allow_html=True)
             st.markdown("</div>", unsafe_allow_html=True)
-            # --- 1. تعريف الدالة (يجب أن تكون في بداية الملف أو قبل استخدامها) ---
-def calculate_age(birth_date):
-        from datetime import date
-        today = date.today()
-        years = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
-        if years < 12: icon = "👶 (طفل)"
-        elif years < 60: icon = "👱 (بالغ)"
-        else: icon = "👴 (كبير سن)"
-        return years, icon
 
     # ---- [ محتوى Patients ] ----
 elif menu == "Patients (ملف مريض)":
@@ -186,6 +185,7 @@ elif menu == "Patients (ملف مريض)":
         if submit_btn:
             st.success(f"تم تسجيل {name} بنجاح!")
             st.balloons()
+
 
 
 
