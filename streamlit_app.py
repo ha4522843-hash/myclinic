@@ -1,56 +1,56 @@
 import streamlit as st
 
 # --- إعدادات الصفحة ---
-st.set_page_config(page_title="Dr. Bahaa System", layout="wide")
+st.set_page_config(page_title="DR. BAHAA SYSTEM", layout="wide")
 
-# --- تنسيق الـ CSS لتوسيط اللوجو والحفاظ على الألوان ---
+# --- تنسيق الـ CSS الفخم (بدون مستطيلات تقليدية) ---
 st.markdown("""
     <style>
-    :root {
-        --mint: #a3d9c9;
-        --deep-mint: #3e7d6a;
-    }
-
-    /* جعل خلفية التطبيق متناسقة مع ألوان الهوية */
+    /* جعل الخلفية العامة هادئة جداً لتبرز اللوجو */
     .main {
-        background-color: #f8fbf9;
+        background: radial-gradient(circle, #fdfdfd 0%, #f0f7f4 100%);
     }
 
-    /* الهيدر المصمم لتوسيط اللوجو فقط */
-    .main-header {
-        background: white;
-        padding: 40px;
-        border-bottom: 8px solid var(--mint);
-        border-radius: 0 0 60px 60px;
-        box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+    /* حاوية اللوجو: شفافة وبدون حدود ثقيلة */
+    .logo-container {
         display: flex;
-        justify-content: center; /* توسيط أفقي كامل */
+        justify-content: center;
         align-items: center;
+        padding: 60px 0; /* مساحة واسعة حول اللوجو */
+        background: transparent; /* إزالة المستطيل الأبيض */
     }
 
-    /* تكبير اللوجو ليكون هو العنوان البصري الوحيد */
-    .center-logo {
-        width: 300px; /* حجم كبير وواضح في المنتصف */
+    /* تكبير اللوجو جداً وجعله عائم */
+    .hero-logo {
+        width: 500px; /* حجم ضخم وواضح */
         height: auto;
-        transition: transform 0.3s ease;
+        filter: drop-shadow(0px 20px 30px rgba(62, 125, 106, 0.15)); /* ظل ناعم بلون المِنت جرين */
+        transition: all 0.5s ease;
     }
-    
-    .center-logo:hover {
-        transform: scale(1.05); /* حركة خفيفة عند الوقوف عليه */
+
+    /* حركة خفيفة عند الوقوف على اللوجو */
+    .hero-logo:hover {
+        transform: scale(1.02) translateY(-10px);
+    }
+
+    /* خط مِنت جرين نحيف وأنيق يفصل بين الهيدر والمحتوى */
+    .divider-line {
+        height: 2px;
+        background: linear-gradient(to right, transparent, #a3d9c9, transparent);
+        margin: 0 auto;
+        width: 80%;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# --- تنفيذ الهيدر (اللوجو فقط في المنتصف) ---
-st.markdown(f"""
-    <div class="main-header">
-        <img src="https://i.ibb.co/Qvm9q6bX/logo.jpg" class="center-logo">
+# --- تنفيذ الواجهة (اللوجو فقط في المنتصف بأناقة) ---
+st.markdown("""
+    <div class="logo-container">
+        <img src="https://i.ibb.co/Qvm9q6bX/logo.jpg" class="hero-logo">
     </div>
+    <div class="divider-line"></div>
 """, unsafe_allow_html=True)
 
-# مسافة جمالية تحت الهيدر
+# مسافة تحت الهيدر لبدء المحتوى
 st.write("<br><br>", unsafe_allow_html=True)
-
-# رسالة تأكيد (تظهر لك فقط الآن)
-st.success("✅ تم اعتماد الهوية البصرية الصامتة: اللوجو في المنتصف بدون أي نصوص، مع الحفاظ على ألوان المنظومة.")
 
