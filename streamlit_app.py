@@ -16,8 +16,8 @@ st.markdown("""
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding-top: 100px; /* هنا التحكم في نزول اللوجو */
-        padding-bottom: 100px;
+        padding-top: 250px; /* هنا التحكم في نزول اللوجو */
+        padding-bottom: 20px;
     }
 
     .big-logo {
@@ -73,5 +73,6 @@ with col2:
         else:
             st.error("Invalid Code")
             
+
 
 
