@@ -123,20 +123,7 @@ else:
         st.markdown("</div>", unsafe_allow_html=True)
 
      # ---- [ واجهة ملف المريض - هي اللي فيها الواتساب ] ----
-    elif menu == "📂 ملفات المرضى":
-         st.markdown("<h2 class='main-title'>Patient File</h2>", unsafe_allow_html=True)
-    
-         # البحث عن المريض
-         search = st.text_input("🔍 ابحث بالاسم لفتح الملف")
-         if search:
-             st.markdown("---")
-         # هنا يظهر زر الواتساب فقط عند فتح ملف مريض معين
-         c1, c2 = st.columns([3, 1])
-         with c2:
-             st.markdown('<button style="background:#25D366; color:white; border:none; border-radius:10px; padding:10px; width:100%;">WhatsApp Message</button>', unsafe_allow_html=True)
-        
-            # باقي استمارة المريض والـ BMI والعمليات...
-    # ---- [ محتوى Patients ] ----
+  # ---- [ محتوى Patients ] ----
     elif menu == "Patients (ملف مريض)":
         st.markdown("<h2 class='main-title'>مدير ملفات المرضى</h2>", unsafe_allow_html=True)
         # اختيار نوع الإجراء (مريض جديد أم سابق)
@@ -146,174 +133,119 @@ else:
         st.markdown("---")
 
         if patient_type == "🆕 مريض جديد لأول مرة":
-        st.markdown("<h4 style='color:#3e7d6a;'>📝 إنشاء ملف جديد</h4>", unsafe_allow_html=True)
-
-        with st.form("comprehensive_patient_form"):
-            # --- القسم الأول: البيانات الشخصية (Personal Info) ---
-            st.markdown("<h4 style='color:#3e7d6a;'>👤 أولاً: البيانات الشخصية</h4>", unsafe_allow_html=True)
-            col1, col2 = st.columns(2)
-        
-            with col1:
-                name = st.text_input("الاسم الرباعي", value=p_data['name'], disabled=is_ex)
-                gender = st.radio("النوع", ["ذكر 💙", "أنثى 💗"], horizontal=True, disabled=is_ex)
-                # محرك العمر الذكي
-                dob = st.date_input("تاريخ الميلاد", min_value=date(1940, 1, 1))
-                age_years, age_icon = calculate_age(dob)
-                st.info(f"السن المحسوب: {age_years} سنة {age_icon}")
-
-           with col2:
-               phone = st.text_input("رقم الموبايل (واتساب)", value=p_data['phone'], disabled=is_ex)
-               social = st.selectbox("الحالة الاجتماعية", ["أعزب", "متزوج", "مطلق", "أرمل"], index=0)
-               # القوائم الذكية (تتعلم ذاتياً)
-               job = st.selectbox("المهنة (قائمة ذكية)", options=st.session_state.get('jobs_list', ["طبيب", "مهندس", "أعمال حرة", "أخرى"]))
-               source = st.selectbox("مصدر الحجز", ["فيسبوك", "تيك توك", "إعلان ممول", "ترشيح من مريض"], index=0)
-
-               # --- القسم الثاني: العنوان التفصيلي (Smart Address) ---
-          st.markdown("<h4 style='color:#3e7d6a;'>📍 ثانياً: العنوان والسكن</h4>", unsafe_allow_html=True)
-              c_addr1, c_addr2 = st.columns(2)
-          with c_addr1:
-            city = st.selectbox("المحافظة / المنطقة", ["القاهرة", "الجيزة", "الإسكندرية", "أخرى"])
-          with c_addr2:
-            street = st.text_input("الشارع / رقم المبنى / علامة مميزة")
-
-          st.markdown("---")
-
-          # --- القسم الثالث: المؤشرات القياسية (Vital Signs) ---
-          st.markdown("<h4 style='color:#3e7d6a;'>📊 ثالثاً: المؤشرات القياسية (خاص للدكتور)</h4>", unsafe_allow_html=True)
-           is_ob = st.checkbox("حالة سمنة (تفعيل حسابات BMI)", value=(p_data['type']=="Obesity"))
-        
-          c_w, c_h, c_p, c_t = st.columns(4)
-          weight = c_w.number_input("الوزن (kg)", min_value=1.0, value=80.0)
-          height = c_h.number_input("الطول (cm)", min_value=1.0, value=170.0)
-          pressure = c_p.text_input("الضغط (BP)", placeholder="120/80")
-          pulse = c_t.text_input("النبض (Pulse)", placeholder="72 bpm")
-         
-        if is_ob and height > 0:
-            bmi_val = weight / ((height/100)**2)
-            st.metric("معادل كتلة الجسم (BMI)", f"{bmi_val:.2f}")
-            if bmi_val > 30: st.error("تحذير: سمنة مفرطة")
-
-        st.markdown("---")
-
-        # --- القسم الرابع: التاريخ الطبي (Medical History) ---
-        st.markdown("<h4 style='color:#3e7d6a;'>🩺 رابعاً: التاريخ الطبي والعمليات</h4>", unsafe_allow_html=True)
-        c_med1, c_med2 = st.columns(2)
-        with c_med1:
-            chronic = st.multiselect("الأمراض المزمنة", ["السكري", "الضغط", "حساسية صدر", "أمراض قلب"])
-        with c_med2:
-            # --- خانة العمليات السابقة الذكية ---
-        st.markdown("##### ✂️ التاريخ الجراحي")
-        selected_surgeries = st.multiselect(
-              "العمليات السابقة (اختر من القائمة)", 
-            options=st.session_state['surgeries_list']
-                                                         )
-
-            # خيار إضافة عملية جديدة للقائمة (خارج الـ multiselect لضمان التحديث)
-       with st.expander("➕ إضافة عملية غير موجودة بالقائمة"):
-           new_surgery = st.text_input("اسم العملية الجديدة")
-           if st.button("إضافة العملية للقائمة الدائمة"):
-              if new_surgery and new_surgery not in st.session_state['surgeries_list']:
-                  st.session_state['surgeries_list'].append(new_surgery)
-                  st.success(f"تمت إضافة '{new_surgery}' بنجاح!")
-                  st.rerun()
-
-        # تاريخ التسجيل (تلقائي وغير قابل للتعديل)
-        reg_date = st.date_input("تاريخ تسجيل الملف (تلقائي)", value=date.today(), disabled=True)
-
-        # زر الحفظ النهائي
-       # الزرار السحري (لازم يكون جوه الـ with ومزاح لليمين)
-        submit_btn = st.form_submit_button("💾 حفظ ملف المريض في الأرشيف")
-
-        if submit_btn:
-            st.success(f"تم تسجيل {name} بنجاح!")
-            st.balloons()
-elif patient_type == "🔍 مريض سابق (بحث وتعديل)":
-        st.markdown("<h4 style='color:#3e7d6a;'>🔎 البحث في الأرشيف</h4>")
-        search_query = st.text_input("ادخل اسم المريض أو رقم الملف (ID) للبحث:")
-        
-        # محاكاة البحث
-        if search_query:
-            # هنا نفترض وجود المريض (مثلاً ID 101)
-            is_found = search_query in st.session_state['db']
+            st.markdown("<h4 style='color:#3e7d6a;'>📝 إنشاء ملف جديد</h4>", unsafe_allow_html=True)
             
-            if is_found:
-                p = st.session_state['db'][search_query]
-                st.success(f"تم العثور على ملف: {p['name']}")
-                
-                with st.form("update_existing_patient"):
-                # --- القسم الأول: بيانات قابلة للتعديل ---
-                st.markdown("##### 📝 تحديث البيانات الأساسية")
+            with st.form("comprehensive_patient_form"):
+                # --- القسم الأول: البيانات الشخصية ---
+                st.markdown("<h4 style='color:#3e7d6a;'>👤 أولاً: البيانات الشخصية</h4>", unsafe_allow_html=True)
                 col1, col2 = st.columns(2)
+            
                 with col1:
-                    # الاسم هو الوحيد المقفل
-                    st.text_input("الاسم (لا يمكن تعديله)", value=p['name'], disabled=True)
-                    u_phone = st.text_input("رقم الموبايل", value=p.get('phone', ""))
-                with col2:  
-                     phone = st.text_input("رقم الموبايل (واتساب)", value=p_data['phone'], disabled=is_ex)
+                    name = st.text_input("الاسم الرباعي")
+                    gender = st.radio("النوع", ["ذكر 💙", "أنثى 💗"], horizontal=True)
+                    dob = st.date_input("تاريخ الميلاد", min_value=date(1940, 1, 1))
+                    age_years, age_icon = calculate_age(dob)
+                    st.info(f"السن المحسوب: {age_years} سنة {age_icon}")
+
+                with col2:
+                    phone = st.text_input("رقم الموبايل (واتساب)")
                     social = st.selectbox("الحالة الاجتماعية", ["أعزب", "متزوج", "مطلق", "أرمل"], index=0)
-                    # القوائم الذكية (تتعلم ذاتياً)
-                    job = st.selectbox("المهنة (قائمة ذكية)", options=st.session_state.get('jobs_list', ["طبيب", "مهندس", "أعمال حرة", "أخرى"]))
-                    source = st.selectbox("مصدر الحجز", ["فيسبوك", "تيك توك", "إعلان ممول", "ترشيح من مريض"], index=0)
+                    job = st.selectbox("المهنة (قائمة ذكية)", options=st.session_state.get('jobs_list', ["طبيب", "مهندس", "أخرى"]))
+                    source = st.selectbox("مصدر الحجز", ["فيسبوك", "تيك توك", "إعلان ممول"], index=0)
 
-                    # --- القسم الثاني: العنوان التفصيلي (Smart Address) ---
-                   st.markdown("<h4 style='color:#3e7d6a;'>📍 ثانياً: العنوان والسكن</h4>", unsafe_allow_html=True)
-                    c_addr1, c_addr2 = st.columns(2)
-                   with c_addr1:
-                   city = st.selectbox("المحافظة / المنطقة", ["القاهرة", "الجيزة", "الإسكندرية", "أخرى"])
-                   with c_addr2:
-                   street = st.text_input("الشارع / رقم المبنى / علامة مميزة")
+                # --- القسم الثاني: العنوان التفصيلي ---
+                st.markdown("<h4 style='color:#3e7d6a;'>📍 ثانياً: العنوان والسكن</h4>", unsafe_allow_html=True)
+                c_addr1, c_addr2 = st.columns(2)
+                with c_addr1:
+                    city = st.selectbox("المحافظة / المنطقة", ["القاهرة", "الجيزة", "الإسكندرية", "أخرى"])
+                with c_addr2:
+                    street = st.text_input("الشارع / رقم المبنى / علامة مميزة")
 
-                   st.markdown("---")
+                st.markdown("---")
 
-               # --- القسم الثاني: التاريخ الطبي (قراءة + إضافة) ---
-                st.markdown("##### 🩺 التاريخ الطبي والعمليات")
-                med_col1, med_col2 = st.columns(2)
-                
-                with med_col1:
-                    # عرض الأمراض القديمة وإضافة الجديد
-                    old_chronic = ", ".join(p.get('chronic', ["لا يوجد"]))
-                    st.text_input("الأمراض المسجلة سابقاً (للقراءة فقط)", value=old_chronic, disabled=True)
-                    new_chronic = st.multiselect("إضافة أمراض مزمنة جديدة", ["السكري", "الضغط", "القلب", "حساسية"])
+                # --- القسم الثالث: المؤشرات القياسية ---
+                st.markdown("<h4 style='color:#3e7d6a;'>📊 ثالثاً: المؤشرات القياسية (خاص للدكتور)</h4>", unsafe_allow_html=True)
+                is_ob = st.checkbox("حالة سمنة (تفعيل حسابات BMI)")
+            
+                c_w, c_h, c_p, c_t = st.columns(4)
+                weight = c_w.number_input("الوزن (kg)", min_value=1.0, value=80.0)
+                height = c_h.number_input("الطول (cm)", min_value=1.0, value=170.0)
+                pressure = c_p.text_input("الضغط (BP)", placeholder="120/80")
+                pulse = c_t.text_input("النبض (Pulse)", placeholder="72 bpm")
+             
+                if is_ob and height > 0:
+                    bmi_val = weight / ((height/100)**2)
+                    st.metric("معادل كتلة الجسم (BMI)", f"{bmi_val:.2f}")
 
-                with med_col2:
-                    # عرض العمليات القديمة وإضافة الجديد
-                    old_surgeries = p.get('prev_surgeries', "لا يوجد")
-                    st.text_area("العمليات السابقة المسجلة (للقراءة فقط)", value=old_surgeries, disabled=True, height=68)
-                    add_surgery = st.text_input("إضافة عملية جراحية جديدة")
+                st.markdown("---")
 
-                st.divider() 
-                # إضافة مؤشرات جديدة (مفتوحة للطبيب)
-                st.markdown("##### 📈 تحديث المؤشرات الحيوية")
-                with st.form("update_vitals"):
-                    col_w, col_h = st.columns(2)
-                    u_weight = col_w.number_input("الوزن الحالي (kg)")
-                    u_pressure = col_h.text_input("الضغط الحالي")
+                # --- القسم الرابع: التاريخ الطبي والعمليات ---
+                st.markdown("<h4 style='color:#3e7d6a;'>🩺 رابعاً: التاريخ الطبي والعمليات</h4>", unsafe_allow_html=True)
+                c_med1, c_med2 = st.columns(2)
+                with c_med1:
+                    chronic = st.multiselect("الأمراض المزمنة", ["السكري", "الضغط", "حساسية صدر", "أمراض قلب"])
+                with c_med2:
+                    st.markdown("##### ✂️ التاريخ الجراحي")
+                    selected_surgeries = st.multiselect("العمليات السابقة", options=st.session_state.get('surgeries_list', []))
+
+                reg_date = st.date_input("تاريخ تسجيل الملف (تلقائي)", value=date.today(), disabled=True)
+                submit_btn = st.form_submit_button("💾 حفظ ملف المريض في الأرشيف")
+                if submit_btn:
+                    st.success(f"تم تسجيل المريض بنجاح!")
+                    st.balloons()
+
+            with st.expander("➕ إضافة عملية غير موجودة بالقائمة"):
+                new_surgery = st.text_input("اسم العملية الجديدة")
+                if st.button("إضافة العملية للقائمة الدائمة"):
+                    if new_surgery and new_surgery not in st.session_state['surgeries_list']:
+                        st.session_state['surgeries_list'].append(new_surgery)
+                        st.success(f"تمت إضافة '{new_surgery}'!")
+                        st.rerun()
+
+        elif patient_type == "🔍 مريض سابق (بحث وتعديل)":
+            st.markdown("<h4 style='color:#3e7d6a;'>🔎 البحث في الأرشيف</h4>")
+            search_query = st.text_input("ادخل اسم المريض أو رقم الملف (ID) للبحث:")
+            
+            if search_query:
+                is_found = search_query in st.session_state['db']
+                if is_found:
+                    p = st.session_state['db'][search_query]
+                    st.success(f"تم العثور على ملف: {p['name']}")
                     
-                    if st.form_submit_button("💾 تحديث القياسات"):
-                        st.info("تمت إضافة القياسات الجديدة لسجل المريض")
+                    with st.form("update_existing_patient"):
+                        st.markdown("##### 📝 تحديث البيانات الأساسية")
+                        col1, col2 = st.columns(2)
+                        with col1:
+                            st.text_input("الاسم (لا يمكن تعديله)", value=p['name'], disabled=True)
+                            u_phone = st.text_input("رقم الموبايل", value=p.get('phone', ""))
+                        with col2:
+                            u_social = st.selectbox("الحالة الاجتماعية", ["أعزب", "متزوج", "مطلق", "أرمل"])
+                            u_job = st.selectbox("المهنة", options=st.session_state.get('jobs_list', ["أخرى"]))
+                       # --- القسم الثاني: التاريخ الطبي (قراءة + إضافة) ---
+                        st.markdown("##### 🩺 التاريخ الطبي والعمليات")
+                        med_col1, med_col2 = st.columns(2)
                 
-                # زر الواتساب يظهر هنا فقط في المريض السابق
-                wa_url = f"https://wa.me/{p['phone']}"
-                st.markdown(f'<a href="{wa_url}" target="_blank"><button style="background:#25D366; color:white; border:none; padding:10px; border-radius:10px; width:100%;">إرسال رسالة واتساب للمريض</button></a>', unsafe_allow_html=True)
-            else:
-                st.error("لم يتم العثور على مريض بهذا الاسم أو الرقم.")
+                        with med_col1:
+                            # عرض الأمراض القديمة وإضافة الجديد
+                            old_chronic = ", ".join(p.get('chronic', ["لا يوجد"]))
+                            st.text_input("الأمراض المسجلة سابقاً (للقراءة فقط)", value=old_chronic, disabled=True)
+                            new_chronic = st.multiselect("إضافة أمراض مزمنة جديدة", ["السكري", "الضغط", "القلب", "حساسية"])
 
+                        with med_col2:
+                            # عرض العمليات القديمة وإضافة الجديد
+                            old_surgeries = p.get('prev_surgeries', "لا يوجد")
+                            st.text_area("العمليات السابقة المسجلة (للقراءة فقط)", value=old_surgeries, disabled=True, height=68)
+                            add_surgery = st.text_input("إضافة عملية جراحية جديدة")
 
+                       st.divider()
+                     
+                        st.markdown("##### 📈 تحديث المؤشرات (زيارة اليوم)")
+                        v1, v2 = st.columns(2)
+                        u_weight = v1.number_input("الوزن الحالي")
+                        u_pressure = v2.text_input("الضغط الحالي")
+                        
+                        if st.form_submit_button("💾 حفظ التعديلات"):
+                            st.info("تم التحديث!")
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                    wa_url = f"https://wa.me/{p.get('phone', '')}"
+                    st.markdown(f'<a href="{wa_url}" target="_blank"><button style="background:#25D366; color:white; border:none; padding:10px; border-radius:10px; width:100%;">إرسال واتساب</button></a>', unsafe_allow_html=True)
