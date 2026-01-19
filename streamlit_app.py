@@ -3,86 +3,75 @@ import streamlit as st
 # --- 1. إعدادات الصفحة ---
 st.set_page_config(page_title="DR. BAHAA SYSTEM", layout="wide")
 
-# --- 2. محرك الجرافيك (تعديل الحجم ليكون أضخم) ---
+# --- 2. محرك الجرافيك (ضبط المسافات بدقة) ---
 st.markdown("""
     <style>
-    /* خلفية فخمة ومنع السكرول */
     .stApp {
         background: radial-gradient(circle at center, #ffffff 0%, #f0f7f4 100%);
         overflow: hidden;
     }
 
-    /* حاوية العرض الرئيسية */
+    /* الحاوية الرئيسية */
     .main-viewport {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding-top: 2vh; 
-        perspective: 1500px; /* زيادة العمق البصري */
+        padding-top: 3vh; /* تقليل الفراغ العلوي جداً */
+        perspective: 1500px;
     }
 
-    /* اللوجو الـ 3D الضخم */
+    /* اللوجو 3D */
     .logo-3d {
-        width: 650px; /* تكبير الحجم ليكون ضخم وواضح */
+        width: 600px; 
         height: auto;
-        filter: drop-shadow(0px 25px 50px rgba(62, 125, 106, 0.25));
+        filter: drop-shadow(0px 20px 40px rgba(62, 125, 106, 0.2));
         transition: transform 0.3s ease-out; 
         transform-style: preserve-3d;
-        cursor: pointer;
     }
 
-    /* تأثير الميلان عند ملامسة الماوس */
     .logo-3d:hover {
         transform: rotateX(10deg) rotateY(10deg) scale(1.02);
-        filter: drop-shadow(0px 45px 65px rgba(62, 125, 106, 0.35));
     }
 
-    /* الخط الفاصل */
+    /* الخط الفاصل - تم تقليل الـ margin جداً */
     .accent-line {
         height: 3px;
-        width: 450px; /* تكبير عرض الخط ليتناسب مع اللوجو */
+        width: 400px;
         background: linear-gradient(90deg, transparent, #a3d9c9, transparent);
-        margin: 15px 0;
+        margin: 5px 0; /* مسافة 5 بكسل فقط ليكون قريب جداً من اللوجو */
     }
 
-    /* نص SYSTEM ACCESS */
+    /* نص SYSTEM ACCESS - تم تقليل المسافة السفلية */
     .system-text {
         color: #3e7d6a;
         font-weight: 900;
         font-family: 'Segoe UI', sans-serif;
-        margin-bottom: 15px;
-        letter-spacing: 4px; /* زيادة التباعد ليعطي فخامة */
-        font-size: 20px;
+        margin-bottom: 2px; /* تقليل المسافة جداً للالتصاق بصندوق الدخول */
+        letter-spacing: 4px;
+        font-size: 18px;
     }
 
-    /* تنسيق صندوق الدخول ليكون متناسق مع الحجم الكبير */
+    /* تنسيق صندوق الدخول ليكون ملتصقاً */
     div.stTextInput > div > div > input {
         text-align: center;
-        border-radius: 15px;
+        border-radius: 12px;
         border: 2px solid #a3d9c9;
-        height: 50px;
-        font-size: 20px;
+        height: 45px;
     }
 
     div.stButton > button {
-        border-radius: 15px;
+        border-radius: 12px;
         background-color: #3e7d6a;
         color: white;
         font-weight: bold;
-        height: 55px;
-        font-size: 18px;
-        transition: 0.3s;
-    }
-    
-    div.stButton > button:hover {
-        background-color: #a3d9c9;
-        color: #3e7d6a;
+        height: 45px;
+        margin-top: -10px; /* سحب الزرار لفوق ليقترب من الخانة */
     }
     </style>
 """, unsafe_allow_html=True)
 
-# --- 3. التنفيذ البصري ---
+# --- 3. التنفيذ البصري (العناصر ملتصقة ومنظمة) ---
 st.markdown(f"""
     <div class="main-viewport">
         <img src="https://i.ibb.co/YFVscsYM/Adobe-Express-file.png" class="logo-3d">
@@ -91,16 +80,16 @@ st.markdown(f"""
     </div>
 """, unsafe_allow_html=True)
 
-# صندوق تسجيل الدخول في المنتصف
-col1, col2, col3 = st.columns([1, 0.7, 1])
+# صندوق تسجيل الدخول
+col1, col2, col3 = st.columns([1, 0.6, 1])
 with col2:
-    # إلغاء الفراغ اللي بيعمله ستريمليت أوتوماتيك
-    st.markdown('<style>div.block-container{padding-top:0rem;}</style>', unsafe_allow_html=True)
+    # إزالة فراغات ستريمليت الإجبارية
+    st.markdown('<style>div.block-container{padding-top:0rem; margin-top:-20px;}</style>', unsafe_allow_html=True)
     
     code = st.text_input("", placeholder="Access Code", type="password", label_visibility="collapsed")
+    st.write("") # فاصل صغير جداً
     if st.button("LOGIN", use_container_width=True):
         if code == "123":
             st.success("Welcome Dr. Bahaa")
         else:
             st.error("Invalid Code")
-            
