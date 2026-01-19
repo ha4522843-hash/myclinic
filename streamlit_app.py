@@ -70,6 +70,30 @@ st.markdown("""
 # مساحة عمل تحت الهيدر
 st.write("<br><br>", unsafe_allow_html=True)
 st.markdown("<h2 style='text-align:center; color:#3e7d6a; font-family:sans-serif;'>READY TO START THE MISSION</h2>", unsafe_allow_html=True)
+# --- 2. منطق تسجيل الدخول ---
+st.markdown("<h3 style='text-align: center; color: #3e7d6a; font-family: sans-serif;'>SECURE ACCESS GATEWAY</h3>", unsafe_allow_html=True)
+
+# إنشاء حاوية في المنتصف لشكل الدخول
+col1, col2, col3 = st.columns([1, 1, 1])
+
+with col2:
+    with st.container():
+        user_code = st.text_input("Enter Access Code", type="password", help="ادخل الكود السري للمنظومة")
+        login_btn = st.button("LOGIN TO SYSTEM", use_container_width=True)
+
+        if login_btn:
+            if user_code == "123": # كود تجريبي لدكتور بهاء
+                st.success("Welcome, Dr. Bahaa!")
+                st.session_state['role'] = 'admin'
+                # هنا السيستم هيقلب مِنت جرين كامل
+            elif user_code == "456": # كود تجريبي للاستقبال
+                st.info("Welcome to Reception Desk")
+                st.session_state['role'] = 'reception'
+            else:
+                st.error("Invalid Access Code! Please try again.")
+
+# --- 3. فاصل جمالي ---
+st.markdown("<div style='margin-top:50px;' class='glass-divider'></div>", unsafe_allow_html=True)
 
 
 
