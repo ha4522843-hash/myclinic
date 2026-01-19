@@ -94,7 +94,7 @@ else:
             </div>
         """, unsafe_allow_html=True)
         
-       menu = st.radio("القائمة الرئيسية", ["📋 سجل المواعيد", "📂 ملفات المرضى"])
+        menu = st.radio("القائمة الرئيسية", ["📋 سجل المواعيد", "📂 ملفات المرضى"])
         
         st.markdown("<br><br>", unsafe_allow_html=True)
         if st.button("Logout"):
@@ -297,6 +297,7 @@ elif patient_type == "🔍 مريض سابق (بحث وتعديل)":
                 st.markdown(f'<a href="{wa_url}" target="_blank"><button style="background:#25D366; color:white; border:none; padding:10px; border-radius:10px; width:100%;">إرسال رسالة واتساب للمريض</button></a>', unsafe_allow_html=True)
             else:
                 st.error("لم يتم العثور على مريض بهذا الاسم أو الرقم.")
+
 
 
 
