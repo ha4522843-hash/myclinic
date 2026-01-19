@@ -7,64 +7,58 @@ st.set_page_config(page_title="DR. BAHAA SYSTEM", layout="wide")
 if 'logged_in' not in st.session_state:
     st.session_state['logged_in'] = False
 
-# --- 3. التصميم البصري (نسخة Emerald الهادئة) ---
+# --- 3. محرك الجرافيك (تعديل الجودة الفائقة) ---
 st.markdown("""
     <style>
-    /* خلفية بيضاء صافية تعطي نظافة للتصميم */
     .stApp { background-color: #ffffff; }
     
-    /* القائمة الجانبية بلون مِنت "وسط" متناسق مع الصور */
+    /* القائمة الجانبية */
     [data-testid="stSidebar"] {
-        background-color: #f0f7f4; /* مِنت فاتح جداً وراقي */
-        border-right: 2px solid #a3d9c9;
+        background-color: #f8fbf9;
+        border-right: 1px solid #e0eee9;
+    }
+
+    /* كود سحري لتحسين جودة الصور ومنع البكسلة */
+    img {
+        image-rendering: -webkit-optimize-contrast; /* لأجهزة ماك وجوجل كروم */
+        image-rendering: crisp-edges;              /* للمتصفحات الأخرى */
+        -ms-interpolation-mode: nearest-neighbor;  /* لمتصفحات إيدج القديمة */
+    }
+
+    /* حاوية الصور في السايد بار */
+    .sidebar-container {
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+        padding-top: 80px;
+    }
+
+    .hd-img-top {
+        width: 220px !important; /* تحديد عرض ثابت يمنع التمدد المسبب للبكسلة */
+        height: auto;
+        filter: contrast(110%); /* زيادة التباين لتوضيح التفاصيل */
+    }
+
+    .hd-img-bottom {
+        width: 180px !important; 
+        margin-top: 50px; /* مسافة واضحة بين الصورتين */
+        height: auto;
+        opacity: 0.95;
     }
     
-    /* نصوص السايد بار باللون الأخضر المِنت الواضح */
     [data-testid="stSidebar"] * { color: #3e7d6a !important; }
-
-    /* تنسيق الصور بجودة عالية جداً (HD Rendering) */
-    .sidebar-img {
-        width: 100%;
-        margin: 0 auto;
-        display: block;
-        image-rendering: -webkit-optimize-contrast;
-        filter: drop-shadow(0px 2px 5px rgba(0,0,0,0.05));
-    }
-    
-    /* تقليل المسافات بين الصور */
-    .img-box { padding: 10px; text-align: center; }
-
-    /* كروت الإحصائيات (تصميم Glassmorphism خفيف) */
-    .metric-box {
-        background: #f9fdfc;
-        padding: 20px;
-        border-radius: 15px;
-        border: 1px solid #a3d9c9;
-        text-align: center;
-        box-shadow: 2px 2px 10px rgba(163, 217, 201, 0.2);
-    }
-    .metric-box h2 { color: #3e7d6a; font-size: 30px; margin: 0; }
-    .metric-box p { color: #666; font-size: 14px; margin: 0; }
-    
-    /* زر الدخول بلونه الأصلي */
-    .stButton > button {
-        background-color: #3e7d6a;
-        color: white;
-        border-radius: 10px;
-        border: none;
-    }
     </style>
 """, unsafe_allow_html=True)
 
-# --- 4. منطق العرض ---
+# --- 4. منطق التنفيذ ---
 
 if not st.session_state['logged_in']:
-    # شاشة الدخول (اللوجو الأصلي الشفاف)
+    # شاشة الدخول (نفس التصميم الاحترافي)
     st.markdown(f"""
-        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding-top: 10vh;">
-            <img src="https://i.ibb.co/YFVscsYM/Adobe-Express-file.png" style="width: 500px;">
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding-top: 8vh; perspective: 1500px;">
+            <img src="https://i.ibb.co/YFVscsYM/Adobe-Express-file.png" style="width: 500px; filter: drop-shadow(0px 15px 30px rgba(62, 125, 106, 0.2));">
             <div style="height: 2px; width: 300px; background: #a3d9c9; margin: 15px 0;"></div>
-            <p style="color: #3e7d6a; font-weight: bold; letter-spacing: 2px;">DR. BAHAA MANAGEMENT UNIT</p>
+            <p style="color: #3e7d6a; font-weight: bold; letter-spacing: 2px;">SYSTEM ACCESS</p>
         </div>
     """, unsafe_allow_html=True)
 
@@ -79,37 +73,22 @@ if not st.session_state['logged_in']:
                 st.error("Invalid Code")
 
 else:
-    # ---- [ لوحة التحكم المريحة ] ----
-with st.sidebar:
-    # التحكم في نزول الصور: غيري رقم 50px ده لو عاوزة تنزليهم أكتر
-    st.markdown(f"""
-        <div style="display: flex; flex-direction: column; align-items: center; padding-top: 50px;">
-            
-            <img src="https://i.ibb.co/WWq0wnpg/Layer-8.png" 
-                 style="width: 100%; image-rendering: -webkit-optimize-contrast;">
-            
-            <img src="https://i.ibb.co/xtmjKkMm/Layer-1-copy.png" 
-                 style="width: 80%; margin-top: 10px; image-rendering: -webkit-optimize-contrast;">
-                 
-            <div style="height: 2px; width: 80%; background: #a3d9c9; margin: 20px 0;"></div>
-        </div>
-    """, unsafe_allow_html=True)
-        menu = st.radio("القائمة الرئيسية", ["Dashboard", "Patients", "Calendar"])
+    # ---- [ لوحة التحكم بالصور عالية الجودة ] ----
+    with st.sidebar:
+        st.markdown(f"""
+            <div class="sidebar-container">
+                <img src="https://i.ibb.co/WWq0wnpg/Layer-8.png" class="hd-img-top">
+                <img src="https://i.ibb.co/xtmjKkMm/Layer-1-copy.png" class="hd-img-bottom">
+                <div style="height: 1px; width: 70%; background: #a3d9c9; margin: 40px 0;"></div>
+            </div>
+        """, unsafe_allow_html=True)
+        
+        menu = st.radio("Main Menu", ["Dashboard", "Patients", "Calendar"])
         
         if st.button("Logout", use_container_width=True):
             st.session_state['logged_in'] = False
             st.rerun()
 
     # المحتوى الداخلي
-    st.markdown("<h2 style='color:#3e7d6a;'>الرئيسية</h2>", unsafe_allow_html=True)
-    
-    c1, c2, c3 = st.columns(3)
-    with c1: st.markdown('<div class="metric-box"><h2>24</h2><p>Today</p></div>', unsafe_allow_html=True)
-    with c2: st.markdown('<div class="metric-box"><h2>08</h2><p>Surgery</p></div>', unsafe_allow_html=True)
-    with c3: st.markdown('<div class="metric-box"><h2>150</h2><p>Database</p></div>', unsafe_allow_html=True)
-
-    st.write("<br>", unsafe_allow_html=True)
-    st.info("السيستم الآن يعمل بأفضل أداء بصري.")
-
-
-
+    st.markdown("<h2 style='color:#3e7d6a;'>Dashboard Overview</h2>", unsafe_allow_html=True)
+    st.info("الجودة الآن مفعلة بنمط High-DPI Rendering.")
