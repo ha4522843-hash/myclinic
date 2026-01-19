@@ -104,7 +104,7 @@ else:
             st.markdown("</div>", unsafe_allow_html=True)
             # --- 1. تعريف الدالة (يجب أن تكون في بداية الملف أو قبل استخدامها) ---
     def calculate_age(birth_date):
-    from datetime import date
+      from datetime import date
     today = date.today()
     years = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
     if years < 12: icon = "👶 (طفل)"
@@ -186,6 +186,7 @@ else:
         if submit_btn:
             st.success(f"تم تسجيل {name} بنجاح!")
             st.balloons()
+
 
 
 
