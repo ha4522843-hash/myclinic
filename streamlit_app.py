@@ -30,7 +30,7 @@ st.markdown("""
     [data-testid="stHorizontalBlock"] button {
         color: #2d5a4d!important;
         height: 35px !important;
-        width: 10px !important; /* زرار كنكة وصغير */
+        width: 50px !important; /* زرار كنكة وصغير */
         border: none !important;
         font-weight: bold !important;
         margin-top: 1px !important;
@@ -85,6 +85,7 @@ else:
             st.rerun()
 
     st.markdown("<h2 style='color:#2d5a4d;'>Clinic Dashboard</h2>", unsafe_allow_html=True)
+
 
 
 
