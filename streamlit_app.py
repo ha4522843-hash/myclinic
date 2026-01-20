@@ -28,9 +28,7 @@ st.markdown("""
      }   
     /* الزرار جوه الحاوية */
     [data-testid="stHorizontalBlock"] button {
-        background: #2d5a4d !important;
-        color: white !important;
-        border-radius: 10px !important;
+        color: #2d5a4d!important;
         height: 35px !important;
         width: 80px !important; /* زرار كنكة وصغير */
         border: none !important;
@@ -87,6 +85,7 @@ else:
             st.rerun()
 
     st.markdown("<h2 style='color:#2d5a4d;'>Clinic Dashboard</h2>", unsafe_allow_html=True)
+
 
 
 
