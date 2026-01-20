@@ -9,23 +9,34 @@ if 'logged_in' not in st.session_state:
 
 # --- محرك الجرافيك (اللم والدمج) ---
 st.markdown("""
-    <style>
-    img { image-rendering: -webkit-optimize-contrast !important; }
-    .stApp { background-color: #f7fdfb !important; }
-    header {visibility: hidden;}
-    
-    .login-master {
-        display: flex; flex-direction: column; align-items: center;
-        justify-content: center; width: 100%; padding-top: 2vh;
-    }
+    img { 
+            image-rendering: -webkit-optimize-contrast !important; /* تحسين التباين */
+            image-rendering: crisp-edges !important; /* الحفاظ على الحواف حادة */
+            -ms-interpolation-mode: bicubic !important; /* أفضل خوارزمية تكبير */
+        }
 
-    .login-logo-img {
-        width: 500px !important;
-        transition: 0.5s ease;
-        margin-bottom: -110px;
-        z-index: 10;
-    
-     }   
+        .stApp { background-color: #f7fdfb !important; }
+        header {visibility: hidden;}
+        
+        .login-master {
+            display: flex; flex-direction: column; align-items: center;
+            justify-content: center; width: 100%; padding-top: 5vh;
+        }
+
+        /* اللوجو مع تنعيم الحركة Anti-Aliasing */
+        .login-logo-img {
+            width: 600px !important;
+            transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1); /* حركة حريرية */
+            cursor: pointer;
+            margin-bottom: -95px; 
+            filter: drop-shadow(0px 10px 20px rgba(62, 125, 106, 0.1));
+            will-change: transform; /* إبلاغ المتصفح بالاستعداد للحركة لزيادة النقاوة */
+        }
+        .login-logo-img:hover { 
+            transform: scale(1.08); 
+            filter: drop-shadow(0px 20px 40px rgba(62, 125, 106, 0.2));
+        }
+      
     /* الزرار جوه الحاوية */
     [data-testid="stHorizontalBlock"] button {
         color: #2d5a4d!important;
@@ -85,6 +96,7 @@ else:
             st.rerun()
 
     st.markdown("<h2 style='color:#2d5a4d;'>Clinic Dashboard</h2>", unsafe_allow_html=True)
+
 
 
 
