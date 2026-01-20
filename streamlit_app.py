@@ -3,130 +3,91 @@ import streamlit as st
 # --- 1. إعدادات الصفحة ---
 st.set_page_config(page_title="DR. BAHAA | LOGIN", layout="wide")
 
-# --- 2. محرك التصميم (CSS الموحد للسنترة المطلقة) ---
+# --- 2. محرك التصميم (CSS للوضع الأفقي) ---
 st.markdown("""
     <style>
-    /* خلفية المنت جرين الهادئة */
     .stApp {
         background: linear-gradient(135deg, #f2f9f7 0%, #e6f2ee 100%);
     }
-
     header {visibility: hidden;}
-    [data-testid="stSidebar"] {display: none;}
 
-    /* الحاوية السحرية: تجمع اللوجو والخانات وتسنترهم في نص الشاشة بالضبط */
-    .unified-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center; /* سنترة أفقية */
-        justify-content: center; /* سنترة رأسية */
-        width: 100%;
-        margin-top: 5vh;
-    }
-
-    /* اللوجو العملاق مع حركة تفاعلية */
-    .brand-logo {
-        width: 700px !important; 
-        max-width: 90vw;
-        filter: drop-shadow(0px 15px 30px rgba(62, 125, 106, 0.1));
-        transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        cursor: pointer;
-        margin-bottom: -100px; /* تقريب الخانات من قلب اللوجو */
-    }
-
-    .brand-logo:hover {
-        transform: scale(1.05);
-        filter: drop-shadow(0px 20px 40px rgba(62, 125, 106, 0.2));
-    }
-
-    /* نص MANAGEMENT LOGIN موسطن */
-    .login-label {
-        color: #3e7d6a;
-        font-family: 'Segoe UI', sans-serif;
-        font-weight: 700;
-        letter-spacing: 5px;
-        font-size: 14px;
-        margin-bottom: 25px;
-        opacity: 0.8;
-    }
-
-    /* إجبار خانة الإدخال والزرار على السنترة تحت اللوجو */
-    .stTextInput, .stButton {
+    /* الحاوية الأساسية للوجو */
+    .logo-container {
         display: flex;
         justify-content: center;
-        width: 150% !important;
+        align-items: center;
+        width: 100%;
+        margin-top: 2vh;
     }
 
-    div[data-testid="stTextInput"] > div {
-        width: 380px !important;
+    .brand-logo {
+        width: 650px !important;
+        transition: 0.5s ease;
+        margin-bottom: -110px; /* لتقريب الخانات من قلب اللوجو */
     }
 
-    /* تصميم خانة الإدخال 3D */
+    /* الحاوية السحرية اللي بتخليهم يمين وشمال */
+    .horizontal-login {
+        display: flex;
+        flex-direction: row; /* سر الترتيب يمين وشمال */
+        justify-content: center;
+        align-items: center;
+        gap: 10px; /* المسافة بين الخانة والزرار */
+        width: 100%;
+    }
+
+    /* تنسيق خانة الإدخال */
+    div[data-testid="stTextInput"] {
+        width: 250px !important; /* صغرنا العرض عشان ييجوا جنب بعض */
+    }
+    
     input {
-        border-radius: 20px !important;
-        background: #ffffff !important;
+        border-radius: 15px !important;
         border: 1px solid #d1e2dc !important;
-        box-shadow: 8px 8px 20px rgba(0,0,0,0.03), inset 2px 2px 5px rgba(0,0,0,0.01) !important;
-        padding: 18px !important;
+        padding: 12px !important;
         text-align: center !important;
-        font-size: 20px !important;
-        color: #2d5a4d !important;
-        transition: 0.3s ease;
-    }
-    
-    input:focus {
-        border: 1px solid #3e7d6a !important;
-        box-shadow: 0px 0px 25px rgba(62, 125, 106, 0.15) !important;
+        box-shadow: 4px 4px 10px rgba(0,0,0,0.03) !important;
     }
 
-    /* تصميم الزرار الموسطن */
-    .stButton>button {
-        background: #2d5a4d !important;
+    /* تنسيق الزرار */
+    .stButton > button {
+        width: 150px !important; /* عرض الزرار */
+        border-radius: 15px !important;
+        padding: 10px !important;
+        background-color: #2d5a4d !important;
         color: white !important;
-        border-radius: 20px !important;
-        padding: 15px 0px !important;
-        font-weight: 800 !important;
-        font-size: 18px !important;
+        font-weight: bold !important;
         border: none !important;
-        box-shadow: 0 12px 25px rgba(45, 90, 77, 0.2) !important;
-        width: 380px !important; /* نفس عرض الخانة لضمان التماثل */
-        transition: 0.4s ease !important;
-    }
-    
-    .stButton>button:hover {
-        background: #3e7d6a !important;
-        transform: translateY(-4px);
-        box-shadow: 0 15px 30px rgba(45, 90, 77, 0.3) !important;
+        height: 48px; /* نفس طول خانة الإدخال تقريباً */
+        margin-top: 15px; /* لضبط المحاذاة مع الخانة */
     }
     </style>
 """, unsafe_allow_html=True)
 
-# --- 3. عرض الواجهة ---
+# --- 3. التنفيذ ---
 if 'logged_in' not in st.session_state:
-    st.session_state['logged_in'] = False
+    st.session_state.logged_in = False
 
-if not st.session_state['logged_in']:
-    # الحاوية الموحدة لضمان سنترة الخانات تحت نص اللوجو بالظبط
-    st.markdown("""
-        <div class="unified-container">
-            <img src="https://i.ibb.co/YFVscsYM/Adobe-Express-file.png" class="brand-logo">
-            <p class="login-label">MANAGEMENT LOGIN</p>
-        </div>
-    """, unsafe_allow_html=True)
+if not st.session_state.logged_in:
+    # عرض اللوجو موسطن
+    st.markdown('<div class="logo-container"><img src="https://i.ibb.co/YFVscsYM/Adobe-Express-file.png" class="brand-logo"></div>', unsafe_allow_html=True)
 
-    # وضع الخانات في حاوية موسطنة
-    col1, col2, col3 = st.columns([0.5, 1,0.5])
-    with col2:
-        code = st.text_input("Access Code", type="password", placeholder="••••", label_visibility="collapsed")
-        st.markdown('<div style="height: 10px;"></div>', unsafe_allow_html=True)
-        if st.button("ENTER SYSTEM"):
-            if code in ["0000", "1111"]:
-                st.session_state['logged_in'] = True
-                st.rerun()
-            else:
-                st.error("Invalid Access Code")
-
-else:
-    st.success("مرحباً دكتور بهاء، جاري الدخول...")
-
-
+    # استخدام الحاوية الأفقية
+    st.markdown('<div class="horizontal-login">', unsafe_allow_html=True)
+    
+    # الأعمدة هنا عشان نتحكم في مكانهم تحت السنتر بالضبط
+    c1, c2, c3 = st.columns([1, 2, 1])
+    with c2:
+        # بنستخدم columns داخلية عشان ييجوا جنب بعض بالملي
+        sub_c1, sub_c2 = st.columns([2, 1])
+        with sub_c1:
+            code = st.text_input("Code", type="password", placeholder="Access Code", label_visibility="collapsed")
+        with sub_c2:
+            if st.button("LOGIN"):
+                if code in ["0000", "1111"]:
+                    st.session_state.logged_in = True
+                    st.rerun()
+                else:
+                    st.error("Wrong!")
+    
+    st.markdown('</div>', unsafe_allow_html=True)
