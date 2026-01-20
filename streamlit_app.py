@@ -33,13 +33,13 @@ st.markdown("""
         filter: drop-shadow(0px 15px 30px rgba(62, 125, 106, 0.1));
     }
     .main-logo-login:hover {
-        transform: scale(1.08);
+        transform: scale(2.08);
     }
 
     /* سنترة الخانات تحت أبعاد الصورة بالظبط */
     .stTextInput, .stButton {
         width: 300px !important; /* عرض الخانة والزرار موحد لضمان السنترة */
-        margin: 50px !important;
+        margin: 0 auto !important;
     }
 
     input {
@@ -144,6 +144,7 @@ else:
     # محتوى الصفحة
     st.title("مرحباً بك دكتور بهاء")
     st.write("النظام الآن جاهز للعمل بنفس التنسيقات المطلوبة.")
+
 
 
 
