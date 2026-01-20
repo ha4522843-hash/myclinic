@@ -96,11 +96,30 @@ if not st.session_state['logged_in']:
             code = st.text_input("", placeholder="Code", type="password", label_visibility="collapsed")
         with c2:
             if st.button("GO"):
-                if code in ["0000", "1111"]:
+                if code == "0000": # كود الدكتور
                     st.session_state['logged_in'] = True
+                    st.session_state['user_role'] = "Doctor"
                     st.rerun()
-                else:
-                    st.error("X")
+                elif code == "1111": # كود السكرتيرة
+                    st.session_state['logged_in'] = True
+                    st.session_state['user_role'] = "Reception"
+                    st.rerun()
+                elif code == "2222": # كود الفريق الطبي
+                    st.session_state['logged_in'] = True
+                    st.session_state['user_role'] = "Medical Team"
+                    st.rerun()if st.button("GO"):
+                if code == "0000": # كود الدكتور
+                    st.session_state['logged_in'] = True
+                    st.session_state['user_role'] = "Doctor"
+                    st.rerun()
+               elif code == "1111": # كود السكرتيرة
+                    st.session_state['logged_in'] = True
+                    st.session_state['user_role'] = "Reception"
+                    st.rerun()
+               elif code == "2222": # كود الفريق الطبي
+                    st.session_state['logged_in'] = True
+                    st.session_state['user_role'] = "Medical Team"
+                    st.rerun()
 else:  
     # الصفحة الداخلية (لوحة التحكم)
     st.markdown('<div class="watermark-container"><img src="https://i.ibb.co/WWq0wnpg/Layer-8.png" style="width:100%;"></div>', unsafe_allow_html=True)
@@ -143,6 +162,7 @@ else:
     elif menu == "👥 Patients Record":
         st.title("Patients Management")
         # هنا هنضيف جدول البيانات لاحقاً
+
 
 
 
