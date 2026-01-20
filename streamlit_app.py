@@ -27,10 +27,10 @@ st.markdown("""
 
     /* اللوجو مع تنعيم الحركة اللي عجبك */
     .login-logo-img {
-        width: 800px !important;
+        width: 900px !important;
         transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1); 
         cursor: pointer;
-        margin-bottom:-150px; 
+        margin-bottom:-200px; 
         filter: drop-shadow(0px 10px 20px rgba(62, 125, 106, 0.1));
         will-change: transform; 
     }
@@ -94,6 +94,7 @@ else:
     # الصفحة الداخلية بنفس روح المحرك
     st.markdown('<div class="watermark-container"><img src="https://i.ibb.co/WWq0wnpg/Layer-8.png" style="width:100%;"></div>', unsafe_allow_html=True)
     st.success("Welcome Doctor - المحرك يعمل بأقصى جودة")
+
 
 
 
