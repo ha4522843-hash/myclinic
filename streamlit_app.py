@@ -123,10 +123,11 @@ else:
                 <span class="clock-date">{curr_date}</span>
             </div>
         """, unsafe_allow_html=True)
-
+       st.markdown("<hr style='margin:10px 0; border-color:#c2dbd1;'>", unsafe_allow_html=True)
       if st.button("Logout", use_container_width=True):
                  st.session_state['logged_in'] = False
                    st.rerun()
+
 
 
 
