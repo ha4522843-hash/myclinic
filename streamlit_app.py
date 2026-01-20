@@ -22,6 +22,17 @@ def get_age_info(birth_date):
     elif years < 60: icon = "👱 (بالغ)"
     else: icon = "👴 (كبير سن)"
     return years, icon
+ # 2. دالة حساب كتلة الجسم (BMI)
+ def calculate_bmi(weight, height):
+    if height > 0:
+        height_m = height / 100
+        bmi = weight / (height_m ** 2)
+        if bmi < 18.5: status = "نقص وزن ⚠️"
+        elif bmi < 25: status = "وزن مثالي ✅"
+        elif bmi < 30: status = "زيادة وزن 📈"
+        else: status = "سمنة مفرطة 🚨"
+        return round(bmi, 1), status
+    return 0, "غير محدد"   
 
 # --- 4. التصميم البصري (الألوان الأصلية + تأثيرات 3D + علامة مائية) ---
 st.markdown("""
@@ -29,7 +40,7 @@ st.markdown("""
     /* خلفية التطبيق مع علامة مائية */
     .stApp {
         background-color: #f2f7f5;
-        background-image: url("https://i.ibb.co/YFVscsYM/Adobe-Express-file.png");
+        background-image: url("https://i.ibb.co/WWq0wnpg/Layer-8.png");
         background-attachment: fixed;
         background-size: 600px;
         background-repeat: no-repeat;
@@ -44,47 +55,59 @@ st.markdown("""
         z-index: -1;
     }
     
-    /* ستايل الخانات 3D */
-    div[data-baseweb="input"], div[data-baseweb="select"], .stNumberInput input {
-        box-shadow: inset 2px 2px 5px #babecc, inset -5px -5px 10px #ffffff !important;
-        border-radius: 10px !important;
-        border: none !important;
-        background: #f2f7f5 !important;
+  /* 2. تصميم الخانات 3D (تأثير البروز والعمق) */
+    div.stTextInput > div > div > input, 
+    div.stSelectbox > div > div > div, 
+    div.stNumberInput > div > div > input,
+    div.stTextArea > div > textarea {
+        background-color: #f0f4f2 !important;
+        border-radius: 15px !important;
+        border: 1px solid #d1d9e6 !important;
+        box-shadow: 6px 6px 12px #b8bec9, -6px -6px 12px #ffffff !important;
+        padding: 12px !important;
+        color: #2d5a4d !important;
+        font-weight: bold !important;
     }
 
-    /* العناوين والبطاقات */
-    .main-title { color: #2d5a4d; font-weight: 800; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); border-bottom: 3px solid #a3d9c9; }
-    .patient-row { 
-        background: white; padding: 20px; border-radius: 15px; margin-bottom: 15px; 
-        border-right: 8px solid #3e7d6a; 
-        box-shadow: 5px 5px 15px rgba(0,0,0,0.1); 
+    /* 3. تصميم الكروت (المريض) 3D */
+    .patient-card-3d {
+        background: #f0f4f2;
+        border-radius: 20px;
+        padding: 25px;
+        box-shadow: 10px 10px 20px #bebebe, -10px -10px 20px #ffffff;
+        border-right: 12px solid #2d5a4d;
+        margin-bottom: 25px;
+        transition: 0.3s;
     }
-    
-    /* السايد بار */
-    [data-testid="stSidebar"] { background-color: #e6eee9 !important; }
+
+    /* 4. تصميم أزرار السايد بار */
+    .css-17l2qt2 { 
+        background-color: #f0f4f2 !important;
+        border-radius: 15px !important;
+        box-shadow: 4px 4px 8px #b8bec9, -4px -4px 8px #ffffff !important;
+    }
+
+    /* 5. العناوين */
+    h1, h2, h3 {
+        color: #2d5a4d !important;
+        font-family: 'Cairo', sans-serif;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
     </style>
 """, unsafe_allow_html=True)
 
-# --- 5. منطق الدخول ---
-if not st.session_state['logged_in']:
-    st.markdown('<div style="text-align:center; padding-top:10vh;"><img src="https://i.ibb.co/YFVscsYM/Adobe-Express-file.png" style="width:400px;"></div>', unsafe_allow_html=True)
-    col1, col2, col3 = st.columns([1, 0.6, 1])
-    with col2:
-        code = st.text_input("رمز الدخول", type="password")
-        if st.button("دخول النظام", use_container_width=True):
-            if code in ["0000", "1111"]:
-                st.session_state['logged_in'] = True
-                st.rerun()
-            else: st.error("الرمز خاطئ")
-else:
-    # --- القائمة الجانبية ---
-    with st.sidebar:
-        st.image("https://i.ibb.co/WWq0wnpg/Layer-8.png", width=200)
-        menu = st.radio("القائمة الرئيسية", ["📋 سجل المواعيد", "📂 ملفات المرضى"])
-        st.divider()
-        if st.button("تسجيل الخروج"):
-            st.session_state['logged_in'] = False
-            st.rerun()
+# --- 3. السايد بار (اللوجوين) ---
+with st.sidebar:
+    # اللوجو العلوي
+    st.image("https://i.ibb.co/WWq0wnpg/Layer-8.png", use_container_width=True)
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # قائمة التنقل
+    menu = st.radio("القائمة الرئيسية", ["🏠 واجهة السكرتارية", "🩺 واجهة الطبيب", "📊 الإحصائيات"])
+    
+    st.divider()
+    # اللوجو السفلي
+    st.image("https://i.ibb.co/xtmjKkMm/Layer-1-copy.png", width=150)
 
     # ---- [ صفحة السجل ] ----
     if menu == "📋 سجل المواعيد":
@@ -194,6 +217,7 @@ else:
 
                 wa_url = f"https://wa.me/{p.get('phone', '')}"
                 st.markdown(f'<a href="{wa_url}" target="_blank"><button style="background:#25D366; color:white; border:none; padding:10px; border-radius:10px; width:100%;">إرسال واتساب</button></a>', unsafe_allow_html=True)
+
 
 
 
