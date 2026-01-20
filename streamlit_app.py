@@ -3,10 +3,10 @@ import streamlit as st
 # --- 1. إعدادات الصفحة ---
 st.set_page_config(page_title="DR. BAHAA | LOGIN", layout="wide")
 
-# --- 2. محرك التصميم المطور (CSS) ---
+# --- 2. محرك التصميم (CSS الموحد للسنترة المطلقة) ---
 st.markdown("""
     <style>
-    /* خلفية المِنت جرين المتدرجة */
+    /* خلفية المنت جرين الهادئة */
     .stApp {
         background: linear-gradient(135deg, #f2f9f7 0%, #e6f2ee 100%);
     }
@@ -14,46 +14,51 @@ st.markdown("""
     header {visibility: hidden;}
     [data-testid="stSidebar"] {display: none;}
 
-    /* الحاوية الرئيسية لضمان السنترة المطلقة */
-    .main-container {
+    /* الحاوية السحرية: تجمع اللوجو والخانات وتسنترهم في نص الشاشة بالضبط */
+    .unified-container {
         display: flex;
         flex-direction: column;
-        align-items: center;
-        justify-content: center;
+        align-items: center; /* سنترة أفقية */
+        justify-content: center; /* سنترة رأسية */
         width: 100%;
-        text-align: center;
+        margin-top: 5vh;
     }
 
-    /* اللوجو العملاق مع حركة التكبير */
+    /* اللوجو العملاق مع حركة تفاعلية */
     .brand-logo {
-        width: 750px !important; /* كبرت اللوجو أكتر كما طلبت */
+        width: 700px !important; 
         max-width: 90vw;
-        filter: drop-shadow(0px 15px 30px rgba(62, 125, 106, 0.15));
-        transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        filter: drop-shadow(0px 15px 30px rgba(62, 125, 106, 0.1));
+        transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         cursor: pointer;
-        margin-bottom: -120px; /* تقريب الخانات جداً من اللوجو */
+        margin-bottom: -100px; /* تقريب الخانات من قلب اللوجو */
     }
 
     .brand-logo:hover {
-        transform: scale(1.08);
-        filter: drop-shadow(0px 25px 45px rgba(62, 125, 106, 0.25));
+        transform: scale(1.05);
+        filter: drop-shadow(0px 20px 40px rgba(62, 125, 106, 0.2));
     }
 
-    /* الكلمة التوضيحية تحت اللوجو */
+    /* نص MANAGEMENT LOGIN موسطن */
     .login-label {
         color: #3e7d6a;
         font-family: 'Segoe UI', sans-serif;
         font-weight: 700;
-        letter-spacing: 6px;
+        letter-spacing: 5px;
         font-size: 14px;
-        margin-bottom: 20px;
+        margin-bottom: 25px;
         opacity: 0.8;
     }
 
-    /* تنسيق الخانات والزراير في السنتر */
+    /* إجبار خانة الإدخال والزرار على السنترة تحت اللوجو */
     .stTextInput, .stButton {
+        display: flex;
+        justify-content: center;
+        width: 100% !important;
+    }
+
+    div[data-testid="stTextInput"] > div {
         width: 380px !important;
-        margin: 0 auto !important;
     }
 
     /* تصميم خانة الإدخال 3D */
@@ -61,8 +66,8 @@ st.markdown("""
         border-radius: 20px !important;
         background: #ffffff !important;
         border: 1px solid #d1e2dc !important;
-        box-shadow: 8px 8px 20px rgba(0,0,0,0.04), inset 2px 2px 5px rgba(0,0,0,0.02) !important;
-        padding: 20px !important;
+        box-shadow: 8px 8px 20px rgba(0,0,0,0.03), inset 2px 2px 5px rgba(0,0,0,0.01) !important;
+        padding: 18px !important;
         text-align: center !important;
         font-size: 20px !important;
         color: #2d5a4d !important;
@@ -71,54 +76,46 @@ st.markdown("""
     
     input:focus {
         border: 1px solid #3e7d6a !important;
-        box-shadow: 0px 0px 25px rgba(62, 125, 106, 0.2) !important;
-        transform: scale(1.02);
+        box-shadow: 0px 0px 25px rgba(62, 125, 106, 0.15) !important;
     }
 
-    /* تصميم الزرار */
+    /* تصميم الزرار الموسطن */
     .stButton>button {
         background: #2d5a4d !important;
         color: white !important;
         border-radius: 20px !important;
-        padding: 18px 0px !important;
+        padding: 15px 0px !important;
         font-weight: 800 !important;
         font-size: 18px !important;
         border: none !important;
-        box-shadow: 0 12px 25px rgba(45, 90, 77, 0.25) !important;
+        box-shadow: 0 12px 25px rgba(45, 90, 77, 0.2) !important;
+        width: 380px !important; /* نفس عرض الخانة لضمان التماثل */
         transition: 0.4s ease !important;
-        width: 100% !important;
     }
     
     .stButton>button:hover {
         background: #3e7d6a !important;
-        box-shadow: 0 18px 35px rgba(45, 90, 77, 0.35) !important;
         transform: translateY(-4px);
-    }
-
-    /* إلغاء أي هوامش تلقائية من ستريم ليت تسبب إزاحة يميناً */
-    [data-testid="column"] {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        box-shadow: 0 15px 30px rgba(45, 90, 77, 0.3) !important;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# --- 3. التنفيذ ---
+# --- 3. عرض الواجهة ---
 if 'logged_in' not in st.session_state:
     st.session_state['logged_in'] = False
 
 if not st.session_state['logged_in']:
-    # استخدام حاوية HTML واحدة للسنترة المطلقة
+    # الحاوية الموحدة لضمان سنترة الخانات تحت نص اللوجو بالظبط
     st.markdown("""
-        <div class="main-container">
+        <div class="unified-container">
             <img src="https://i.ibb.co/YFVscsYM/Adobe-Express-file.png" class="brand-logo">
             <p class="login-label">MANAGEMENT LOGIN</p>
         </div>
     """, unsafe_allow_html=True)
 
-    # وضع الخانة والزرار داخل عمود واحد موسطن بالكامل
-    col1, col2, col3 = st.columns([1, 2, 1])
+    # وضع الخانات في حاوية موسطنة
+    col1, col2, col3 = st.columns([1, 1, 1])
     with col2:
         code = st.text_input("Access Code", type="password", placeholder="••••", label_visibility="collapsed")
         st.markdown('<div style="height: 10px;"></div>', unsafe_allow_html=True)
@@ -130,6 +127,4 @@ if not st.session_state['logged_in']:
                 st.error("Invalid Access Code")
 
 else:
-    st.balloons()
-    st.success("تم تسجيل الدخول بنجاح")
-
+    st.success("مرحباً دكتور بهاء، جاري الدخول...")
