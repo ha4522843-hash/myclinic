@@ -24,20 +24,8 @@ st.markdown("""
         transition: 0.5s ease;
         margin-bottom: -110px;
         z-index: 10;
-    }
-
-    /* الحاوية المدمجة: صغيرة وملمومة تحت الكلمة */
-
-    /* الخانة جوه الحاوية */
-    [data-testid="stHorizontalBlock"] input {
-        border: none !important;
-        background: transparent !important;
-        box-shadow: none !important;
-        height: 40px !important;
-        font-size: 16px !important;
-        width: 80% !important;
-    }
-
+    
+     }   
     /* الزرار جوه الحاوية */
     [data-testid="stHorizontalBlock"] button {
         background: #2d5a4d !important;
@@ -99,6 +87,7 @@ else:
             st.rerun()
 
     st.markdown("<h2 style='color:#2d5a4d;'>Clinic Dashboard</h2>", unsafe_allow_html=True)
+
 
 
 
