@@ -44,7 +44,7 @@ st.markdown("""
         background: linear-gradient(145deg, #2d5a4d, #3e7d6a) !important;
         color: white !important;
         border-radius: 15px !important;
-        width: 200px !important; /* حجم متناسق */
+        width: 400px !important; /* حجم متناسق */
         height: 48px !important;
         border: none !important;
         box-shadow: 5px 5px 15px rgba(0,0,0,0.2) !important;
@@ -140,6 +140,7 @@ else:
 
     st.markdown("<h2 style='color:#2d5a4d;'>Clinic Dashboard</h2>", unsafe_allow_html=True)
     st.success("تم ضبط الأبعاد والـ 3D بنجاح.")
+
 
 
 
