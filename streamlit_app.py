@@ -49,7 +49,7 @@ st.markdown("""
         border: none !important;
         box-shadow: 5px 5px 15px rgba(0,0,0,0.2) !important;
         font-weight: bold !important;
-        margin: 50px auto 20px auto !important;
+        margin: 200px auto 200px auto !important;
         display: block !important;
         transition: 0.3s;
     }
@@ -140,6 +140,7 @@ else:
 
     st.markdown("<h2 style='color:#2d5a4d;'>Clinic Dashboard</h2>", unsafe_allow_html=True)
     st.success("تم ضبط الأبعاد والـ 3D بنجاح.")
+
 
 
 
