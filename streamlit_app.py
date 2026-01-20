@@ -1,22 +1,21 @@
 import streamlit as st
 from datetime import date
 
-# --- 1. إعدادات الصفحة (يجب أن يكون أول أمر) ---
+# --- 1. إعدادات الصفحة ---
 st.set_page_config(page_title="DR. BAHAA SYSTEM", layout="wide")
 
-# --- 2. كود الأمان لتجنب الـ KeyError (التعريفات الأساسية) ---
-# السطور دي بتضمن إن البرنامج مش هيطلع خطأ لو الذاكرة اتمسحت
+# --- 2. إدارة الجلسة والبيانات (الأمان أولاً) ---
 if 'db' not in st.session_state: st.session_state['db'] = {}
 if 'logged_in' not in st.session_state: st.session_state['logged_in'] = False
-if 'jobs_list' not in st.session_state: st.session_state['jobs_list'] = ["طبيب", "مهندس", "أخرى"]
+if 'jobs_list' not in st.session_state: st.session_state['jobs_list'] = ["طبيب", "مهندس", "محاسب", "أعمال حرة"]
 if 'cities_list' not in st.session_state: st.session_state['cities_list'] = ["القاهرة", "الجيزة", "الإسكندرية"]
 if 'sources_list' not in st.session_state: st.session_state['sources_list'] = ["فيسبوك", "تيك توك", "مريض سابق"]
 if 'chronic_list' not in st.session_state: st.session_state['chronic_list'] = ["السكري", "الضغط", "القلب"]
-if 'surgeries_list' not in st.session_state: st.session_state['surgeries_list'] = ["تكميم", "مرارة"]
+if 'surgeries_list' not in st.session_state: st.session_state['surgeries_list'] = ["تكميم معدة", "تحويل مسار", "مرارة"]
 
-# --- 3. الدالة المصلحة لحساب السن بالأيقونات ---
+# --- 3. دالة حساب السن الذكية ---
 def get_age_info(birth_date):
-    if birth_date is None: return 0, "❓"
+    if not birth_date: return 0, "❓"
     today = date.today()
     years = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
     if years < 12: icon = "👶 (طفل)"
@@ -24,89 +23,138 @@ def get_age_info(birth_date):
     else: icon = "👴 (كبير سن)"
     return years, icon
 
-# --- 4. منطق تسجيل الدخول ---
+# --- 4. التصميم البصري (الألوان الأصلية + تأثيرات 3D + علامة مائية) ---
+st.markdown("""
+    <style>
+    /* خلفية التطبيق مع علامة مائية */
+    .stApp {
+        background-color: #f2f7f5;
+        background-image: url("https://i.ibb.co/YFVscsYM/Adobe-Express-file.png");
+        background-attachment: fixed;
+        background-size: 600px;
+        background-repeat: no-repeat;
+        background-position: center;
+        opacity: 0.96;
+    }
+    .stApp::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background-color: rgba(242, 247, 245, 0.92); /* تحكم في شفافية العلامة المائية */
+        z-index: -1;
+    }
+    
+    /* ستايل الخانات 3D */
+    div[data-baseweb="input"], div[data-baseweb="select"], .stNumberInput input {
+        box-shadow: inset 2px 2px 5px #babecc, inset -5px -5px 10px #ffffff !important;
+        border-radius: 10px !important;
+        border: none !important;
+        background: #f2f7f5 !important;
+    }
+
+    /* العناوين والبطاقات */
+    .main-title { color: #2d5a4d; font-weight: 800; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); border-bottom: 3px solid #a3d9c9; }
+    .patient-row { 
+        background: white; padding: 20px; border-radius: 15px; margin-bottom: 15px; 
+        border-right: 8px solid #3e7d6a; 
+        box-shadow: 5px 5px 15px rgba(0,0,0,0.1); 
+    }
+    
+    /* السايد بار */
+    [data-testid="stSidebar"] { background-color: #e6eee9 !important; }
+    </style>
+""", unsafe_allow_html=True)
+
+# --- 5. منطق الدخول ---
 if not st.session_state['logged_in']:
     st.markdown('<div style="text-align:center; padding-top:10vh;"><img src="https://i.ibb.co/YFVscsYM/Adobe-Express-file.png" style="width:400px;"></div>', unsafe_allow_html=True)
     col1, col2, col3 = st.columns([1, 0.6, 1])
     with col2:
-        code = st.text_input("Access Code", type="password")
-        if st.button("LOGIN", use_container_width=True):
+        code = st.text_input("رمز الدخول", type="password")
+        if st.button("دخول النظام", use_container_width=True):
             if code in ["0000", "1111"]:
                 st.session_state['logged_in'] = True
                 st.rerun()
-            else: st.error("Invalid Code")
-
+            else: st.error("الرمز خاطئ")
 else:
-    # ---- [ القائمة الجانبية ] ----
+    # --- القائمة الجانبية ---
     with st.sidebar:
-        st.markdown('<div style="text-align:center;"><img src="https://i.ibb.co/WWq0wnpg/Layer-8.png" style="width:180px;"></div>', unsafe_allow_html=True)
+        st.image("https://i.ibb.co/WWq0wnpg/Layer-8.png", width=200)
         menu = st.radio("القائمة الرئيسية", ["📋 سجل المواعيد", "📂 ملفات المرضى"])
-        if st.button("Logout"):
+        st.divider()
+        if st.button("تسجيل الخروج"):
             st.session_state['logged_in'] = False
             st.rerun()
 
-    # ---- [ الصفحة الأولى: سجل المواعيد ] ----
+    # ---- [ صفحة السجل ] ----
     if menu == "📋 سجل المواعيد":
-        st.markdown("<h2 class='main-title'>Clinical Schedule</h2>", unsafe_allow_html=True)
-        
-        # التأكد من وجود بيانات قبل الحساب
-        total = len(st.session_state['db'])
-        if total > 0:
-            done = len([p for p in st.session_state['db'].values() if p.get('status') == "تم ✅"])
-            st.progress(done/total)
-            st.write(f"✅ تم الانتهاء من {done} حالة من أصل {total}")
-            
-            for name, p in st.session_state['db'].items():
-                p_age, p_icon = get_age_info(p.get('dob'))
+        st.markdown("<h2 class='main-title'>📋 جدول مواعيد العيادة</h2>", unsafe_allow_html=True)
+        if not st.session_state['db']:
+            st.info("لا يوجد مرضى مسجلين اليوم.")
+        else:
+            for id, p in st.session_state['db'].items():
+                age, icon = get_age_info(p['dob'])
                 st.markdown(f"""
-                <div style="background:white; padding:15px; border-radius:12px; margin-bottom:10px; border-right:5px solid #3e7d6a; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
-                    <b>{name}</b> {p_icon} ({p_age} سنة) <br>
-                    <small>الحالة: {p.get('status', 'انتظار ⏳')}</small>
+                <div class="patient-row">
+                    <span style="font-size:20px;"><b>👤 {p['name']}</b></span> | {icon} | {age} سنة <br>
+                    <small>📞 {p['phone']} | 📍 {p['city']} | 🏷️ {p['status']}</small>
                 </div>
                 """, unsafe_allow_html=True)
-        else:
-            st.info("لا يوجد مرضى مسجلين اليوم.")
 
-    # ---- [ الصفحة الثانية: ملفات المرضى ] ----
+    # ---- [ صفحة ملفات المرضى ] ----
     elif menu == "📂 ملفات المرضى":
-        st.markdown("<h2>📂 إدارة ملفات المرضى</h2>", unsafe_allow_html=True)
+        st.markdown("<h2 class='main-title'>📂 مدير ملفات المرضى</h2>", unsafe_allow_html=True)
         
-        tab1, tab2 = st.tabs(["🆕 تسجيل مريض جديد", "🔍 بحث وتعديل"])
+        tab1, tab2 = st.tabs(["🆕 إضافة مريض جديد", "🔍 مريض سابق (تعديل)"])
 
         with tab1:
-            with st.form("new_patient_form"):
-                c1, c2 = st.columns(2)
-                with c1:
-                    name = st.text_input("الاسم الرباعي")
-                    dob = st.date_input("تاريخ الميلاد", value=date(1990, 1, 1))
-                with c2:
-                    phone = st.text_input("رقم الموبايل")
-                    city = st.selectbox("المحافظة", options=st.session_state['cities_list'])
+            with st.form("new_p_form"):
+                st.markdown("### 👤 البيانات الشخصية")
+                c1, c2, c3 = st.columns(3)
+                name = c1.text_input("الاسم بالكامل")
+                dob = c2.date_input("تاريخ الميلاد", value=date(1990,1,1))
+                phone = c3.text_input("رقم الهاتف")
                 
-                # إضافات ذكية
-                new_c = st.text_input("➕ أضف محافظة جديدة (اختياري)")
+                gender = c1.radio("النوع", ["ذكر 💙", "أنثى 💗"], horizontal=True)
+                job = c2.selectbox("المهنة", options=st.session_state['jobs_list'])
+                city = c3.selectbox("المحافظة", options=st.session_state['cities_list'])
                 
-                if st.form_submit_button("💾 حفظ ملف المريض"):
+                st.markdown("### 🩺 التاريخ الطبي والمؤشرات")
+                w1, w2, w3, w4 = st.columns(4)
+                weight = w1.number_input("الوزن (kg)", value=80.0)
+                height = w2.number_input("الطول (cm)", value=170.0)
+                pressure = w3.text_input("الضغط")
+                pulse = w4.text_input("النبض")
+                
+                chronic = st.multiselect("الأمراض المزمنة", st.session_state['chronic_list'])
+                surgeries = st.multiselect("العمليات السابقة", st.session_state['surgeries_list'])
+                
+                st.markdown("### ➕ إضافة خيارات جديدة للقوائم")
+                new_j = st.text_input("أضف مهنة جديدة")
+                new_c = st.text_input("أضف منطقة جديدة")
+
+                if st.form_submit_button("💾 حفظ ملف المريض بنجاح"):
                     if name and phone:
-                        if new_c and new_c not in st.session_state['cities_list']:
-                            st.session_state['cities_list'].append(new_c)
+                        # تحديث القوائم الذكية
+                        if new_j and new_j not in st.session_state['jobs_list']: st.session_state['jobs_list'].append(new_j)
+                        if new_c and new_c not in st.session_state['cities_list']: st.session_state['cities_list'].append(new_c)
                         
                         st.session_state['db'][name] = {
-                            "name": name, "phone": phone, "dob": dob,
-                            "city": new_c if new_c else city,
-                            "status": "انتظار ⏳"
+                            "name": name, "phone": phone, "dob": dob, "gender": gender,
+                            "job": new_j if new_j else job, "city": new_c if new_c else city,
+                            "weight": weight, "height": height, "pressure": pressure, "pulse": pulse,
+                            "chronic": chronic, "surgeries": surgeries, "status": "انتظار ⏳"
                         }
-                        st.success(f"✅ تم حفظ المريض {name}")
+                        st.success("✅ تم الحفظ بنجاح")
                         st.rerun()
-                    else:
-                        st.error("الاسم والموبايل مطلوبين")
+                    else: st.error("الاسم والموبايل مطلوبين")
 
         with tab2:
-            search_name = st.text_input("ابحث بالاسم:")
-            if search_name in st.session_state['db']:
-                p = st.session_state['db'][search_name]
-                p_age, p_icon = get_age_info(p.get('dob'))
-                st.success(f"تم العثور على: {search_name} ({p_age} سنة) {p_icon}")
+            search = st.text_input("🔍 ابحث بالاسم:")
+            if search in st.session_state['db']:
+                p = st.session_state['db'][search]
+                age, icon = get_age_info(p['dob'])
+                st.markdown(f"### {icon} الملف الحالي لـ: {search}")
                 # كود التعديل يوضع هنا
             # ... باقي كود التعديل ...
                 with st.form("update_patient_form"):
@@ -146,6 +194,7 @@ else:
 
                 wa_url = f"https://wa.me/{p.get('phone', '')}"
                 st.markdown(f'<a href="{wa_url}" target="_blank"><button style="background:#25D366; color:white; border:none; padding:10px; border-radius:10px; width:100%;">إرسال واتساب</button></a>', unsafe_allow_html=True)
+
 
 
 
