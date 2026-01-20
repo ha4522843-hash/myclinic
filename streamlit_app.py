@@ -27,17 +27,6 @@ st.markdown("""
     }
 
     /* الحاوية المدمجة: صغيرة وملمومة تحت الكلمة */
-    [data-testid="stHorizontalBlock"] {
-        background: white !important;
-        border: 2px solid #c2dbd1 !important;
-        border-radius: 15px !important;
-        padding: 2px 5px 2px 15px !important; /* تقليل البادينج للحجم الصغير */
-        width: 380px !important; /* تصغير عرض الحاوية */
-        margin: 0 auto !important;
-        box-shadow: 4px 4px 12px rgba(0,0,0,0.05) !important;
-        display: flex !important;
-        align-items: center !important;
-    }
 
     /* الخانة جوه الحاوية */
     [data-testid="stHorizontalBlock"] input {
@@ -110,3 +99,4 @@ else:
             st.rerun()
 
     st.markdown("<h2 style='color:#2d5a4d;'>Clinic Dashboard</h2>", unsafe_allow_html=True)
+
