@@ -33,9 +33,9 @@ st.markdown("""
         border: none !important;
         background: transparent !important;
         box-shadow: none !important;
-        height: 35px !important;
+        height: 40px !important;
         font-size: 16px !important;
-        width: 80% !important;
+        width: 100% !important;
     }
 
     /* الزرار جوه الحاوية */
@@ -69,7 +69,7 @@ if not st.session_state['logged_in']:
     st.markdown('<p style="text-align:center; color:#3e7d6a; font-weight:bold; letter-spacing:4px; font-size:11px; margin-top:115px; margin-bottom:15px;">MANAGEMENT LOGIN</p>', unsafe_allow_html=True)
 
     # السطر المدمج (خانة وزرار)
-    _, col_box, _ = st.columns([1, 1, 1]) 
+    _, col_box, _ = st.columns([1, 0.2, 1]) 
     with col_box:
         c1, c2 = st.columns([3, 1]) # تقسيم 3 للخانة و 1 للزرار
         with c1:
@@ -99,5 +99,6 @@ else:
             st.rerun()
 
     st.markdown("<h2 style='color:#2d5a4d;'>Clinic Dashboard</h2>", unsafe_allow_html=True)
+
 
 
