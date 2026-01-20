@@ -93,7 +93,7 @@ with col2:
             if code in ["0000", "1111"]:
                 st.session_state['logged_in'] = True
                 st.rerun()
-else:
+ else:  
     st.markdown("""
         <style>
         /* العلامة المائية: إجبار الظهور بـ z-index */
@@ -144,6 +144,7 @@ else:
 
     st.markdown("<h2 style='color:#2d5a4d;'>Clinic Dashboard</h2>", unsafe_allow_html=True)
     st.success("تم ضبط الأبعاد والـ 3D بنجاح.")
+
 
 
 
