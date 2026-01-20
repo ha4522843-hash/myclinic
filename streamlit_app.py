@@ -57,9 +57,7 @@ st.markdown("""
         width: 50% !important;
         height: 50px;
         font-weight: bold;
-        margin-top: 20px; /* جرب تغيير هذا الرقم حسب رغبتك */
-        transition: transform 0.3s ease; /* إ
-
+        
     }
 
     /* --- تصميم السايد بار (على الشمال) --- */
@@ -148,6 +146,7 @@ else:
     # محتوى الصفحة
     st.title("مرحباً بك دكتور بهاء")
     st.write("النظام الآن جاهز للعمل بنفس التنسيقات المطلوبة.")
+
 
 
 
