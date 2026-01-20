@@ -1,165 +1,113 @@
 import streamlit as st
 
 # --- 1. إعدادات الصفحة ---
-st.set_page_config(page_title="DR. BAHAA PREMIUM UI", layout="wide")
+st.set_page_config(page_title="DR. BAHAA | LOGIN", layout="centered")
 
-# --- 2. محرك الجرافيك (الـ CSS الاحترافي بجودة HTML/JS) ---
+# --- 2. محرك التصميم الاحترافي (Login UI) ---
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;800&display=swap');
-    
-    /* الأساسيات */
-    * { font-family: 'Cairo', sans-serif; }
-
-    /* العلامة المائية في خلفية الصفحة الرئيسية فقط */
+    /* 1. خلفية الصفحة بلون المنت جرين الهادئ */
     .stApp {
-        background-color: #f4f7f6;
-        background-image: url("https://i.ibb.co/WWq0wnpg/Layer-8.png");
-        background-repeat: no-repeat;
-        background-position: 60% 50%; /* تم ترحيله بجانب السايد بار */
-        background-size: 500px;
-        background-attachment: fixed;
-        opacity: 0.95;
-    }
-    
-    /* طبقة شفافة فوق الخلفية لضمان وضوح البيانات */
-    .stApp::before {
-        content: "";
-        position: absolute;
-        top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(244, 247, 246, 0.92); /* تحكم في شفافية العلامة المائية من هنا */
-        z-index: -1;
+        background: linear-gradient(135deg, #f2f9f7 0%, #e6f2ee 100%);
     }
 
-    /* تصميم السايد بار بجودة عالية */
-    [data-testid="stSidebar"] {
-        background: #ffffff !important;
-        border-right: 1px solid #e0e6e4;
-        box-shadow: 10px 0 30px rgba(0,0,0,0.03);
+    /* 2. إخفاء أي عناصر افتراضية من ستريم ليت */
+    header {visibility: hidden;}
+    [data-testid="stSidebar"] {display: none;}
+
+    /* 3. حاوية تسجيل الدخول - بدون مستطيلات أو حدود */
+    .login-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding-top: 5vh;
     }
 
-    /* هيكل تسجيل الدخول الاحترافي (Glassmorphism) */
-    .login-container {
-        background: rgba(255, 255, 255, 0.8);
-        backdrop-filter: blur(15px);
-        border-radius: 30px;
-        padding: 50px;
-        border: 1px solid rgba(255,255,255,0.5);
-        box-shadow: 20px 20px 60px #d1d9e6, -20px -20px 60px #ffffff;
-        text-align: center;
-        max-width: 500px;
-        margin: 50px auto;
+    /* 4. اللوجو - جودة عالية ومعالجة أطراف */
+    .brand-logo {
+        width: 550px !important; /* تكبير اللوجو كما طلبت */
+        filter: drop-shadow(0px 15px 25px rgba(62, 125, 106, 0.1));
+        image-rendering: -webkit-optimize-contrast;
+        margin-bottom: -20px; /* تقريب المسافة جداً من خانة الدخول */
     }
 
-    /* تصميم الخانات 3D العميقة */
+    /* 5. نص العنوان (MANAGEMENT LOGIN) */
+    .login-label {
+        color: #3e7d6a;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-weight: 700;
+        letter-spacing: 5px;
+        font-size: 14px;
+        margin-bottom: 25px;
+        opacity: 0.8;
+    }
+
+    /* 6. تحسين جودة خانة الإدخال (3D ناعم) */
     input {
-        border-radius: 15px !important;
-        background: #f8faf9 !important;
-        border: 1px solid #e0e6e4 !important;
-        box-shadow: inset 4px 4px 8px #d1d9e6, inset -4px -4px 8px #ffffff !important;
-        padding: 15px !important;
+        border-radius: 18px !important;
+        background: #ffffff !important;
+        border: 1px solid #d1e2dc !important;
+        box-shadow: 6px 6px 15px rgba(0,0,0,0.03), inset 2px 2px 5px rgba(0,0,0,0.02) !important;
+        padding: 18px !important;
+        text-align: center !important;
+        font-size: 18px !important;
         color: #2d5a4d !important;
-        transition: 0.3s;
+        width: 320px !important;
+        transition: all 0.3s ease;
     }
     
     input:focus {
         border: 1px solid #3e7d6a !important;
-        box-shadow: 0 0 15px rgba(62, 125, 106, 0.2) !important;
+        box-shadow: 0px 0px 20px rgba(62, 125, 106, 0.15) !important;
+        transform: scale(1.02);
     }
 
-    /* تصميم الأزرار بجودة HTML Buttons */
+    /* 7. زر الدخول الاحترافي */
     .stButton>button {
-        background: linear-gradient(145deg, #3e7d6a, #2d5a4d);
-        color: white;
-        border-radius: 15px;
-        padding: 20px;
-        border: none;
-        box-shadow: 5px 5px 15px #c8d1cd, -5px -5px 15px #ffffff;
-        font-weight: 800;
-        transition: 0.4s ease;
+        background: #2d5a4d !important;
+        color: white !important;
+        border-radius: 18px !important;
+        padding: 12px 0px !important;
+        font-weight: 700 !important;
+        font-size: 16px !important;
+        border: none !important;
+        box-shadow: 0 10px 20px rgba(45, 90, 77, 0.2) !important;
+        width: 320px !important;
+        margin-top: 10px;
+        transition: 0.4s ease !important;
     }
     
     .stButton>button:hover {
-        transform: translateY(-5px);
-        box-shadow: 8px 8px 25px rgba(45, 90, 77, 0.3);
-    }
-
-    /* كروت البيانات الداخلية */
-    .data-card {
-        background: white;
-        padding: 25px;
-        border-radius: 20px;
-        border-right: 10px solid #2d5a4d;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-        margin-bottom: 20px;
+        background: #3e7d6a !important;
+        box-shadow: 0 15px 30px rgba(45, 90, 77, 0.3) !important;
+        transform: translateY(-3px);
     }
     </style>
 """, unsafe_allow_html=True)
 
-# --- 3. منطق الهياكل (تسجيل الدخول والداخلية) ---
-
+# --- 3. عرض الواجهة ---
 if 'logged_in' not in st.session_state:
     st.session_state['logged_in'] = False
 
 if not st.session_state['logged_in']:
-    # ---- [ الهيكل الأول: تسجيل الدخول ] ----
-    st.markdown('<div style="padding-top: 50px;"></div>', unsafe_allow_html=True)
-    col1, col2, col3 = st.columns([1, 2, 1])
+    # الجزء العلوي: اللوجو والكلمة
+    st.markdown("""
+        <div class="login-wrapper">
+            <img src="https://i.ibb.co/YFVscsYM/Adobe-Express-file.png" class="brand-logo">
+            <p class="login-label">MANAGEMENT LOGIN</p>
+        </div>
+    """, unsafe_allow_html=True)
+
+    # الجزء السفلي: خانة الإدخال والزر (مع سنترة دقيقة)
+    col1, col2, col3 = st.columns([1, 1.2, 1])
     with col2:
-        st.markdown(f"""
-            <div class="login-container">
-                <img src="https://i.ibb.co/YFVscsYM/Adobe-Express-file.png" style="width: 250px;">
-                <h2 style="color: #2d5a4d; margin-bottom: 30px;">نظام الإدارة المتكامل</h2>
-            </div>
-        """, unsafe_allow_html=True)
-        
-        # خانة الدخول 3D
-        code = st.text_input("Access Code", type="password", placeholder="أدخل الكود السري هنا", label_visibility="collapsed")
-        
-        st.markdown('<div style="height: 20px;"></div>', unsafe_allow_html=True)
-        
-        if st.button("دخول إلى النظام 🔓", use_container_width=True):
+        code = st.text_input("Access Code", type="password", placeholder="••••", label_visibility="collapsed")
+        if st.button("ENTER SYSTEM"):
             if code in ["0000", "1111"]:
                 st.session_state['logged_in'] = True
                 st.rerun()
             else:
-                st.error("الكود غير صحيح، حاول مرة أخرى")
-
+                st.error("Invalid Access Code")
 else:
-    # ---- [ الهيكل الثاني: الصفحة الموحدة ] ----
-    
-    # السايد بار بجودة الصور الأصلية
-    with st.sidebar:
-        st.markdown(f"""
-            <div style="text-align: center; padding: 20px 0;">
-                <img src="https://i.ibb.co/WWq0wnpg/Layer-8.png" style="width: 180px;">
-                <div style="height: 2px; width: 100px; background: #3e7d6a; margin: 20px auto; opacity: 0.3;"></div>
-                <img src="https://i.ibb.co/xtmjKkMm/Layer-1-copy.png" style="width: 150px;">
-            </div>
-        """, unsafe_allow_html=True)
-        
-        st.markdown("<br>", unsafe_allow_html=True)
-        menu = st.radio("القائمة الرئيسية", ["📋 سجل المواعيد", "📂 ملفات المرضى", "⚙️ الإعدادات"])
-        
-        st.markdown("<div style='margin-top: 100px;'></div>", unsafe_allow_html=True)
-        if st.button("تسجيل خروج"):
-            st.session_state['logged_in'] = False
-            st.rerun()
-
-    # محتوى الصفحة الموحدة (جنب السايد بار والعلامة المائية خلفه)
-    st.markdown(f"<h1 style='color:#2d5a4d;'>{menu}</h1>", unsafe_allow_html=True)
-    
-    if menu == "📋 سجل المواعيد":
-        # مثال للكروت بجودة HTML
-        st.markdown("""
-            <div class="data-card">
-                <h3 style="margin:0; color:#2d5a4d;">👤 المريض: أحمد محمد كمال</h3>
-                <p style="color:#666;">الحالة: انتظار ⏳ | النوع: ذكر | السن: 34 سنة</p>
-                <div style="display: flex; gap: 20px; font-weight: bold;">
-                    <span>🩺 الضغط: 120/80</span>
-                    <span>⚖️ الوزن: 85 كجم</span>
-                </div>
-            </div>
-        """, unsafe_allow_html=True)
-
-
+    st.success("تم تسجيل الدخول بنجاح! جاري تحويلك للوحة التحكم...")
