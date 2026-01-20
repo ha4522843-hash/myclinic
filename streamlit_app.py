@@ -21,8 +21,8 @@ st.markdown("""
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        width: 50%;
-        margin-top: 2vh;
+        width: 100%;
+        margin-top: 1vh;
     }
 
     /* الصورة الرئيسية مع حركة التكبير */
@@ -144,6 +144,7 @@ else:
     # محتوى الصفحة
     st.title("مرحباً بك دكتور بهاء")
     st.write("النظام الآن جاهز للعمل بنفس التنسيقات المطلوبة.")
+
 
 
 
