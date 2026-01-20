@@ -91,7 +91,7 @@ st.markdown("""
         left: 60%; /* ترحيل جهة اليمين بعيداً عن السايد بار */
         transform: translate(-50%, -50%);
         width: 600px;
-        opacity: 0.05; /* فاتحة جداً درجتين أو أكثر */
+        opacity: 0.1; /* فاتحة جداً درجتين أو أكثر */
         z-index: -1;
         pointer-events: none;
     }
@@ -108,7 +108,7 @@ if not st.session_state['logged_in']:
             <div style="height: 40px;"></div> </div>
     """, unsafe_allow_html=True)
 
-    col1, col2, col3 = st.columns([1, 1, 1])
+    col1, col2, col3 = st.columns([5, 1, 5])
     with col2:
         code = st.text_input("", placeholder="Access Code", type="password", label_visibility="collapsed")
         st.markdown('<div style="height: 15px;"></div>', unsafe_allow_html=True)
@@ -144,6 +144,7 @@ else:
     # محتوى الصفحة
     st.title("مرحباً بك دكتور بهاء")
     st.write("النظام الآن جاهز للعمل بنفس التنسيقات المطلوبة.")
+
 
 
 
