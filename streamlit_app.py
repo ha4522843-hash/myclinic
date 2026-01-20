@@ -69,7 +69,7 @@ if not st.session_state['logged_in']:
     st.markdown('<p style="text-align:center; color:#3e7d6a; font-weight:bold; letter-spacing:4px; font-size:11px; margin-top:115px; margin-bottom:15px;">MANAGEMENT LOGIN</p>', unsafe_allow_html=True)
 
     # السطر المدمج (خانة وزرار)
-    _, col_box, _ = st.columns([3, 1, 3]) 
+    _, col_box, _ = st.columns([3, 1.5, 3]) 
     with col_box:
         c1, c2 = st.columns([3, 1]) # تقسيم 3 للخانة و 1 للزرار
         with c1:
@@ -99,6 +99,7 @@ else:
             st.rerun()
 
     st.markdown("<h2 style='color:#2d5a4d;'>Clinic Dashboard</h2>", unsafe_allow_html=True)
+
 
 
 
