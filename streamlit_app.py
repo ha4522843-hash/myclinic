@@ -88,8 +88,6 @@ else:
         st.progress(done/total if total > 0 else 0)
         st.write(f"✅ تم الانتهاء من {done} حالة من أصل {total}")
         for id, p in st.session_state['db'].items():
-            p_age, p_icon = get_age_info(p['dob'])
-            st.markdown(f"**👤 {p['name']}** {p_icon} ({p_age} سنة)")
         # جدول عرض الحالات
         for id, p in st.session_state['db'].items():
             row_class = "patient-row delay-alert" if p.get('delay') else "patient-row"
@@ -244,6 +242,7 @@ else:
 
                 wa_url = f"https://wa.me/{p.get('phone', '')}"
                 st.markdown(f'<a href="{wa_url}" target="_blank"><button style="background:#25D366; color:white; border:none; padding:10px; border-radius:10px; width:100%;">إرسال واتساب</button></a>', unsafe_allow_html=True)
+
 
 
 
