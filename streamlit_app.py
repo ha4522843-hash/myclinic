@@ -89,7 +89,7 @@ if not st.session_state['logged_in']:
     st.markdown('<p style="text-align:center; color:#3e7d6a; font-weight:bold; letter-spacing:4px; font-size:11px; margin-top:115px; margin-bottom:15px;">MANAGEMENT LOGIN</p>', unsafe_allow_html=True)
 
     # التنسيق المنفصل اللي طلبته
-    _, col_box, _ = st.columns([5, 2, 5])
+    _, col_box, _ = st.columns([5, 3, 5])
     with col_box:
         c1, c2 = st.columns([3, 1])
         with c1:
@@ -143,6 +143,7 @@ else:
     elif menu == "👥 Patients Record":
         st.title("Patients Management")
         # هنا هنضيف جدول البيانات لاحقاً
+
 
 
 
