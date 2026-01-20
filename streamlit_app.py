@@ -22,7 +22,7 @@ st.markdown("""
         align-items: center;
         justify-content: center;
         width: 100%;
-        margin-top: 1vh;
+        margin-top: 2vh;
     }
 
     /* الصورة الرئيسية مع حركة التكبير */
@@ -144,6 +144,7 @@ else:
     # محتوى الصفحة
     st.title("مرحباً بك دكتور بهاء")
     st.write("النظام الآن جاهز للعمل بنفس التنسيقات المطلوبة.")
+
 
 
 
