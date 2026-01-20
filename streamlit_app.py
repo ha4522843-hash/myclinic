@@ -16,36 +16,13 @@ def calculate_age(birth_date):
     elif years < 60: icon = "👱 (بالغ)"
     else: icon = "👴 (كبير سن)"
     return years, icon
-# قاعدة بيانات وهمية للتجربة (يمكن استبدالها لاحقاً بقاعدة بيانات حقيقية)
-if 'db' not in st.session_state:
-    st.session_state['db'] = {
-        "101": {"name": "أحمد علي", "phone": "201065432100", "status": "في الكشف 🩺", "delay": False, "type": "Normal"},
-        "102": {"name": "سارة محمود", "phone": "201287654321", "status": "انتظار ⏳", "delay": True, "type": "Obesity"}
-    }
 # ضيف السطور دي تحت السطر اللي فيه st.session_state['db']
 if 'jobs_list' not in st.session_state:
     st.session_state['jobs_list'] = ["طبيب", "مهندس", "محاسب", "أعمال حرة"]
 if 'cities_list' not in st.session_state:
     st.session_state['cities_list'] = ["القاهرة", "الجيزة", "الإسكندرية"]
 if 'sources_list' not in st.session_state:
-    st.session_state['sources_list'] = ["فيسبوك", "تيك توك", "مريض سابق"]
-# --- مثال لقائمة المهنة الذكية ---
-job_choice = st.selectbox("المهنة", options=st.session_state['jobs_list'] + ["+ إضافة مهنة جديدة"])
-if job_choice == "+ إضافة مهنة جديدة":
-    new_job = st.text_input("اكتب المهنة الجديدة هنا")
-    if st.button("حفظ المهنة في القائمة"):
-        st.session_state['jobs_list'].append(new_job)
-        st.rerun()
-
-# --- مثال لقائمة المحافظة الذكية ---
-city_choice = st.selectbox("المحافظة", options=st.session_state['cities_list'] + ["+ إضافة منطقة جديدة"])
-if city_choice == "+ إضافة منطقة جديدة":
-    new_city = st.text_input("اكتب اسم المنطقة الجديدة")
-    if st.button("حفظ المنطقة"):
-        st.session_state['cities_list'].append(new_city)
-        st.rerun()
-if 'surgeries_list' not in st.session_state:
-    st.session_state['surgeries_list'] = ["تكميم معدة", "تحويل مسار", "مرارة", "فتق إربي", "تجميل أنف"]       
+    st.session_state['sources_list'] = ["فيسبوك", "تيك توك", "مريض ساب"]   
 # --- 3. محرك الجرافيك (التنسيق الكامل) ---
 st.markdown("""
     <style>
@@ -147,14 +124,6 @@ else:
  # ---- [ الصفحة الثانية: ملفات المرضى ] ----
     elif menu == "Patients (ملف مريض)":
         st.markdown("<h2 class='main-title'>مدير ملفات المرضى</h2>", unsafe_allow_html=True)
-        
-        # إعداد القوائم الذكية في الخلفية
-        if 'jobs_list' not in st.session_state: st.session_state['jobs_list'] = ["طبيب", "أخرى"]
-        if 'cities_list' not in st.session_state: st.session_state['cities_list'] = ["القاهرة", "الجيزة", "الإسكندرية"]
-        if 'sources_list' not in st.session_state: st.session_state['sources_list'] = ["فيسبوك", "تيك توك", "إعلان ممول"]
-        if 'chronic_list' not in st.session_state: st.session_state['chronic_list'] = ["السكري", "الضغط", "القلب"]
-        if 'surgeries_list' not in st.session_state: st.session_state['surgeries_list'] = ["زائدة دودية", "مرارة", "فتق"]
-
         # لوحة التحكم في الحذف (تطهير القوائم)
         with st.expander("⚙️ إعدادات القوائم الذكية (حذف خيارات)"):
             c_del1, c_del2, c_del3 = st.columns(3)
@@ -275,6 +244,7 @@ else:
 
                 wa_url = f"https://wa.me/{p.get('phone', '')}"
                 st.markdown(f'<a href="{wa_url}" target="_blank"><button style="background:#25D366; color:white; border:none; padding:10px; border-radius:10px; width:100%;">إرسال واتساب</button></a>', unsafe_allow_html=True)
+
 
 
 
