@@ -89,7 +89,6 @@ else:
         st.write(f"✅ تم الانتهاء من {done} حالة من أصل {total}")
         for id, p in st.session_state['db'].items():
         # جدول عرض الحالات
-        for id, p in st.session_state['db'].items():
             row_class = "patient-row delay-alert" if p.get('delay') else "patient-row"
             st.markdown(f"<div class='{row_class}'>", unsafe_allow_html=True)
             
@@ -242,6 +241,7 @@ else:
 
                 wa_url = f"https://wa.me/{p.get('phone', '')}"
                 st.markdown(f'<a href="{wa_url}" target="_blank"><button style="background:#25D366; color:white; border:none; padding:10px; border-radius:10px; width:100%;">إرسال واتساب</button></a>', unsafe_allow_html=True)
+
 
 
 
