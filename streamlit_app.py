@@ -31,7 +31,7 @@ st.markdown("""
 
     /* جعل الخانة والزرار 3D وجزء من الصفحة */
     .stTextInput input {
-        border-radius: 15px !important;
+        
         height: 50px !important;
         width: 200px !important; /* فرد الخانة */
         text-align: center !important;
@@ -140,6 +140,7 @@ else:
 
     st.markdown("<h2 style='color:#2d5a4d;'>Clinic Dashboard</h2>", unsafe_allow_html=True)
     st.success("تم ضبط الأبعاد والـ 3D بنجاح.")
+
 
 
 
