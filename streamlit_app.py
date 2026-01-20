@@ -8,90 +8,88 @@ st.set_page_config(page_title="DR. BAHAA SYSTEM", layout="wide")
 if 'logged_in' not in st.session_state:
     st.session_state['logged_in'] = False
 
-# --- 3. محرك الجرافيك (التنسيق والتحريك) ---
+# --- 3. محرك الجرافيك (تعديلات الألوان والمسافات) ---
 st.markdown("""
     <style>
-    .stApp {
-        background-color: #f2f7f5;
     /* تحسين جودة الصور */
-    img { image-rendering: -webkit-optimize-contrast !important; image-rendering: crisp-edges !important; }
+    img { image-rendering: -webkit-optimize-contrast !important; }
 
-    /* --- [ ستايل صفحة الدخول ] --- */
+    /* --- [ صفحة التسجيل - ألوان Mint Green ] --- */
+    .stApp { 
+        background-color: #f7fdfb !important; /* لون منت فاتح جداً ونظيف */
+    }
+
     .login-master {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         width: 100%;
-        padding-top: 5vh;
+        padding-top: 2vh; /* تقليل المسافة العلوية */
     }
 
-    /* اللوجو العملاق مع حركة الماوس */
+    /* اللوجو الخارجي الكبير */
     .login-logo-img {
-        width: 650px !important;
-        transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        width: 600px !important;
+        transition: all 0.5s ease;
         cursor: pointer;
-        filter: drop-shadow(0px 20px 40px rgba(62, 125, 106, 0.2));
+        filter: drop-shadow(0px 10px 20px rgba(62, 125, 106, 0.1));
+        margin-bottom: -90px; /* تقريب اللوجو جداً من الخانات */
     }
-    .login-logo-img:hover {
-        transform: scale(1.1); /* تكبير الصورة */
-    }
+    .login-logo-img:hover { transform: scale(1.05); }
 
-    /* تحريك الزرار والسنترة */
+    /* تصغير زرار اللوج إن وسنترته */
     .stButton > button {
         background-color: #2d5a4d !important;
         color: white !important;
-        border-radius: 15px !important;
-        height: 52px !important;
-        font-weight: bold !important;
-        font-size: 16px !important;
-        margin-top: 50px; /* المسافة اللي بتحرك الزرار تحت الخانة */
-        transition: 0.4s ease;
+        border-radius: 12px !important;
+        height: 42px !important; /* تصغير الطول */
+        width: 180px !important; /* تصغير العرض ليكون أصغر من الخانة */
+        font-weight: 600 !important;
+        font-size: 14px !important;
+        margin: 10px auto !important; /* سنترة تلقائية */
+        display: block;
         border: none !important;
-        box-shadow: 0 8px 15px rgba(45, 90, 77, 0.2) !important;
-    }
-    .stButton > button:hover {
-        transform: translateY(-4px); /* حركة نبض للزرار */
-        box-shadow: 0 12px 25px rgba(45, 90, 77, 0.3) !important;
-        background-color: #3e7d6a !important;
+        box-shadow: 0 4px 10px rgba(45, 90, 77, 0.15) !important;
     }
 
-    /* خانة الإدخال موسطنة */
+    /* خانة الإدخال */
     .stTextInput > div > div > input {
-        border-radius: 15px !important;
+        border-radius: 12px !important;
         text-align: center !important;
-        height: 52px !important;
-        font-size: 18px !important;
-        border: 1px solid #a3d9c9 !important;
+        height: 45px !important;
+        width: 320px !important; /* عرض متناسق */
+        margin: 0 auto !important;
+        border: 1px solid #c2dbd1 !important;
+        background-color: white !important;
     }
 
-    /* --- [ ستايل السايد بار والداخلية ] --- */
-    [data-testid="stSidebar"] { 
-        background-color: #e6eee9 !important; 
-        border-right: 2px solid #ceded6; 
+    /* --- [ العلامة المائية والداخلية ] --- */
+    .watermark {
+        position: fixed;
+        top: 55%;
+        left: 60%;
+        transform: translate(-50%, -50%);
+        width: 500px;
+        opacity: 0.02; /* شفافة جداً جداً (فاتحة درجتين إضافيتين) */
+        z-index: -1;
+        pointer-events: none;
     }
-    
+
+    [data-testid="stSidebar"] { 
+        background-color: #edf5f2 !important; /* درجة منت واضحة للسايد بار */
+        border-right: 1px solid #d1e2dc;
+    }
+
     .sidebar-wrapper { 
         display: flex; 
         flex-direction: column; 
         align-items: center; 
-        padding-top: 50px; 
+        padding-top: 40px; 
     }
     
-    .img-sb-top { width: 190px !important; margin-bottom: 40px; }
-    .img-sb-bottom { width: 130px !important; opacity: 0.8; } /* أصغر ومبتعدة */
-
-    /* العلامة المائية في النص فاتحة جداً */
-    .watermark {
-        position: fixed;
-        top: 50%;
-        left: 55%;
-        transform: translate(-50%, -50%);
-        width: 600px;
-        opacity: 0.2; /* فاتحة درجتين عن السايد بار */
-        z-index: -1;
-        pointer-events: none;
-    }
+    .img-sb-top { width: 170px !important; }
+    .img-sb-bottom { width: 110px !important; margin-top: 30px; opacity: 0.7; }
     </style>
 """, unsafe_allow_html=True)
 
@@ -102,69 +100,43 @@ if not st.session_state['logged_in']:
     st.markdown("""
         <div class="login-master">
             <img src="https://i.ibb.co/YFVscsYM/Adobe-Express-file.png" class="login-logo-img">
-            <div style="height: 2px; width: 250px; background: #a3d9c9; margin: 30px 0;"></div>
-            <p style="color: #3e7d6a; font-weight: bold; letter-spacing: 4px; margin-bottom: 10px;">MANAGEMENT LOGIN</p>
+            <p style="color: #3e7d6a; font-weight: bold; letter-spacing: 3px; font-size: 12px; margin-bottom: 15px;">MANAGEMENT LOGIN</p>
         </div>
     """, unsafe_allow_html=True)
 
-    # السنترة الهندسية للخانات والزرار
-    col1, col2, col3 = st.columns([1, 0.7, 1])
+    # استخدام أعمدة للسنترة الدقيقة
+    col1, col2, col3 = st.columns([1, 0.8, 1])
     with col2:
-        code = st.text_input("", placeholder="Access Code", type="password", label_visibility="collapsed")
-        if st.button("LOGIN TO CLINIC", use_container_width=True):
+        code = st.text_input("", placeholder="Code", type="password", label_visibility="collapsed")
+        # سنترة الزرار تحت الخانة بالظبط
+        st.markdown('<div style="display: flex; justify-content: center;">', unsafe_allow_html=True)
+        if st.button("LOGIN"):
             if code in ["0000", "1111"]:
                 st.session_state['logged_in'] = True
                 st.session_state['user_type'] = "Doctor" if code == "0000" else "Reception"
                 st.rerun()
             else:
-                st.error("Invalid Code")
+                st.error("Invalid")
+        st.markdown('</div>', unsafe_allow_html=True)
 
 else:
     # ---- [ الواجهة الداخلية ] ----
-    
-    # 1. إضافة العلامة المائية في الخلفية
+    # العلامة المائية الفاتحة جداً في الخلفية
     st.markdown('<img src="https://i.ibb.co/WWq0wnpg/Layer-8.png" class="watermark">', unsafe_allow_html=True)
 
-    # 2. السايد بار على الشمال بتنسيق الصورتين
     with st.sidebar:
         st.markdown(f"""
             <div class="sidebar-wrapper">
                 <img src="https://i.ibb.co/WWq0wnpg/Layer-8.png" class="img-sb-top">
                 <img src="https://i.ibb.co/xtmjKkMm/Layer-1-copy.png" class="img-sb-bottom">
-                <div style="height: 1px; width: 60%; background: #a3d9c9; margin: 40px 0;"></div>
+                <div style="height: 1px; width: 50%; background: #c2dbd1; margin: 30px 0;"></div>
             </div>
         """, unsafe_allow_html=True)
         
-        st.write(f"### مرحباً بك: {st.session_state['user_type']}")
-        if st.button("Logout", use_container_width=True):
+        st.write(f"**User:** {st.session_state['user_type']}")
+        if st.button("Logout"):
             st.session_state['logged_in'] = False
             st.rerun()
 
-    # محتوى الصفحة الرئيسي
-    st.markdown('<h1 class="main-title">لوحة التحكم الرئيسية</h1>', unsafe_allow_html=True)
-    st.write("مرحباً بك دكتور بهاء في نظام إدارة العيادة المطور.")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    st.markdown("<h2 style='color: #2d5a4d;'>Clinic Dashboard</h2>", unsafe_allow_html=True)
+    st.info("تم ضبط الألوان والمسافات كما طلبت يا دكتور.")
