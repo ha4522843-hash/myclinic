@@ -134,7 +134,7 @@ else:
                 it_src = st.selectbox("حذف مصدر:", [""] + st.session_state['sources_list'])
                 if st.button("🗑️ حذف مصدر") and it_src: st.session_state['sources_list'].remove(it_src); st.rerun()
 
-    tab1, tab2 = st.tabs(["🆕 تسجيل مريض جديد", "🔍 بحث وتعديل مريض سابق"])
+        tab1, tab2 = st.tabs(["🆕 تسجيل مريض جديد", "🔍 بحث وتعديل مريض سابق"])
 
         with tab1:
             st.markdown("### 📝 إنشاء ملف مريض جديد")
@@ -240,6 +240,7 @@ else:
 
                 wa_url = f"https://wa.me/{p.get('phone', '')}"
                 st.markdown(f'<a href="{wa_url}" target="_blank"><button style="background:#25D366; color:white; border:none; padding:10px; border-radius:10px; width:100%;">إرسال واتساب</button></a>', unsafe_allow_html=True)
+
 
 
 
