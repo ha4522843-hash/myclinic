@@ -112,11 +112,11 @@ if not st.session_state['logged_in']:
                     st.session_state['logged_in'] = True
                     st.session_state['user_role'] = "Doctor"
                     st.rerun()
-               elif code == "1111": # كود السكرتيرة
+                elif code == "1111": # كود السكرتيرة
                     st.session_state['logged_in'] = True
                     st.session_state['user_role'] = "Reception"
                     st.rerun()
-               elif code == "2222": # كود الفريق الطبي
+                elif code == "2222": # كود الفريق الطبي
                     st.session_state['logged_in'] = True
                     st.session_state['user_role'] = "Medical Team"
                     st.rerun()
@@ -162,6 +162,7 @@ else:
     elif menu == "👥 Patients Record":
         st.title("Patients Management")
         # هنا هنضيف جدول البيانات لاحقاً
+
 
 
 
