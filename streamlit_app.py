@@ -52,7 +52,7 @@ st.markdown("""
         color: white !important;
         border-radius: 12px !important;
         height: 42px !important;
-        width: 60px !important; 
+        width: 100px !important; 
         border: none !important;
         font-weight: bold !important;
         transition: all 0.4s ease;
@@ -143,6 +143,7 @@ else:
     elif menu == "👥 Patients Record":
         st.title("Patients Management")
         # هنا هنضيف جدول البيانات لاحقاً
+
 
 
 
