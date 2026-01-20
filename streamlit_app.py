@@ -2,7 +2,7 @@ import streamlit as st
 
 # 1. إعدادات الصفحة
 st.set_page_config(page_title="DR. BAHAA SYSTEM", layout="wide")
-
+from datetime import datetime  # <--- السطر ده هو اللي ناقصك ومسبب المشكلة
 # 2. إدارة الجلسة
 if 'logged_in' not in st.session_state:
     st.session_state['logged_in'] = False
@@ -143,6 +143,7 @@ else:
     elif menu == "👥 Patients Record":
         st.title("Patients Management")
         # هنا هنضيف جدول البيانات لاحقاً
+
 
 
 
