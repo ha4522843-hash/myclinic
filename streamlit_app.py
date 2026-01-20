@@ -67,6 +67,17 @@ st.markdown("""
         position: fixed; top: 50%; left: 60%; transform: translate(-50%, -50%);
         width: 850px; opacity: 0.08 !important; z-index: 0; pointer-events: none;
     }
+    /* السايد بار والساعة */
+    [data-testid="stSidebar"] { background-color: #edf5f2 !important; border-right: 1px solid #d1e2dc; }
+    
+    .clock-box {
+        background: #2d5a4d; color: white; border-radius: 15px;
+        padding: 15px; text-align: center; margin: 20px 10px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        font-family: 'Courier New', Courier, monospace;
+    }
+    .clock-time { font-size: 24px; font-weight: bold; display: block; }
+    .clock-date { font-size: 12px; opacity: 0.8; }
     </style>
 """, unsafe_allow_html=True)
 
@@ -90,15 +101,34 @@ if not st.session_state['logged_in']:
                     st.rerun()
                 else:
                     st.error("X")
-else:
-    # الصفحة الداخلية بنفس روح المحرك
+else:  
+    # الصفحة الداخلية (لوحة التحكم)
     st.markdown('<div class="watermark-container"><img src="https://i.ibb.co/WWq0wnpg/Layer-8.png" style="width:100%;"></div>', unsafe_allow_html=True)
-    st.success("Welcome Doctor - المحرك يعمل بأقصى جودة")
+    
+    with st.sidebar:
+        # لوجوهات الدكتور في السايد بار
+        st.markdown("""
+            <div style="display: flex; flex-direction: column; align-items: center; padding-top: 20px;">
+                <img src="https://i.ibb.co/WWq0wnpg/Layer-8.png" style="width:150px;">
+                <img src="https://i.ibb.co/xtmjKkMm/Layer-1-copy.png" style="width:90px; margin-top:15px;">
+            </div>
+        """, unsafe_allow_html=True)
 
+        # الساعة الرقمية الحية
+        curr_time = datetime.now().strftime("%H:%M:%S")
+        curr_date = datetime.now().strftime("%A, %d %B")
+        st.markdown(f"""
+            <div class="clock-box">
+                <span class="clock-time">{curr_time}</span>
+                <span class="clock-date">{curr_date}</span>
+            </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("<hr style='margin:10px 0; border-color:#c2dbd1;'>", unsafe_allow_html=True)
 
-
-
-
+if st.button("Logout", use_container_width=True):
+            st.session_state['logged_in'] = False
+            st.rerun()
 
 
 
