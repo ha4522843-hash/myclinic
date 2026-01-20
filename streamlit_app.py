@@ -49,7 +49,7 @@ st.markdown("""
         border: none !important;
         box-shadow: 5px 5px 15px rgba(0,0,0,0.2) !important;
         font-weight: bold !important;
-        margin: 50px auto 0 auto !important;
+        margin: 50px auto 20px auto !important;
         display: block !important;
         transition: 0.3s;
     }
@@ -98,7 +98,7 @@ else:
             top: 50%;
             left: 60%;
             transform: translate(-50%, -50%);
-            width: 600px;
+            width: 900px;
             opacity: 0.12 !important; /* رفع الشفافية للتأكد من رؤيتها */
             z-index: 0; /* خلف المحتوى ولكن فوق الخلفية */
             pointer-events: none;
@@ -140,6 +140,7 @@ else:
 
     st.markdown("<h2 style='color:#2d5a4d;'>Clinic Dashboard</h2>", unsafe_allow_html=True)
     st.success("تم ضبط الأبعاد والـ 3D بنجاح.")
+
 
 
 
