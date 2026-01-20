@@ -3,106 +3,117 @@ import streamlit as st
 # --- 1. إعدادات الصفحة ---
 st.set_page_config(page_title="DR. BAHAA | LOGIN", layout="wide")
 
-# --- 2. محرك التصميم (CSS احترافي يمنع الفركشة) ---
+# --- 2. محرك التصميم المطور (Pure CSS) ---
 st.markdown("""
     <style>
-    .stApp { background: linear-gradient(135deg, #f2f9f7 0%, #e6f2ee 100%); }
+    /* خلفية المنت جرين */
+    .stApp {
+        background: linear-gradient(135deg, #f2f9f7 0%, #e6f2ee 100%);
+    }
     header {visibility: hidden;}
 
-    /* حاوية السنترة المطلقة */
-    .super-container {
+    /* الحاوية الرئيسية اللي شايلة كل حاجة */
+    .master-login-container {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         width: 100%;
-        text-align: center;
-        padding-top: 5vh;
+        margin-top: 5vh;
     }
 
-    /* حركة اللوجو - Hover Effect */
+    /* حركة اللوجو العملاق */
     .brand-logo {
-        width: 600px !important;
+        width: 650px !important;
+        max-width: 90vw;
+        filter: drop-shadow(0px 10px 20px rgba(62, 125, 106, 0.1));
         transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         cursor: pointer;
-        filter: drop-shadow(0px 10px 20px rgba(62, 125, 106, 0.1));
-        margin-bottom: -80px; /* لتقريب الخانات */
+        margin-bottom: -110px; /* لتقريب الخانات من قلب اللوجو */
     }
+    /* تأثير التكبير عند اللمس */
     .brand-logo:hover {
-        transform: scale(1.1) rotate(1deg); /* تكبير مع لفة خفيفة */
+        transform: scale(1.1);
         filter: drop-shadow(0px 20px 40px rgba(62, 125, 106, 0.2));
     }
 
-    /* حاوية الخانات "يمين وشمال" بدون فركشة */
-    .input-row {
+    /* نص MANAGEMENT LOGIN */
+    .login-subtitle {
+        color: #3e7d6a;
+        font-family: 'Segoe UI', sans-serif;
+        font-weight: 700;
+        letter-spacing: 5px;
+        font-size: 14px;
+        margin-bottom: 30px;
+        opacity: 0.7;
+    }
+
+    /* إجبار الخانة والزرار على السنترة المطلقة تحت بعض */
+    [data-testid="stVerticalBlock"] > div {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 15px;
         width: 100%;
-        margin-top: 20px;
     }
 
-    /* تنسيق خانة الإدخال */
-    .custom-input {
-        width: 300px !important;
+    /* تصميم خانة الإدخال 3D */
+    div[data-testid="stTextInput"] {
+        width: 380px !important;
     }
     input {
-        border-radius: 18px !important;
+        border-radius: 20px !important;
         border: 1px solid #d1e2dc !important;
-        padding: 15px !important;
+        padding: 18px !important;
         text-align: center !important;
-        font-size: 18px !important;
+        font-size: 20px !important;
         box-shadow: 6px 6px 15px rgba(0,0,0,0.03) !important;
+        width: 100% !important;
     }
 
-    /* تنسيق الزرار */
-    .stButton button {
-        width: 160px !important;
-        border-radius: 18px !important;
-        height: 55px !important; /* طول متناسق مع الخانة */
+    /* تصميم الزرار */
+    div[data-testid="stButton"] button {
+        width: 380px !important;
+        border-radius: 20px !important;
+        padding: 15px 0px !important;
         background: #2d5a4d !important;
         color: white !important;
         font-weight: 800 !important;
+        font-size: 18px !important;
         border: none !important;
         box-shadow: 0 10px 20px rgba(45, 90, 77, 0.2) !important;
-        transition: 0.3s !important;
+        transition: 0.4s ease !important;
+        margin-top: 10px;
     }
-    .stButton button:hover {
+    div[data-testid="stButton"] button:hover {
         background: #3e7d6a !important;
         transform: translateY(-3px);
+        box-shadow: 0 15px 30px rgba(45, 90, 77, 0.3) !important;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# --- 3. التنفيذ (بناء الهيكل) ---
+# --- 3. التنفيذ ---
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
 
 if not st.session_state.logged_in:
-    # 1. عرض اللوجو داخل الحاوية الموسطنة
+    # عرض اللوجو والاسم في الحاوية الموحدة
     st.markdown("""
-        <div class="super-container">
+        <div class="master-login-container">
             <img src="https://i.ibb.co/YFVscsYM/Adobe-Express-file.png" class="brand-logo">
-            <p style="color:#3e7d6a; font-weight:bold; letter-spacing:4px; opacity:0.7;">MANAGEMENT LOGIN</p>
+            <p class="login-subtitle">MANAGEMENT LOGIN</p>
         </div>
     """, unsafe_allow_html=True)
 
-    # 2. عرض الخانة والزرار جنب بعض (بدون Columns خارجية)
-    # بنستخدم columns بس عشان نتحكم في عرض المنطقة
-    c1, c2, c3 = st.columns([1, 2, 1])
-    with c2:
-        # هنا بقى الـ Layout اللي هيظبط اليمين والشمال
-        inner_c1, inner_c2 = st.columns([2, 1])
-        with inner_c1:
-            code = st.text_input("Code", type="password", placeholder="Access Code", label_visibility="collapsed")
-        with inner_c2:
-            if st.button("LOGIN 🔓"):
-                if code in ["0000", "1111"]:
-                    st.session_state.logged_in = True
-                    st.rerun()
-                else:
-                    st.error("خطأ!")
+    # وضع الخانة والزرار (ستريم ليت هيرصهم تحت بعض تلقائياً بس الـ CSS هيسنترهم)
+    code = st.text_input("Code", type="password", placeholder="••••", label_visibility="collapsed")
+    if st.button("ENTER SYSTEM"):
+        if code in ["0000", "1111"]:
+            st.session_state.logged_in = True
+            st.rerun()
+        else:
+            st.error("Invalid Access Code")
+
 else:
-    st.success("تم الدخول!")
+    st.success("تم الدخول..")
