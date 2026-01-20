@@ -7,47 +7,67 @@ st.set_page_config(page_title="DR. BAHAA SYSTEM", layout="wide")
 if 'logged_in' not in st.session_state:
     st.session_state['logged_in'] = False
 
-# --- محرك الجرافيك (اللم والدمج) ---
+# --- محرك الجرافيك المطور ---
 st.markdown("""
+    <style>
     img { 
-            image-rendering: -webkit-optimize-contrast !important; /* تحسين التباين */
-            image-rendering: crisp-edges !important; /* الحفاظ على الحواف حادة */
-            -ms-interpolation-mode: bicubic !important; /* أفضل خوارزمية تكبير */
-        }
-
-        .stApp { background-color: #f7fdfb !important; }
-        header {visibility: hidden;}
-        
-        .login-master {
-            display: flex; flex-direction: column; align-items: center;
-            justify-content: center; width: 100%; padding-top: 5vh;
-        }
-
-        /* اللوجو مع تنعيم الحركة Anti-Aliasing */
-        .login-logo-img {
-            width: 600px !important;
-            transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1); /* حركة حريرية */
-            cursor: pointer;
-            margin-bottom: -95px; 
-            filter: drop-shadow(0px 10px 20px rgba(62, 125, 106, 0.1));
-            will-change: transform; /* إبلاغ المتصفح بالاستعداد للحركة لزيادة النقاوة */
-        }
-        .login-logo-img:hover { 
-            transform: scale(1.08); 
-            filter: drop-shadow(0px 20px 40px rgba(62, 125, 106, 0.2));
-        }
-      
-    /* الزرار جوه الحاوية */
-    [data-testid="stHorizontalBlock"] button {
-        color: #2d5a4d!important;
-        height: 35px !important;
-        width: 50px !important; /* زرار كنكة وصغير */
-        border: none !important;
-        font-weight: bold !important;
-        margin-top: 1px !important;
+        image-rendering: -webkit-optimize-contrast !important; 
+        image-rendering: crisp-edges !important; 
+        -ms-interpolation-mode: bicubic !important; 
     }
 
-    /* العلامة المائية */
+    .stApp { background-color: #f7fdfb !important; }
+    header {visibility: hidden;}
+    
+    .login-master {
+        display: flex; flex-direction: column; align-items: center;
+        justify-content: center; width: 100%; padding-top: 5vh;
+    }
+
+    .login-logo-img {
+        width: 600px !important;
+        transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        cursor: pointer;
+        margin-bottom: -95px; 
+        filter: drop-shadow(0px 10px 20px rgba(62, 125, 106, 0.1));
+    }
+    .login-logo-img:hover { transform: scale(1.05); }
+
+    /* الحاوية المدمجة اللي بتلم الخانة والزرار */
+    div[data-testid="stHorizontalBlock"] {
+        background: white !important;
+        border: 2px solid #c2dbd1 !important;
+        border-radius: 15px !important;
+        padding: 5px 10px !important;
+        width: 380px !important; /* العرض الملموم اللي طلبته */
+        margin: 0 auto !important;
+        display: flex !important;
+        align-items: center !important;
+        box-shadow: 4px 4px 15px rgba(0,0,0,0.05) !important;
+    }
+
+    /* الخانة جوه الحاوية */
+    div[data-testid="stHorizontalBlock"] input {
+        border: none !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        height: 40px !important;
+        font-size: 16px !important;
+    }
+
+    /* الزرار الكنكة بتاعك */
+    div[data-testid="stHorizontalBlock"] button {
+        background-color: #2d5a4d !important;
+        color: white !important;
+        height: 35px !important; 
+        width: 60px !important; 
+        border: none !important; 
+        font-weight: bold !important; 
+        border-radius: 10px !important;
+        margin-top: 2px !important;
+    }
+
+    /* العلامة المائية المفرودة */
     .watermark-container {
         position: fixed; top: 50%; left: 60%; transform: translate(-50%, -50%);
         width: 800px; opacity: 0.1 !important; z-index: 0; pointer-events: none;
@@ -65,10 +85,10 @@ if not st.session_state['logged_in']:
     st.markdown('<div class="login-master"><img src="https://i.ibb.co/YFVscsYM/Adobe-Express-file.png" class="login-logo-img"></div>', unsafe_allow_html=True)
     st.markdown('<p style="text-align:center; color:#3e7d6a; font-weight:bold; letter-spacing:4px; font-size:11px; margin-top:115px; margin-bottom:15px;">MANAGEMENT LOGIN</p>', unsafe_allow_html=True)
 
-    # السطر المدمج (خانة وزرار)
-    _, col_box, _ = st.columns([3, 1.5, 3]) 
+    # السطر المدمج بالسنترة المظبوطة
+    _, col_box, _ = st.columns([1, 1, 1]) 
     with col_box:
-        c1, c2 = st.columns([3, 1]) # تقسيم 3 للخانة و 1 للزرار
+        c1, c2 = st.columns([3, 1]) 
         with c1:
             code = st.text_input("", placeholder="Code", type="password", label_visibility="collapsed")
         with c2:
@@ -96,21 +116,4 @@ else:
             st.rerun()
 
     st.markdown("<h2 style='color:#2d5a4d;'>Clinic Dashboard</h2>", unsafe_allow_html=True)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    st.info("أهلاً بك يا دكتور بهاء، تم ضبط الواجهة بأعلى نقاء.")
