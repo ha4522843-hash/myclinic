@@ -124,9 +124,10 @@ else:
             </div>
         """, unsafe_allow_html=True)
 
-if st.button("Logout", use_container_width=True):
-            st.session_state['logged_in'] = False
-            st.rerun()
+      if st.button("Logout", use_container_width=True):
+                 st.session_state['logged_in'] = False
+                   st.rerun()
+
 
 
 
