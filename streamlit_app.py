@@ -28,35 +28,37 @@ st.markdown("""
         z-index: 10;
     }
     .login-logo-img:hover { transform: scale(1.05); }
+        /* حاوية تجمع الخانة والزرار كقطعة واحدة */
+div[data-testid="stHorizontalBlock"] {
+    background: white !important;
+    border: 2px solid #c2dbd1 !important;
+    border-radius: 20px !important;
+    padding: 5px !important;
+    width: 450px !important; /* العرض الكلي */
+    margin: 0 auto !important; /* السنترة في نص الصفحة */
+    box-shadow: 6px 6px 20px rgba(0,0,0,0.05) !important;
+}
 
-    /* جعل الخانة والزرار 3D وجزء من الصفحة */
-    .stTextInput input {
-        
-        height: 50px !important;
-        width: 450px !important; /* فرد الخانة */
-        text-align: center !important;
-        box-shadow: inset 2px 2px 5px rgba(0,0,0,0.05), 4px 4px 15px rgba(0,0,0,0.05) !important;
-        font-size: 18px !important;
-    }
+/* ستايل الخانة جوه الحاوية */
+div[data-testid="stHorizontalBlock"] input {
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    height: 45px !important;
+    font-size: 18px !important;
+    text-align: left !important; /* الكتابة من الشمال أو اليمين حسب رغبتك */
+}
 
-    /* زرار اللوج إن 3D موسطن تماماً */
-    div.stButton > button {
-        background: linear-gradient(145deg, #2d5a4d, #3e7d6a) !important;
-        color: white !important;
-        border-radius: 15px !important;
-        width: 100px !important; /* حجم متناسق */
-        height: 48px !important;
-        border: none !important;
-        box-shadow: 5px 5px 15px rgba(0,0,0,0.2) !important;
-        font-weight: bold !important;
-        margin: 50px auto 20px auto !important;
-        display: block !important;
-        transition: 0.3s;
-    }
-    div.stButton > button:hover {
-        transform: translateY(-3px);
-        box-shadow: 7px 7px 20px rgba(0,0,0,0.3) !important;
-    }
+/* ستايل الزرار داخل الخانة */
+div[data-testid="stHorizontalBlock"] button {
+    background: #2d5a4d !important;
+    color: white !important;
+    border-radius: 15px !important;
+    height: 45px !important;
+    width: 100% !important;
+    border: none !important;
+    font-weight: bold !important;
+}
 
     /* السايد بار */
     [data-testid="stSidebar"] { 
@@ -140,6 +142,7 @@ else:
 
     st.markdown("<h2 style='color:#2d5a4d;'>Clinic Dashboard</h2>", unsafe_allow_html=True)
     st.success("تم ضبط الأبعاد والـ 3D بنجاح.")
+
 
 
 
