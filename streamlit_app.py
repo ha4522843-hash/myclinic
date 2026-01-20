@@ -24,7 +24,7 @@ def get_age_info(birth_date):
     return years, icon
  # 2. دالة حساب كتلة الجسم (BMI)
 def calculate_bmi(weight, height):
-    if height > 0:
+ if height > 0:
     height_m = height / 100
     bmi = weight / (height_m ** 2)
     if bmi < 18.5: status = "نقص وزن ⚠️"
@@ -217,6 +217,7 @@ with st.sidebar:
 
                 wa_url = f"https://wa.me/{p.get('phone', '')}"
                 st.markdown(f'<a href="{wa_url}" target="_blank"><button style="background:#25D366; color:white; border:none; padding:10px; border-radius:10px; width:100%;">إرسال واتساب</button></a>', unsafe_allow_html=True)
+
 
 
 
