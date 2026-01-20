@@ -31,7 +31,7 @@ st.markdown("""
         transition: all 0.5s ease-in-out;
         cursor: pointer;
         filter: drop-shadow(0px 15px 30px rgba(62, 125, 106, 0.1));
-        margin-top: 40px; 
+        margin-top: 60px; 
     }
     .main-logo-login:hover {
         transform: scale(1.08);
@@ -145,6 +145,7 @@ else:
     # محتوى الصفحة
     st.title("مرحباً بك دكتور بهاء")
     st.write("النظام الآن جاهز للعمل بنفس التنسيقات المطلوبة.")
+
 
 
 
