@@ -45,7 +45,7 @@ st.markdown("""
         height: 52px !important;
         font-weight: bold !important;
         font-size: 16px !important;
-        margin-top: 20px; /* المسافة اللي بتحرك الزرار تحت الخانة */
+        margin-top: 50px; /* المسافة اللي بتحرك الزرار تحت الخانة */
         transition: 0.4s ease;
         border: none !important;
         box-shadow: 0 8px 15px rgba(45, 90, 77, 0.2) !important;
@@ -143,6 +143,7 @@ else:
     # محتوى الصفحة الرئيسي
     st.markdown('<h1 class="main-title">لوحة التحكم الرئيسية</h1>', unsafe_allow_html=True)
     st.write("مرحباً بك دكتور بهاء في نظام إدارة العيادة المطور.")
+
 
 
 
