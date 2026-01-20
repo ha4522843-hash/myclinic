@@ -30,7 +30,7 @@ st.markdown("""
         width: 900px !important;
         transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1); 
         cursor: pointer;
-        margin-bottom:-200px; 
+        margin-bottom:-300px; 
         filter: drop-shadow(0px 10px 20px rgba(62, 125, 106, 0.1));
         will-change: transform; 
     }
@@ -78,7 +78,7 @@ if not st.session_state['logged_in']:
     st.markdown('<p style="text-align:center; color:#3e7d6a; font-weight:bold; letter-spacing:4px; font-size:11px; margin-top:115px; margin-bottom:15px;">MANAGEMENT LOGIN</p>', unsafe_allow_html=True)
 
     # التنسيق المنفصل اللي طلبته
-    _, col_box, _ = st.columns([1, 0.6, 1])
+    _, col_box, _ = st.columns([3, 0.6, 1])
     with col_box:
         c1, c2 = st.columns([3, 1])
         with c1:
@@ -94,6 +94,7 @@ else:
     # الصفحة الداخلية بنفس روح المحرك
     st.markdown('<div class="watermark-container"><img src="https://i.ibb.co/WWq0wnpg/Layer-8.png" style="width:100%;"></div>', unsafe_allow_html=True)
     st.success("Welcome Doctor - المحرك يعمل بأقصى جودة")
+
 
 
 
