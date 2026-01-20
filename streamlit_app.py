@@ -2,12 +2,12 @@ import streamlit as st
 
 st.set_page_config(page_title="DR. BAHAA SYSTEM", layout="wide")
 
-# --- CSS للتنسيق ---
+# --- CSS للتنسيق بدرجات Mint Green ---
 st.markdown("""
     <style>
     /* خلفية عامة */
     .stApp {
-        background-color: #f2f7f5;
+        background-color: #e8f5f1; /* Mint Green فاتح */
         position: relative;
     }
 
@@ -38,8 +38,8 @@ st.markdown("""
 
     /* Sidebar */
     [data-testid="stSidebar"] {
-        background-color: #e6eee9;
-        border-right: 2px solid #ceded6;
+        background-color: #d4ede6; /* Mint Green أغمق شوية */
+        border-right: 2px solid #a3d9c9;
     }
     .sidebar-wrapper {
         display: flex;
@@ -52,14 +52,15 @@ st.markdown("""
         margin-bottom: 30px;
     }
     .sidebar-img-bottom {
-        width: 150px;
-        margin-top: 20px;
+        width: 140px;
+        margin-top: 25px;
     }
     .sidebar-divider {
         height: 2px;
         width: 70%;
-        background: linear-gradient(to right, #a3d9c9, #ceded6);
+        background: linear-gradient(to right, #a3d9c9, #7fc8b8);
         margin: 30px 0;
+        border-radius: 2px;
     }
 
     /* العلامة المائية */
