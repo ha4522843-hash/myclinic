@@ -31,6 +31,7 @@ st.markdown("""
         transition: all 0.5s ease-in-out;
         cursor: pointer;
         filter: drop-shadow(0px 15px 30px rgba(62, 125, 106, 0.1));
+        margin-top: 40px; 
     }
     .main-logo-login:hover {
         transform: scale(1.08);
@@ -108,7 +109,7 @@ if not st.session_state['logged_in']:
             <div style="height: 40px;"></div> </div>
     """, unsafe_allow_html=True)
 
-    col1, col2, col3 = st.columns([5, 1, 5])
+    col1, col2, col3 = st.columns([4, 1, 4])
     with col2:
         code = st.text_input("", placeholder="Access Code", type="password", label_visibility="collapsed")
         st.markdown('<div style="height: 15px;"></div>', unsafe_allow_html=True)
@@ -144,6 +145,7 @@ else:
     # محتوى الصفحة
     st.title("مرحباً بك دكتور بهاء")
     st.write("النظام الآن جاهز للعمل بنفس التنسيقات المطلوبة.")
+
 
 
 
