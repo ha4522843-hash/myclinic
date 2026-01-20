@@ -3,47 +3,58 @@ import streamlit as st
 # --- 1. إعدادات الصفحة ---
 st.set_page_config(page_title="DR. BAHAA | LOGIN", layout="centered")
 
-# --- 2. محرك التصميم الاحترافي (Login UI) ---
+# --- 2. محرك التصميم المطور (CSS) ---
 st.markdown("""
     <style>
-    /* 1. خلفية الصفحة بلون المنت جرين الهادئ */
+    /* خلفية المِنت جرين المتدرجة */
     .stApp {
         background: linear-gradient(135deg, #f2f9f7 0%, #e6f2ee 100%);
     }
 
-    /* 2. إخفاء أي عناصر افتراضية من ستريم ليت */
     header {visibility: hidden;}
     [data-testid="stSidebar"] {display: none;}
 
-    /* 3. حاوية تسجيل الدخول - بدون مستطيلات أو حدود */
+    /* حاوية اللوجو مع الحركة */
     .login-wrapper {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding-top: 5vh;
+        padding-top: 2vh;
     }
 
-    /* 4. اللوجو - جودة عالية ومعالجة أطراف */
     .brand-logo {
-        width: 550px !important; /* تكبير اللوجو كما طلبت */
-        filter: drop-shadow(0px 15px 25px rgba(62, 125, 106, 0.1));
+        width: 500px !important; 
+        filter: drop-shadow(0px 10px 20px rgba(62, 125, 106, 0.1));
         image-rendering: -webkit-optimize-contrast;
-        margin-bottom: -100px; /* تقريب المسافة جداً من خانة الدخول */
+        transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* حركة مرنة */
+        cursor: pointer;
+        margin-bottom: -60px; /* تقريب الخانات من اللوجو */
     }
 
-    /* 5. نص العنوان (MANAGEMENT LOGIN) */
+    /* تأثير التكبير عند مرور الماوس */
+    .brand-logo:hover {
+        transform: scale(1.1); /* يكبر بنسبة 10% */
+        filter: drop-shadow(0px 20px 35px rgba(62, 125, 106, 0.2));
+    }
+
     .login-label {
         color: #3e7d6a;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-family: 'Segoe UI', sans-serif;
         font-weight: 700;
         letter-spacing: 5px;
-        font-size: 14px;
-        margin-bottom: 25px;
-        opacity: 0.8;
+        font-size: 13px;
+        margin-bottom: 20px;
+        opacity: 0.7;
     }
 
-    /* 6. تحسين جودة خانة الإدخال (3D ناعم) */
+    /* ضبط سنترة الخانات */
+    [data-testid="stVerticalBlock"] {
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    /* تصميم خانة الإدخال 3D */
     input {
         border-radius: 18px !important;
         background: #ffffff !important;
@@ -53,7 +64,7 @@ st.markdown("""
         text-align: center !important;
         font-size: 18px !important;
         color: #2d5a4d !important;
-        width: 320px !important;
+        width: 350px !important; /* توحيد العرض */
         transition: all 0.3s ease;
     }
     
@@ -63,18 +74,17 @@ st.markdown("""
         transform: scale(1.02);
     }
 
-    /* 7. زر الدخول الاحترافي */
+    /* تصميم الزرار */
     .stButton>button {
         background: #2d5a4d !important;
         color: white !important;
         border-radius: 18px !important;
-        padding: 12px 0px !important;
+        padding: 15px 0px !important;
         font-weight: 700 !important;
         font-size: 16px !important;
         border: none !important;
         box-shadow: 0 10px 20px rgba(45, 90, 77, 0.2) !important;
-        width: 320px !important;
-        margin-top: 10px;
+        width: 350px !important;
         transition: 0.4s ease !important;
     }
     
@@ -86,12 +96,12 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- 3. عرض الواجهة ---
+# --- 3. التنفيذ ---
 if 'logged_in' not in st.session_state:
     st.session_state['logged_in'] = False
 
 if not st.session_state['logged_in']:
-    # الجزء العلوي: اللوجو والكلمة
+    # اللوجو والاسم
     st.markdown("""
         <div class="login-wrapper">
             <img src="https://i.ibb.co/YFVscsYM/Adobe-Express-file.png" class="brand-logo">
@@ -99,16 +109,14 @@ if not st.session_state['logged_in']:
         </div>
     """, unsafe_allow_html=True)
 
-    # الجزء السفلي: خانة الإدخال والزر (مع سنترة دقيقة)
-    col1, col2, col3 = st.columns([1, 1.2, 1])
-    with col2:
-        code = st.text_input("Access Code", type="password", placeholder="••••", label_visibility="collapsed")
-        if st.button("ENTER SYSTEM"):
-            if code in ["0000", "1111"]:
-                st.session_state['logged_in'] = True
-                st.rerun()
-            else:
-                st.error("Invalid Access Code")
+    # خانات الإدخال (موسنطرة تلقائياً)
+    code = st.text_input("Access Code", type="password", placeholder="••••", label_visibility="collapsed")
+    if st.button("ENTER SYSTEM"):
+        if code in ["0000", "1111"]:
+            st.session_state['logged_in'] = True
+            st.rerun()
+        else:
+            st.error("Invalid Access Code")
 else:
-    st.success("تم تسجيل الدخول بنجاح! جاري تحويلك للوحة التحكم...")
-
+    st.balloons()
+    st.success("تم الدخول.. جاري فتح العيادة")
