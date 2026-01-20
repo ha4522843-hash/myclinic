@@ -104,25 +104,21 @@ else:
     # ---- [ محتوى Dashboard ] ----
 if menu == "📋 سجل المواعيد":
       st.markdown("<h2 class='main-title'>Clinical Schedule</h2>", unsafe_allow_html=True)
-    
     # جدول عرض الحالات فقط (بدون زحمة واتساب)
 for id, p in st.session_state['db'].items():
         row_class = "patient-row delay-alert" if p['delay'] else "patient-row"
         st.markdown(f"<div class='{row_class}'>", unsafe_allow_html=True)
         col_name, col_status = st.columns([3, 1])
-        
         with col_name:
             st.markdown(f"**{p['name']}**")
             if p['delay']: st.markdown("<small style='color:red;'>⚠️ تنبيه: متأخر</small>", unsafe_allow_html=True)
-            
         with col_status:
             # تغيير الحالة فقط لسرعة العمل
             st.selectbox("الحالة", ["انتظار ⏳", "في الكشف 🩺", "تم الانتهاء ✅"], 
                          index=["انتظار ⏳", "في الكشف 🩺", "تم الانتهاء ✅"].index(p['status']), 
                          key=f"status_dash_{id}", label_visibility="collapsed")
         st.markdown("</div>", unsafe_allow_html=True)
-
-     # ---- [ واجهة ملف المريض - هي اللي فيها الواتساب ] ----
+    # ---- [ واجهة ملف المريض - هي اللي فيها الواتساب ] ----
      # ---- [ محتوى Patients ] ----
 elif menu == "Patients (ملف مريض)":
         st.markdown("<h2 class='main-title'>مدير ملفات المرضى</h2>", unsafe_allow_html=True)
@@ -249,6 +245,7 @@ elif menu == "Patients (ملف مريض)":
 
                     wa_url = f"https://wa.me/{p.get('phone', '')}"
                     st.markdown(f'<a href="{wa_url}" target="_blank"><button style="background:#25D366; color:white; border:none; padding:10px; border-radius:10px; width:100%;">إرسال واتساب</button></a>', unsafe_allow_html=True)
+
 
 
 
