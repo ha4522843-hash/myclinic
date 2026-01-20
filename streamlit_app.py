@@ -81,16 +81,18 @@ if not st.session_state['logged_in']:
     st.markdown('<p style="text-align:center; color:#3e7d6a; font-weight:bold; letter-spacing:5px; font-size:12px; margin-top:110px;">MANAGEMENT LOGIN</p>', unsafe_allow_html=True)
 
     # حاوية الخانات (سنترة مطلقة)
-    col1, col2, col3 = st.columns([3, 1, 3])
-    with col2:
-        code = st.text_input("Code", type="password", placeholder="••••", label_visibility="collapsed")
-        if st.button("ENTER"):
+   # كود السطر الواحد (الزرار داخل الخانة)
+col1, col2, col3 = st.columns([1, 2, 1]) # سنترة المنطقة
+with col2:
+    # هنا بنقسم السطر لجزئين: جزء كبير للنص وجزء صغير للزرار
+    c1, c2 = st.columns([3, 1]) 
+    with c1:
+        code = st.text_input("", placeholder="Access Code", type="password", label_visibility="collapsed")
+    with c2:
+        if st.button("GO"):
             if code in ["0000", "1111"]:
                 st.session_state['logged_in'] = True
                 st.rerun()
-            else:
-                st.error("Invalid Code")
-
 else:
     st.markdown("""
         <style>
@@ -142,6 +144,7 @@ else:
 
     st.markdown("<h2 style='color:#2d5a4d;'>Clinic Dashboard</h2>", unsafe_allow_html=True)
     st.success("تم ضبط الأبعاد والـ 3D بنجاح.")
+
 
 
 
