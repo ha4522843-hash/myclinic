@@ -31,7 +31,7 @@ st.markdown("""
         transition: all 0.5s ease-in-out;
         cursor: pointer;
         filter: drop-shadow(0px 15px 30px rgba(62, 125, 106, 0.1));
-        margin-top: 60px; 
+        margin-top: 100px; 
     }
     .main-logo-login:hover {
         transform: scale(1.08);
@@ -57,6 +57,8 @@ st.markdown("""
         width: 50% !important;
         height: 50px;
         font-weight: bold;
+         top: 50%;
+        left: 60%;
     }
 
     /* --- تصميم السايد بار (على الشمال) --- */
@@ -145,6 +147,7 @@ else:
     # محتوى الصفحة
     st.title("مرحباً بك دكتور بهاء")
     st.write("النظام الآن جاهز للعمل بنفس التنسيقات المطلوبة.")
+
 
 
 
