@@ -134,13 +134,11 @@ else:
                 it_src = st.selectbox("حذف مصدر:", [""] + st.session_state['sources_list'])
                 if st.button("🗑️ حذف مصدر") and it_src: st.session_state['sources_list'].remove(it_src); st.rerun()
 
-        patient_type = st.radio("اختر الإجراء المطلوب:", ["🆕 مريض جديد لأول مرة", "🔍 مريض سابق (بحث وتعديل)"], horizontal=True)
-        st.markdown("---")
+       tab1, tab2 = st.tabs(["🆕 تسجيل مريض جديد", "🔍 بحث وتعديل مريض سابق"])
 
-        if patient_type == "🆕 مريض جديد لأول مرة":
-            st.markdown("<h4 style='color:#3e7d6a;'>📝 إنشاء ملف جديد</h4>", unsafe_allow_html=True)
-            
-            with st.form("comprehensive_patient_form"):
+        with tab1:
+            st.markdown("### 📝 إنشاء ملف مريض جديد")
+            with st.form("new_patient_form_final"):
                 st.markdown("<h4 style='color:#3e7d6a;'>👤 أولاً: البيانات الشخصية</h4>", unsafe_allow_html=True)
                 col1, col2 = st.columns(2)
                 with col1:
@@ -196,8 +194,9 @@ else:
                     else:
                         st.error("⚠️ يرجى إدخال الاسم ورقم الهاتف")
 
-        elif patient_type == "🔍 مريض سابق (بحث وتعديل)":
-            search_query = st.text_input("🔍 ابحث بالاسم:")
+      with tab2:
+            st.markdown("### 🔍 البحث عن مريض سابق")
+            search_name = st.text_input("ادخل اسم المريض للبحث عنه:")
             if search_query and search_query in st.session_state['db']:
                 p = st.session_state['db'][search_query]
                 # حساب الأيقونة للمريض السابق من تاريخ ميلاده المسجل
@@ -241,6 +240,7 @@ else:
 
                 wa_url = f"https://wa.me/{p.get('phone', '')}"
                 st.markdown(f'<a href="{wa_url}" target="_blank"><button style="background:#25D366; color:white; border:none; padding:10px; border-radius:10px; width:100%;">إرسال واتساب</button></a>', unsafe_allow_html=True)
+
 
 
 
