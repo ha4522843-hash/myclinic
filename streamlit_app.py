@@ -38,16 +38,30 @@ if not st.session_state['logged_in']:
         .login-logo-img:hover { transform: scale(1.08); }
 
         /* الخانة والزرار */
-        .stTextInput > div > div > input {
-            border-radius: 12px !important; text-align: center !important;
-            height: 48px !important; width: 340px !important;
-            margin: 0 auto !important; border: 1px solid #c2dbd1 !important;
-        }
+        /* تنسيق الخانة المطور لضبط البوردر والسنترة */
+      .stTextInput > div > div > input {
+          border-radius: 12px !important; 
+          text-align: center !important;
+           height: 48px !important; 
+           width: 340px !important;
+           margin: 0 auto !important; 
+             /* تعديل البوردر ليكون أوضح */
+           border: 2px solid #c2dbd1 !important; 
+           background-color: white !important;
+           box-shadow: none !important; /* إلغاء أي ظل قديم بيفركش الشكل */
+           transition: all 0.3s ease-in-out;
+      }
 
+       /* حالة الضغط على الخانة عشان البوردر ميتغيرش لونه للأسود أو الأزرق */
+       .stTextInput > div > div > input:focus {
+            border: 2px solid #3e7d6a !important; /* لون أغمق عند الكتابة */
+            outline: none !important;
+            box-shadow: 0 0 10px rgba(62, 125, 106, 0.2) !important;
+       }
         .stButton > button {
             background-color: #2d5a4d !important; color: white !important;
             border-radius: 12px !important; height: 42px !important;
-            width: 160px !important; margin: 15px auto !important;
+            width: 80px !important; margin: 15px auto !important;
             display: block; border: none !important;
             font-weight: bold; transition: 0.3s;
         }
@@ -79,10 +93,19 @@ else:
     st.markdown("""
         <style>
         /* العلامة المائية: فاتحة جداً ونقيّة */
-        .watermark {
-            position: fixed; top: 50%; left: 60%; transform: translate(-50%, -50%);
-            width: 650px; opacity: 0.02; z-index: -1; pointer-events: none;
-            filter: grayscale(1);
+         /* العلامة المائية المظبوطة */
+          .watermark {
+              position: fixed; 
+              top: 50%; 
+              left: 58%; /* ترحيل خفيف لليمين عشان السايد بار واخد جزء من الشمال */
+              transform: translate(-50%, -50%);
+              width: 550px; 
+              opacity: 0.08; /* رفعنا الشفافية عشان تبان كخيال */
+              z-index: -1; 
+              pointer-events: none;
+              filter: grayscale(1) brightness(0.9); /* جعلها رمادية هادئة */
+              image-rendering: -webkit-optimize-contrast !important;
+        }
         }
         
         [data-testid="stSidebar"] { 
@@ -99,6 +122,7 @@ else:
     """, unsafe_allow_html=True)
 
     # عرض العلامة المائية
+else:
     st.markdown('<img src="https://i.ibb.co/WWq0wnpg/Layer-8.png" class="watermark">', unsafe_allow_html=True)
 
     # السايد بار
@@ -119,3 +143,4 @@ else:
     st.title("Clinic Control Center")
     st.success("Welcome Dr. Bahaa! The system is ready.")
     st.info("الصور الآن تعمل بأعلى نقاء (HD) وبدون بكسلة.")
+
