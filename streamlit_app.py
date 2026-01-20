@@ -235,8 +235,8 @@ else:
             if search_query and search_query in st.session_state['db']:
                 p = st.session_state['db'][search_query]
                 # حساب الأيقونة للمريض السابق من تاريخ ميلاده المسجل
-            p_age, p_icon = get_age_info(p['dob'])
-            st.markdown(f"### {p_icon} ملف المريض: {p['name']} ({p_age} سنة)")
+                p_age, p_icon = get_age_info(p['dob'])
+                st.markdown(f"### {p_icon} ملف المريض: {p['name']} ({p_age} سنة)")
             # ... باقي كود التعديل ...
                     st.markdown(f"##### 📝 تحديث بيانات: {p['name']}")
                     c1, c2, c3 = st.columns(3)
@@ -274,5 +274,6 @@ else:
 
                 wa_url = f"https://wa.me/{p.get('phone', '')}"
                 st.markdown(f'<a href="{wa_url}" target="_blank"><button style="background:#25D366; color:white; border:none; padding:10px; border-radius:10px; width:100%;">إرسال واتساب</button></a>', unsafe_allow_html=True)
+
 
 
