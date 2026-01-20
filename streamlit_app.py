@@ -53,7 +53,7 @@ st.markdown("""
         background-color: #2d5a4d !important;
         color: white !important;
         border-radius: 15px !important;
-        width: 150% !important;
+        width: 50% !important;
         height: 50px;
         font-weight: bold;
     }
@@ -108,7 +108,7 @@ if not st.session_state['logged_in']:
             <div style="height: 40px;"></div> </div>
     """, unsafe_allow_html=True)
 
-    col1, col2, col3 = st.columns([3, 1, 3])
+    col1, col2, col3 = st.columns([1, 1, 1])
     with col2:
         code = st.text_input("", placeholder="Access Code", type="password", label_visibility="collapsed")
         st.markdown('<div style="height: 15px;"></div>', unsafe_allow_html=True)
@@ -144,6 +144,7 @@ else:
     # محتوى الصفحة
     st.title("مرحباً بك دكتور بهاء")
     st.write("النظام الآن جاهز للعمل بنفس التنسيقات المطلوبة.")
+
 
 
 
