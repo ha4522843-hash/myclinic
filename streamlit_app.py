@@ -122,9 +122,8 @@ else:
     """, unsafe_allow_html=True)
 
     # عرض العلامة المائية
- else:
+else:
     st.markdown('<img src="https://i.ibb.co/WWq0wnpg/Layer-8.png" class="watermark">', unsafe_allow_html=True)
-
     # السايد بار
     with st.sidebar:
         st.markdown(f"""
@@ -143,5 +142,6 @@ else:
     st.title("Clinic Control Center")
     st.success("Welcome Dr. Bahaa! The system is ready.")
     st.info("الصور الآن تعمل بأعلى نقاء (HD) وبدون بكسلة.")
+
 
 
