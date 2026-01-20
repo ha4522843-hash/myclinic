@@ -11,6 +11,8 @@ if 'logged_in' not in st.session_state:
 # --- 3. محرك الجرافيك (التنسيق والتحريك) ---
 st.markdown("""
     <style>
+    .stApp {
+        background-color: #f2f7f5;
     /* تحسين جودة الصور */
     img { image-rendering: -webkit-optimize-contrast !important; image-rendering: crisp-edges !important; }
 
@@ -86,7 +88,7 @@ st.markdown("""
         left: 55%;
         transform: translate(-50%, -50%);
         width: 600px;
-        opacity: 0.04; /* فاتحة درجتين عن السايد بار */
+        opacity: 0.2; /* فاتحة درجتين عن السايد بار */
         z-index: -1;
         pointer-events: none;
     }
@@ -141,6 +143,7 @@ else:
     # محتوى الصفحة الرئيسي
     st.markdown('<h1 class="main-title">لوحة التحكم الرئيسية</h1>', unsafe_allow_html=True)
     st.write("مرحباً بك دكتور بهاء في نظام إدارة العيادة المطور.")
+
 
 
 
