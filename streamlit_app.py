@@ -109,7 +109,7 @@ else:
         # لوجوهات الدكتور في السايد بار
         st.markdown("""
             <div style="display: flex; flex-direction: column; align-items: center; padding-top: 20px;">
-                <img src="https://i.ibb.co/WWq0wnpg/Layer-8.png" style="width:200px;">
+                <img src="https://i.ibb.co/WWq0wnpg/Layer-8.png" style="width:150px;">
                 <img src="https://i.ibb.co/xtmjKkMm/Layer-1-copy.png" style="width:90px; margin-top:15px;">
             </div>
         """, unsafe_allow_html=True)
@@ -123,10 +123,26 @@ else:
                 <span class="clock-date">{curr_date}</span>
             </div>
         """, unsafe_allow_html=True)
-       st.markdown("<hr style='margin:10px 0; border-color:#c2dbd1;'>", unsafe_allow_html=True)
-      if st.button("Logout", use_container_width=True):
-                 st.session_state['logged_in'] = False
-                   st.rerun()
+        
+        st.markdown("<hr style='margin:10px 0; border-color:#c2dbd1;'>", unsafe_allow_html=True)
+        
+        # القائمة الرئيسية
+        menu = st.radio("MAIN MENU", ["🏠 Dashboard", "👥 Patients Record", "💊 New Visit", "📊 Financials"], label_visibility="collapsed")
+        
+        st.markdown("<div style='height:15vh;'></div>", unsafe_allow_html=True) # مساحة فاضية
+        
+        if st.button("Logout", use_container_width=True):
+            st.session_state['logged_in'] = False
+            st.rerun()
+
+    # محتوى الصفحات حسب اختيار المنيو
+    if menu == "🏠 Dashboard":
+        st.markdown(f"<h2 style='color:#2d5a4d;'>Welcome, Dr. Bahaa</h2>", unsafe_allow_html=True)
+        st.info("System is running in High-Performance Mode.")
+        
+    elif menu == "👥 Patients Record":
+        st.title("Patients Management")
+        # هنا هنضيف جدول البيانات لاحقاً
 
 
 
