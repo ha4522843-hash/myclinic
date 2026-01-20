@@ -86,7 +86,7 @@ else:
             top: 50%;
             left: 60%;
             transform: translate(-50%, -50%);
-            width: 600px;
+            width: 800px;
             opacity: 0.12 !important; /* رفع الشفافية للتأكد من رؤيتها */
             z-index: 0; /* خلف المحتوى ولكن فوق الخلفية */
             pointer-events: none;
@@ -129,3 +129,4 @@ else:
 
     st.title("Clinic Control Center")
     st.success("تم تفعيل العلامة المائية بنجاح.")
+
