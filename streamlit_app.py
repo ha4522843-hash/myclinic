@@ -35,7 +35,7 @@ st.markdown("""
         box-shadow: none !important;
         height: 40px !important;
         font-size: 16px !important;
-        width: 100% !important;
+        width: 80% !important;
     }
 
     /* الزرار جوه الحاوية */
@@ -47,7 +47,7 @@ st.markdown("""
         width: 100px !important; /* زرار كنكة وصغير */
         border: none !important;
         font-weight: bold !important;
-        margin-top: 2px !important;
+        margin-top: 1px !important;
     }
 
     /* العلامة المائية */
@@ -99,6 +99,7 @@ else:
             st.rerun()
 
     st.markdown("<h2 style='color:#2d5a4d;'>Clinic Dashboard</h2>", unsafe_allow_html=True)
+
 
 
 
