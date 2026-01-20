@@ -33,7 +33,7 @@ st.markdown("""
     .stTextInput input {
         
         height: 50px !important;
-        width: 200px !important; /* فرد الخانة */
+        width: 450px !important; /* فرد الخانة */
         text-align: center !important;
         box-shadow: inset 2px 2px 5px rgba(0,0,0,0.05), 4px 4px 15px rgba(0,0,0,0.05) !important;
         font-size: 18px !important;
@@ -140,6 +140,7 @@ else:
 
     st.markdown("<h2 style='color:#2d5a4d;'>Clinic Dashboard</h2>", unsafe_allow_html=True)
     st.success("تم ضبط الأبعاد والـ 3D بنجاح.")
+
 
 
 
