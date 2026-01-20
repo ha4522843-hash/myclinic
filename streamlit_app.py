@@ -61,3 +61,53 @@ def login_page():
             if code in ["0000", "1111"]:
                 st.session_state['logged_in'] = True
                 st.rerun()
+
+def main_dashboard():
+    st.markdown("""
+        <style>
+        /* تحسين جودة صور السايد بار */
+        .sidebar-wrapper img {
+            image-rendering: -webkit-optimize-contrast !important;
+            filter: contrast(1.1); /* زيادة النقاوة */
+        }
+
+        /* العلامة المائية: فاتحة جداً وراقيّة */
+        .watermark {
+            position: fixed; top: 50%; left: 60%; transform: translate(-50%, -50%);
+            width: 650px; opacity: 0.02; z-index: -1; pointer-events: none;
+            filter: grayscale(1); /* جعلها أحادية اللون لتبدو كعلامة مائية حقيقية */
+        }
+        
+        [data-testid="stSidebar"] { 
+            background-color: #edf5f2 !important; 
+            border-right: 1px solid #d1e2dc;
+        }
+
+        .sidebar-wrapper { 
+            display: flex; flex-direction: column; align-items: center; padding-top: 40px; 
+        }
+        .img-sb-top { width: 180px !important; }
+        .img-sb-bottom { width: 120px !important; margin-top: 35px; opacity: 0.8; }
+        
+        .stTitle { color: #2d5a4d; font-weight: 800; }
+        </style>
+    """, unsafe_allow_html=True)
+
+    st.markdown('<img src="https://i.ibb.co/WWq0wnpg/Layer-8.png" class="watermark">', unsafe_allow_html=True)
+
+    with st.sidebar:
+        st.markdown(f"""
+            <div class="sidebar-wrapper">
+                <img src="https://i.ibb.co/WWq0wnpg/Layer-8.png" class="img-sb-top">
+                <img src="https://i.ibb.co/xtmjKkMm/Layer-1-copy.png" class="img-sb-bottom">
+                <div style="height: 1px; width: 60%; background: #c2dbd1; margin: 30px 0;"></div>
+            </div>
+        """, unsafe_allow_html=True)
+        
+        st.sidebar.success("Welcome Dr. Bahaa")
+        if st.button("Logout", use_container_width=True):
+            st.session_state['logged_in'] = False
+            st.rerun()
+
+    st.title("Clinic Control Center")
+    st.info("النظام يعمل الآن بأعلى جودة عرض للصور.")
