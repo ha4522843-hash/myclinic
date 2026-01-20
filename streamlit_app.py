@@ -54,7 +54,7 @@ st.markdown("""
     .stTextInput, .stButton {
         display: flex;
         justify-content: center;
-        width: 50% !important;
+        width: 150% !important;
     }
 
     div[data-testid="stTextInput"] > div {
@@ -128,4 +128,5 @@ if not st.session_state['logged_in']:
 
 else:
     st.success("مرحباً دكتور بهاء، جاري الدخول...")
+
 
