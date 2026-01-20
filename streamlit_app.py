@@ -194,7 +194,7 @@ else:
                     else:
                         st.error("⚠️ يرجى إدخال الاسم ورقم الهاتف")
 
-      with tab2:
+        with tab2:
             st.markdown("### 🔍 البحث عن مريض سابق")
             search_name = st.text_input("ادخل اسم المريض للبحث عنه:")
             if search_query and search_query in st.session_state['db']:
@@ -240,6 +240,7 @@ else:
 
                 wa_url = f"https://wa.me/{p.get('phone', '')}"
                 st.markdown(f'<a href="{wa_url}" target="_blank"><button style="background:#25D366; color:white; border:none; padding:10px; border-radius:10px; width:100%;">إرسال واتساب</button></a>', unsafe_allow_html=True)
+
 
 
 
