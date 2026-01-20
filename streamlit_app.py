@@ -44,7 +44,7 @@ st.markdown("""
         background: linear-gradient(145deg, #2d5a4d, #3e7d6a) !important;
         color: white !important;
         border-radius: 15px !important;
-        width: 400px !important; /* حجم متناسق */
+        width: 100px !important; /* حجم متناسق */
         height: 48px !important;
         border: none !important;
         box-shadow: 5px 5px 15px rgba(0,0,0,0.2) !important;
@@ -79,7 +79,7 @@ if not st.session_state['logged_in']:
     st.markdown('<p style="text-align:center; color:#3e7d6a; font-weight:bold; letter-spacing:5px; font-size:12px; margin-top:110px;">MANAGEMENT LOGIN</p>', unsafe_allow_html=True)
 
     # حاوية الخانات (سنترة مطلقة)
-    col1, col2, col3 = st.columns([1, 0.2, 1])
+    col1, col2, col3 = st.columns([1, 0.2,3])
     with col2:
         code = st.text_input("Code", type="password", placeholder="••••", label_visibility="collapsed")
         if st.button("ENTER"):
@@ -140,6 +140,7 @@ else:
 
     st.markdown("<h2 style='color:#2d5a4d;'>Clinic Dashboard</h2>", unsafe_allow_html=True)
     st.success("تم ضبط الأبعاد والـ 3D بنجاح.")
+
 
 
 
