@@ -34,7 +34,7 @@ st.markdown("""
         border-radius: 15px !important;
         border: 1px solid #c2dbd1 !important;
         height: 50px !important;
-        width: 400px !important; /* فرد الخانة */
+        width: 200px !important; /* فرد الخانة */
         text-align: center !important;
         box-shadow: inset 2px 2px 5px rgba(0,0,0,0.05), 4px 4px 15px rgba(0,0,0,0.05) !important;
         font-size: 18px !important;
@@ -45,7 +45,7 @@ st.markdown("""
         background: linear-gradient(145deg, #2d5a4d, #3e7d6a) !important;
         color: white !important;
         border-radius: 15px !important;
-        width: 200px !important; /* حجم متناسق */
+        width: 100px !important; /* حجم متناسق */
         height: 48px !important;
         border: none !important;
         box-shadow: 5px 5px 15px rgba(0,0,0,0.2) !important;
@@ -57,19 +57,6 @@ st.markdown("""
     div.stButton > button:hover {
         transform: translateY(-3px);
         box-shadow: 7px 7px 20px rgba(0,0,0,0.3) !important;
-    }
-
-    /* --- [ العلامة المائية المفرودة ] --- */
-    .full-watermark {
-        position: fixed;
-        top: 50%;
-        left: 60%;
-        transform: translate(-50%, -50%);
-        width: 700px; /* تكبير الحجم */
-        opacity: 0.07 !important;
-        z-index: -1;
-        pointer-events: none;
-        filter: grayscale(1);
     }
 
     /* السايد بار */
@@ -104,9 +91,41 @@ if not st.session_state['logged_in']:
                 st.error("Invalid Code")
 
 else:
-    # الصفحة الداخلية
-    st.markdown('<img src="https://i.ibb.co/WWq0wnpg/Layer-8.png" class="full-watermark">', unsafe_allow_html=True)
+    st.markdown("""
+        <style>
+        /* العلامة المائية: إجبار الظهور بـ z-index */
+        .watermark-container {
+            position: fixed;
+            top: 50%;
+            left: 60%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            opacity: 0.12 !important; /* رفع الشفافية للتأكد من رؤيتها */
+            z-index: 0; /* خلف المحتوى ولكن فوق الخلفية */
+            pointer-events: none;
+        }
+        
+        [data-testid="stSidebar"] { 
+            background-color: #edf5f2 !important; 
+            border-right: 1px solid #d1e2dc;
+            z-index: 100; /* السايد بار دائماً في المقدمة */
+        }
 
+        .sidebar-wrapper { 
+            display: flex; flex-direction: column; align-items: center; padding-top: 40px; 
+        }
+        .img-sb-top { width: 170px !important; }
+        .img-sb-bottom { width: 110px !important; margin-top: 30px; opacity: 0.9; }
+        
+        /* تلوين الصفحة اللي على يمين السايد بار */
+        .main {
+            background-color: #f7fdfb !important;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
+    # وضع العلامة المائية داخل div مستقل
+    st.markdown('<div class="watermark-container"><img src="https://i.ibb.co/WWq0wnpg/Layer-8.png" style="width:100%;"></div>', unsafe_allow_html=True)
     with st.sidebar:
         st.markdown(f"""
             <div class="sidebar-wrapper">
@@ -122,5 +141,6 @@ else:
 
     st.markdown("<h2 style='color:#2d5a4d;'>Clinic Dashboard</h2>", unsafe_allow_html=True)
     st.success("تم ضبط الأبعاد والـ 3D بنجاح.")
+
 
 
