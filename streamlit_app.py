@@ -39,7 +39,7 @@ st.markdown("""
     /* سنترة الخانات تحت أبعاد الصورة بالظبط */
     .stTextInput, .stButton {
         width: 300px !important; /* عرض الخانة والزرار موحد لضمان السنترة */
-        margin: 0 auto !important;
+        margin: 50px !important;
     }
 
     input {
@@ -144,6 +144,7 @@ else:
     # محتوى الصفحة
     st.title("مرحباً بك دكتور بهاء")
     st.write("النظام الآن جاهز للعمل بنفس التنسيقات المطلوبة.")
+
 
 
 
