@@ -33,7 +33,7 @@ st.markdown("""
         filter: drop-shadow(0px 15px 30px rgba(62, 125, 106, 0.1));
     }
     .main-logo-login:hover {
-        transform: scale(2.08);
+        transform: scale(1.08);
     }
 
     /* سنترة الخانات تحت أبعاد الصورة بالظبط */
@@ -53,7 +53,7 @@ st.markdown("""
         background-color: #2d5a4d !important;
         color: white !important;
         border-radius: 15px !important;
-        width: 50% !important;
+        width: 150% !important;
         height: 50px;
         font-weight: bold;
     }
@@ -144,6 +144,7 @@ else:
     # محتوى الصفحة
     st.title("مرحباً بك دكتور بهاء")
     st.write("النظام الآن جاهز للعمل بنفس التنسيقات المطلوبة.")
+
 
 
 
