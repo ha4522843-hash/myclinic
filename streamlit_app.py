@@ -25,13 +25,13 @@ def get_age_info(birth_date):
  # 2. دالة حساب كتلة الجسم (BMI)
  def calculate_bmi(weight, height):
     if height > 0:
-        height_m = height / 100
-        bmi = weight / (height_m ** 2)
-        if bmi < 18.5: status = "نقص وزن ⚠️"
-        elif bmi < 25: status = "وزن مثالي ✅"
-        elif bmi < 30: status = "زيادة وزن 📈"
-        else: status = "سمنة مفرطة 🚨"
-        return round(bmi, 1), status
+    height_m = height / 100
+    bmi = weight / (height_m ** 2)
+    if bmi < 18.5: status = "نقص وزن ⚠️"
+    elif bmi < 25: status = "وزن مثالي ✅"
+    elif bmi < 30: status = "زيادة وزن 📈"
+    else: status = "سمنة مفرطة 🚨"
+    return round(bmi, 1), status
     return 0, "غير محدد"   
 
 # --- 4. التصميم البصري (الألوان الأصلية + تأثيرات 3D + علامة مائية) ---
@@ -217,6 +217,7 @@ with st.sidebar:
 
                 wa_url = f"https://wa.me/{p.get('phone', '')}"
                 st.markdown(f'<a href="{wa_url}" target="_blank"><button style="background:#25D366; color:white; border:none; padding:10px; border-radius:10px; width:100%;">إرسال واتساب</button></a>', unsafe_allow_html=True)
+
 
 
 
