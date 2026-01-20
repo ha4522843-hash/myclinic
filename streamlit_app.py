@@ -47,7 +47,7 @@ st.markdown("""
         width: 180px !important; /* تصغير العرض ليكون أصغر من الخانة */
         font-weight: 600 !important;
         font-size: 14px !important;
-        margin: 10px auto !important; /* سنترة تلقائية */
+        margin: 50px auto !important; /* سنترة تلقائية */
         display: block;
         border: none !important;
         box-shadow: 0 4px 10px rgba(45, 90, 77, 0.15) !important;
@@ -58,7 +58,7 @@ st.markdown("""
         border-radius: 12px !important;
         text-align: center !important;
         height: 45px !important;
-        width: 320px !important; /* عرض متناسق */
+        width: 300px !important; /* عرض متناسق */
         margin: 0 auto !important;
         border: 1px solid #c2dbd1 !important;
         background-color: white !important;
@@ -140,3 +140,4 @@ else:
 
     st.markdown("<h2 style='color: #2d5a4d;'>Clinic Dashboard</h2>", unsafe_allow_html=True)
     st.info("تم ضبط الألوان والمسافات كما طلبت يا دكتور.")
+
