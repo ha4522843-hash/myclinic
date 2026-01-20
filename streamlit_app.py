@@ -29,7 +29,7 @@ st.markdown("""
         width: 550px !important; /* تكبير اللوجو كما طلبت */
         filter: drop-shadow(0px 15px 25px rgba(62, 125, 106, 0.1));
         image-rendering: -webkit-optimize-contrast;
-        margin-bottom: -20px; /* تقريب المسافة جداً من خانة الدخول */
+        margin-bottom: -100px; /* تقريب المسافة جداً من خانة الدخول */
     }
 
     /* 5. نص العنوان (MANAGEMENT LOGIN) */
@@ -111,3 +111,4 @@ if not st.session_state['logged_in']:
                 st.error("Invalid Access Code")
 else:
     st.success("تم تسجيل الدخول بنجاح! جاري تحويلك للوحة التحكم...")
+
