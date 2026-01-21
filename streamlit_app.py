@@ -3,8 +3,8 @@ from supabase import create_client, Client # <--- إضافة 1
 from datetime import datetime
 
 # --- إعدادات الربط بالسحابة (حط مفاتيحك هنا) ---
-URL = "https://your-project-url.supabase.co"
-KEY = "sb_publishable_Nj9bK2C-b60F3sY-VnLhUQ_QvZyI_8y"
+URL = "https://scefqjfvsnsteutgzhys.supabase.co"
+KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNjZWZxamZ2c25zdGV1dGd6aHlzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg5NDQ5MTEsImV4cCI6MjA4NDUyMDkxMX0.RqR1lnCA4-z-u-IY48ZCWjzI6ctfCzR1tp9f0AxUuIk"
 supabase: Client = create_client(URL, KEY)
 # 1. إعدادات الصفحة
 st.set_page_config(page_title="DR. BAHAA SYSTEM", layout="wide")
@@ -207,6 +207,7 @@ else:
         if response.data:
             df = pd.DataFrame(response.data)
             st.dataframe(df)
+
 
 
 
