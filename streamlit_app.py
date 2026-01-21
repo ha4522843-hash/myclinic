@@ -1,5 +1,11 @@
 import streamlit as st
+from supabase import create_client, Client # <--- إضافة 1
+from datetime import datetime
 
+# --- إعدادات الربط بالسحابة (حط مفاتيحك هنا) ---
+URL = "https://your-project-url.supabase.co"
+KEY = "sb_publishable_Nj9bK2C-b60F3sY-VnLhUQ_QvZyI_8y"
+supabase: Client = create_client(URL, KEY)
 # 1. إعدادات الصفحة
 st.set_page_config(page_title="DR. BAHAA SYSTEM", layout="wide")
 from datetime import datetime  # <--- السطر ده هو اللي ناقصك ومسبب المشكلة
@@ -156,12 +162,51 @@ else:
 
     # محتوى الصفحات حسب اختيار المنيو
     if menu == "🏠 Dashboard":
-        st.markdown(f"<h2 style='color:#2d5a4d;'>Welcome, Dr. Bahaa</h2>", unsafe_allow_html=True)
-        st.info("System is running in High-Performance Mode.")
-        
+        st.title("Welcome, Dr. Bahaa")
+        # إحصائية سريعة من السحابة
+        res = supabase.table("patients").select("id", count="exact").execute()
+        st.metric("إجمالي المرضى في السحابة", res.count if res.count else 0)
+
+    elif menu == "💊 New Visit":
+        st.header("تسجيل زيارة/مريض جديد")
+        with st.form("visit_form"):
+            name = st.text_input("اسم المريض")
+            track = st.selectbox("المسار الطبي", ["سمنة", "جراحة", "علاج"])
+            col1, col2 = st.columns(2)
+            with col1:
+                weight = st.number_input("الوزن (كجم)", min_value=1.0)
+            with col2:
+                height = st.number_input("الطول (سم)", min_value=50.0)
+            
+            submit = st.form_submit_button("حفظ في السحابة السريعة")
+
+            if submit:
+                # معادلة الـ BMI التلقائية
+                bmi = round(weight / (height/100)**2, 1)
+                
+                # إرسال البيانات لـ Supabase
+                data = {
+                    "name": name,
+                    "patient_track": track,
+                    "weight": weight,
+                    "height": height,
+                    "bmi": bmi,
+                    "arrival_time": datetime.now().isoformat()
+                }
+                
+                try:
+                    supabase.table("patients").insert(data).execute()
+                    st.success(f"تم الحفظ! BMI المريض هو: {bmi}")
+                except Exception as e:
+                    st.error(f"خطأ في الاتصال بالسحابة: {e}")
+
     elif menu == "👥 Patients Record":
-        st.title("Patients Management")
-        # هنا هنضيف جدول البيانات لاحقاً
+        st.header("سجل المرضى السحابي")
+        # سحب كل البيانات من السحابة وعرضها
+        response = supabase.table("patients").select("*").execute()
+        if response.data:
+            df = pd.DataFrame(response.data)
+            st.dataframe(df)
 
 
 
